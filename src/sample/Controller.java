@@ -17,9 +17,9 @@ public class Controller implements Initializable {
     @FXML
     TextArea console;
 
-    private boolean right;
-    private boolean left;
-    private boolean jump;
+    private boolean right = false;
+    private boolean left = false;
+    private boolean jump = false;
 
 
 
@@ -56,6 +56,9 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        console.setPrefColumnCount(16);
+        console.setPrefRowCount(9);
+
         SOTAtimer handler = new SOTAtimer();
         TimerTask task = new TimerTask() {
             @Override
@@ -65,6 +68,6 @@ public class Controller implements Initializable {
             }
         };
         Timer t = new Timer();
-        t.schedule(task, 100);
+        t.schedule(task, 0, 100);
     }
 }
