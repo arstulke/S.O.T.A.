@@ -1,10 +1,10 @@
-package SOTA;
+package sota;
 
 public class SotaHandler {
 
-    private boolean right;
-    private boolean left;
-    private boolean jump;
+    boolean right;
+    boolean left;
+    boolean jump;
 
     public String handle(boolean[] keys) {
         updateKeysBooleans(keys);
