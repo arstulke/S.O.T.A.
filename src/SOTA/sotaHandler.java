@@ -1,19 +1,24 @@
 package SOTA;
 
-public class SOTAtimer {
+public class sotaHandler {
     public String handle(boolean right, boolean left, boolean jump) {
-        String text = "a";
+        String text = "";
+        String a = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n";
 
-        if(right){
-            text = "b";
+        for (int i = 0; i < 9; i++) {
+            text += a;
         }
 
-        if(left){
-            text = "c";
+        if (right) {
+            text = text.replace("a", "b");
         }
 
-        if(jump){
-            text = "d";
+        if (left) {
+            text = text.replace("a", "c");
+        }
+
+        if (jump) {
+            text = text.replace("a", "d");
         }
 
         return text;

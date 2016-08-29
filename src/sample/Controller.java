@@ -1,6 +1,6 @@
 package sample;
 
-import SOTA.SOTAtimer;
+import SOTA.sotaHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -22,17 +22,16 @@ public class Controller implements Initializable {
     private boolean jump = false;
 
 
-
     public void onKeyPressed(KeyEvent keyEvent) {
         KeyCode c = keyEvent.getCode();
 
-        if(c == KeyCode.RIGHT || c == KeyCode.D){
+        if (c == KeyCode.RIGHT || c == KeyCode.D) {
             right = true;
         }
-        if(c == KeyCode.LEFT || c == KeyCode.A){
+        if (c == KeyCode.LEFT || c == KeyCode.A) {
             left = true;
         }
-        if(c == KeyCode.UP || c == KeyCode.D || c == KeyCode.SPACE){
+        if (c == KeyCode.UP || c == KeyCode.D || c == KeyCode.SPACE) {
             jump = true;
         }
 
@@ -42,24 +41,23 @@ public class Controller implements Initializable {
     public void onKeyReleased(KeyEvent keyEvent) {
         KeyCode c = keyEvent.getCode();
 
-        if(c == KeyCode.RIGHT || c == KeyCode.D){
+        if (c == KeyCode.RIGHT || c == KeyCode.D) {
             right = false;
         }
-        if(c == KeyCode.LEFT || c == KeyCode.A){
+        if (c == KeyCode.LEFT || c == KeyCode.A) {
             left = false;
         }
-        if(c == KeyCode.UP || c == KeyCode.D || c == KeyCode.SPACE){
+        if (c == KeyCode.UP || c == KeyCode.D || c == KeyCode.SPACE) {
             jump = false;
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         console.setPrefColumnCount(16);
         console.setPrefRowCount(9);
 
-        SOTAtimer handler = new SOTAtimer();
+        sotaHandler handler = new sotaHandler();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
