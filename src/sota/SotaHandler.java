@@ -9,7 +9,7 @@ public class SotaHandler {
     String[][][] map;
 
     public SotaHandler(){
-        map = 
+        map =
     }
 
     public String handle(boolean[] keys) {
