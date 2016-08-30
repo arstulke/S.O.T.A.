@@ -1,29 +1,43 @@
-package SOTA;
+package sota;
 
+import java.awt.*;
 import java.io.BufferedReader;
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
-public class SOTAMapReader {
+class SOTAMapReader {
 
-    static String[][] map;
-    static int mapLength = 100;
+    private String[][] map;
+    private int width = 0;
+    private int height = 0;
 
-    static String[][][] eventMap;
-    static char player = 'X';
 
-    public static void readMap(String path) {
+    private String[][][] eventMap;
+    private char player = 'X';
+
+    void readMap(String path) {
         File file = new File(path);
-        try  {
+        try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
             int i = 0;
             try {
+                height = 0;
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith(":")) {
-                        for (int k = 1; k < mapLength; k++) {
+                        height++;
+                    }
+                }
+                br.close();
+                br = new BufferedReader(new FileReader(file));
+
+                while ((line = br.readLine()) != null) {
+                    if (line.startsWith(":")) {
+                        for (int k = 1; k < width; k++) {
                             try {
                                 map[i][k] = Character.toString(line.charAt(k));
-                            }catch(Exception ignore){
+                            } catch (Exception ignore) {
                                 map[i][k] = " ";
                             }
                         }
@@ -31,10 +45,12 @@ public class SOTAMapReader {
                     } else if (line.startsWith("player:")) {
                         player = line.split(":")[1].toCharArray()[0];
                     } else if (line.startsWith("-")) {
-                       mapLength = line.length();
+                        width = line.length();
+                        map = new String[height][width];
                     }
 
                 }
+                br.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -43,11 +59,33 @@ public class SOTAMapReader {
         }
     }
 
-    public char getPlayer() {
+    char getPlayer() {
         return player;
     }
 
-    public static String[][][] getMap() {
+    String[][][] getMap() {
         return eventMap;
+    }
+
+    Point locatePlayer() {
+        int y = 0;
+        int x = 0;
+
+        for (String[] ch : map) {
+            for (String c : ch) {
+                if (c != null && c.equals(String.valueOf(player))) {
+
+                    map[y][x] = "";
+                    return new Point(y, x);
+                }
+
+                x++;
+            }
+
+            x = 0;
+            y++;
+        }
+
+        return null;
     }
 }
