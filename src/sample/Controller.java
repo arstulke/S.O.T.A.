@@ -58,7 +58,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SotaHandler handler = new SotaHandler();
+        final SotaHandler handler = new SotaHandler();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {

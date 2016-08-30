@@ -2,12 +2,20 @@ package sota;
 
 public class SotaHandler {
 
-    boolean right;
-    boolean left;
-    boolean jump;
+    public boolean right;
+    public boolean left;
+    public boolean jump;
+
+    String[][][] map;
+
+    public SotaHandler(){
+        map = 
+    }
 
     public String handle(boolean[] keys) {
         updateKeysBooleans(keys);
+
+
         return right + ", " + left + ", " + jump;
     }
 
