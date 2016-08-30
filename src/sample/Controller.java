@@ -1,6 +1,6 @@
 package sample;
 
-import SOTA.SOTAtimer;
+import sota.SotaHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -17,54 +17,56 @@ public class Controller implements Initializable {
     @FXML
     TextArea console;
 
-    private boolean right;
-    private boolean left;
-    private boolean jump;
-
+    private boolean[] keys = new boolean[7];
 
 
     public void onKeyPressed(KeyEvent keyEvent) {
-        KeyCode c = keyEvent.getCode();
-
-        if(c == KeyCode.RIGHT || c == KeyCode.D){
-            right = true;
-        }
-        if(c == KeyCode.LEFT || c == KeyCode.A){
-            left = true;
-        }
-        if(c == KeyCode.UP || c == KeyCode.D || c == KeyCode.SPACE){
-            jump = true;
-        }
-
-
+        updateKeyBooleans(true, keyEvent.getCode());
     }
 
     public void onKeyReleased(KeyEvent keyEvent) {
-        KeyCode c = keyEvent.getCode();
+        updateKeyBooleans(false, keyEvent.getCode());
+    }
 
-        if(c == KeyCode.RIGHT || c == KeyCode.D){
-            right = false;
+    private void updateKeyBooleans(boolean b, KeyCode c) {
+        if (c == KeyCode.RIGHT)
+            keys[0] = b;
+
+        if (c == KeyCode.D) {
+            keys[1] = b;
         }
-        if(c == KeyCode.LEFT || c == KeyCode.A){
-            left = false;
+
+
+        if (c == KeyCode.LEFT) {
+            keys[2] = b;
         }
-        if(c == KeyCode.UP || c == KeyCode.D || c == KeyCode.SPACE){
-            jump = false;
+        if (c == KeyCode.A) {
+            keys[3] = b;
+        }
+
+
+        if (c == KeyCode.UP) {
+            keys[4] = b;
+        }
+        if (c == KeyCode.W) {
+            keys[5] = b;
+        }
+        if (c == KeyCode.SPACE) {
+            keys[6] = b;
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        SOTAtimer handler = new SOTAtimer();
+        final SotaHandler handler = new SotaHandler();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                String output = handler.handle(right, left, jump);
+                String output = handler.handle(keys);
                 console.setText(output);
             }
         };
         Timer t = new Timer();
-        t.schedule(task, 100);
+        t.schedule(task, 0, 100);
     }
 }

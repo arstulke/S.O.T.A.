@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+@SuppressWarnings("deprecation")
 public class Main extends Application {
 
     @Override
