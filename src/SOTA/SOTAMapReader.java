@@ -74,6 +74,8 @@ class SOTAMapReader {
         for (String[] ch : map) {
             for (String c : ch) {
                 if (c != null && c.equals(String.valueOf(player))) {
+
+                    map[y][x] = "";
                     return new Point(y, x);
                 }
 

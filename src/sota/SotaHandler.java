@@ -17,8 +17,8 @@ public class SotaHandler {
         mr.readMap(System.getProperty("user.dir") + "\\map.txt");
 
         player = mr.getPlayer();
-        map = mr.getMap();
         position = mr.locatePlayer();
+        map = mr.getMap();
     }
 
     public String handle(boolean[] keys) {
@@ -34,5 +34,10 @@ public class SotaHandler {
         right = keys[0] || keys[1];
         left = keys[2] || keys[3];
         jump = keys[4] || keys[5] || keys[6];
+    }
+
+    private String[][] display(){
+        //String[][] display = new String[][];
+        return null;
     }
 }

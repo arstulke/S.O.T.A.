@@ -1,4 +1,4 @@
-package tests;
+package sota;
 
 import org.junit.Test;
 import org.testng.Assert;
