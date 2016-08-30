@@ -1,0 +1,34 @@
+player:X
+&c 
+&c Das ist ein Kommentar sie sind nur oberhalb des Spielfeldes erlaubt
+&c X ist der Player
+&c ----- symbolisiert die länge des spielfeldes
+&c höhe ist auf 16 festgesetzt
+&c Großbuchstaben sind Mauern
+&c Kleinbuchstaben sind props
+&c S = schlüssel, G = Gegner, O = Ziel
+&c unten sind die Events mit "[trigger x.y] command Value"
+-------------------------------------------------------------------------
+:
+:
+:
+:
+:
+:
+:
+:    /\ 
+:   /  \                    =#========
+:  /    \                    #                                         o
+: /      \                   #                                        i i
+:/        \                  #                                          
+:==========                  #                                          O
+:I        I                  #    S                                   ===
+:I        I                 =#=====                                ======
+:I   o    I                  #                                 ==========
+:I  i i                      #              G       X      ==============
+:========================================================================
+6.1;8.1 decreasejump 2
+6.1 display "Your Jumpheight has been decreased" 2
+6.2 spawnhiddenenemy
+2.16 teleport 25.3
+16.3 speed 100
