@@ -1,17 +1,18 @@
-package SOTA;
+package sota;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.*;
 
-public class SOTAMapReader {
+class SOTAMapReader {
 
-    static String[][] map;
-    static int mapLength = 100;
+    private String[][] map;
+    private int mapLength = 100;
 
-    static String[][][] eventMap;
-    static char player = 'X';
+    private String[][][] eventMap;
+    private char player = 'X';
 
-    public static void readMap(String path) {
+    void readMap(String path) {
         File file = new File(path);
         try  {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -43,11 +44,31 @@ public class SOTAMapReader {
         }
     }
 
-    public char getPlayer() {
+    char getPlayer() {
         return player;
     }
 
-    public static String[][][] getMap() {
+    String[][][] getMap() {
         return eventMap;
+    }
+
+    Point locatePlayer() {
+        int x = 0;
+        int y = 0;
+
+        for(String[] ch : map){
+            for(String c : ch){
+                if(c.charAt(0) == player){
+                    return new Point(x, y);
+                }
+
+                y++;
+            }
+
+            y = 0;
+            x++;
+        }
+
+        return null;
     }
 }

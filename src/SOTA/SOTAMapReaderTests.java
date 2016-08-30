@@ -1,27 +1,31 @@
-package SOTA;
+package sota;
+
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 public class SOTAMapReaderTests {
 
+    private SOTAMapReader mapReader;
+
+    public SOTAMapReaderTests() {
+        mapReader = new SOTAMapReader();
+    }
+
     @Test
-    public void readingMap(){
+    public void readingMap() {
         // given:
-        String path = "C:\\Users\\kaabert\\Desktop\\map.txt";
+        String path = System.getProperty("user.home") + "\\Desktop\\map.txt";
         String[][][] test = new String[][][]{{{""}}};
-        when(SOTAMapReader.getMap()).thenReturn(test);
+        when(mapReader.getMap()).thenReturn(test);
 
         // when:
-        SOTAMapReader.readMap(path);
-
+        mapReader.readMap(path);
 
         // then:
-        assertThat(SOTAMapReader.getMap(), is(test));
+        assertThat(mapReader.getMap(), is(test));
     }
 
 }

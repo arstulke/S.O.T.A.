@@ -1,22 +1,33 @@
 package sota;
 
+import java.awt.*;
+
 public class SotaHandler {
 
     public boolean right;
     public boolean left;
     public boolean jump;
 
-    String[][][] map;
+    private String[][][] map;
+    private char player;
+    private Point position;
 
     public SotaHandler(){
-        map =
+        SOTAMapReader mr = new SOTAMapReader();
+        mr.readMap(System.getProperty("user.dir") + "\\map.txt");
+
+        player = mr.getPlayer();
+        map = mr.getMap();
+        position = mr.locatePlayer();
     }
 
     public String handle(boolean[] keys) {
         updateKeysBooleans(keys);
 
+        String s = right + ", " + left + ", " + jump + "\n";
+        s += player + ": " + position.x + ", " + position.y;
 
-        return right + ", " + left + ", " + jump;
+        return s;
     }
 
     private void updateKeysBooleans(boolean[] keys) {
