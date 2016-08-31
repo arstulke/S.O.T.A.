@@ -2,8 +2,6 @@ package sota;
 
 import java.awt.*;
 
-import static javafx.scene.input.KeyCode.Y;
-
 public class SotaHandler {
 
     boolean right;
@@ -36,13 +34,28 @@ public class SotaHandler {
         return display();
     }
 
+    Point lastPosition;
+
     private void checkMovement() {
+        lastPosition.setLocation(position);
         if (right && !left && !jump) {
             position.move(position.x, position.y + 1);
         }
 
         if (!right && left && !jump) {
             position.move(position.x, position.y - 1);
+        }
+
+
+
+        if(isValidChar(map[lastPosition.x][lastPosition.y])){
+            position.setLocation(lastPosition);
+        }
+    }
+
+    private boolean isValidChar(String s) {
+        for(char a : chars){
+            if(s.charAt(0) == a){}
         }
     }
 
@@ -77,7 +90,7 @@ public class SotaHandler {
                     System.out.println("ArrayIndexOutOfBoundException: " + e.getMessage());
                 }
 
-                if(d[y][x] == null)
+                if (d[y][x] == null)
                     d[y][x] = " ";
             }
         }
