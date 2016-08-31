@@ -4,31 +4,46 @@ import java.awt.*;
 
 public class SotaHandler {
 
-    boolean keyRight;
-    boolean keyLeft;
-    boolean keyUp;
+    private boolean keyRight;
+    private boolean keyLeft;
+    private boolean keyUp;
     private boolean keyDown;
 
     private String[][] map;
     private char player;
-    private Point position;
+    Point position;
 
     private Point displayPosition;
 
     public SotaHandler(Point displayPos) {
-        SOTAMapReader mr = new SOTAMapReader();
-        mr.readMap(System.getProperty("user.dir") + "\\map.txt");
-
-        player = mr.getPlayer();
-        position = mr.locatePlayer();
-        map = mr.getMap();
+        loadMap(System.getProperty("user.dir") + "\\map.txt");
 
         displayPosition = new Point(0, 0);
         displayPosition.setLocation(displayPos);
     }
 
-    public String handle(boolean[] keys) {
-        updateKeysBooleans(keys);
+    SotaHandler(Point displayPos, String path) {
+        loadMap(path);
+
+        displayPosition = new Point(0, 0);
+        displayPosition.setLocation(displayPos);
+    }
+
+    private void loadMap(String path)
+    {
+        SOTAMapReader mr = new SOTAMapReader();
+        mr.readMap(path);
+
+        player = mr.getPlayer();
+        position = mr.locatePlayer();
+        map = mr.getMap();
+    }
+
+    public String handle(boolean kRight, boolean kLeft, boolean kUp, boolean kDown) {
+        keyRight = kRight;
+        keyLeft = kLeft;
+        keyUp = kUp;
+        keyDown = kDown;
 
         checkMovement();
         checkEvents();
@@ -139,13 +154,6 @@ public class SotaHandler {
 
     private void checkEvents() {
 
-    }
-
-    private void updateKeysBooleans(boolean[] keys) {
-        keyRight = keys[0] || keys[1];
-        keyLeft = keys[2] || keys[3];
-        keyUp = keys[4] || keys[5] || keys[6];
-        keyDown = keys[7] || keys[8];
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
