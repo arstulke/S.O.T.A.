@@ -2,7 +2,6 @@ package sota;
 
 import org.junit.Test;
 import org.testng.Assert;
-import sota.SotaHandler;
 
 public class SotaHandlerHandles {
 
@@ -16,8 +15,8 @@ public class SotaHandlerHandles {
         sHandler.handle(keys);
 
         //Then
-        Assert.assertEquals(true, sHandler.right);
-        Assert.assertEquals(false, sHandler.left);
-        Assert.assertEquals(false, sHandler.jump);
+        Assert.assertEquals(true, sHandler.keyRight);
+        Assert.assertEquals(false, sHandler.keyLeft);
+        Assert.assertEquals(false, sHandler.keyUp);
     }
 }

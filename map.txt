@@ -8,7 +8,7 @@ player:X
 &c Kleinbuchstaben sind props
 &c S = schlüssel, G = Gegner, O = Ziel
 &c unten sind die Events mit "[trigger x.y] command Value"
--------------------------------------------------------------------------
+------------------------------------------------------------------------
 :
 :
 :

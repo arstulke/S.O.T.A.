@@ -40,6 +40,8 @@ class SOTAMapReader {
                             } catch (Exception ignore) {
                                 map[i][k] = " ";
                             }
+
+                            map[i][k] = map[i][k] == null ? " " : map[i][k];
                         }
                         i++;
                     } else if (line.startsWith("player:")) {
@@ -79,7 +81,7 @@ class SOTAMapReader {
             for (String c : ch) {
                 if (c != null && c.equals(String.valueOf(player))) {
 
-                    map[y][x] = "";
+                    map[y][x] = " ";
                     return new Point(y, x);
                 }
 

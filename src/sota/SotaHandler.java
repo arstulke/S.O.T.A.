@@ -4,17 +4,15 @@ import java.awt.*;
 
 public class SotaHandler {
 
-    boolean right;
-    boolean left;
-    boolean jump;
+    boolean keyRight;
+    boolean keyLeft;
+    boolean keyUp;
+    boolean keyDown;
 
     private String[][] map;
     private char player;
     private Point position;
 
-
-    private int width = 32;
-    private int height = 9;
 
     public SotaHandler() {
         SOTAMapReader mr = new SOTAMapReader();
@@ -34,28 +32,105 @@ public class SotaHandler {
         return display();
     }
 
-    Point lastPosition;
-
     private void checkMovement() {
-        lastPosition.setLocation(position);
-        if (right && !left && !jump) {
-            position.move(position.x, position.y + 1);
-        }
+        try {
+            boolean isOnLadder = map[position.x][position.y].charAt(0) == '#';
 
-        if (!right && left && !jump) {
-            position.move(position.x, position.y - 1);
-        }
+            //GravityMovement
+            boolean isOnGround = !isValidChar(map[position.x + 1][position.y], true);
+            if (!isOnGround && !isJumping && !isOnLadder) {
+                move(1, 0, true);
+            }
+            isOnGround = !isValidChar(map[position.x + 1][position.y], true);
+
+
+            //Left/Right Movement
+            if (keyRight && !keyLeft) {
+                move(0, 1, false);
+            }
+            if (!keyRight && keyLeft) {
+                move(0, -1, false);
+            }
+
+            //Simple Jump Movement
+            if (keyUp && isOnGround && !isOnLadder) {
+                isJumping = true;
+            }
+
+            //Ladder Movement (Jump, Right, Left)
+            if (keyUp && isOnLadder && !((keyRight || keyLeft) && !(keyRight && keyLeft))) {
+                move(-1, 0, false);
+            }
+            if (keyUp && isOnLadder && keyRight) {
+                isJumping = true;
+            }
+            if (keyUp && isOnLadder && keyLeft) {
+                isJumping = true;
+            }
+            if (keyDown && (isOnLadder || map[position.x + 1][position.y].charAt(0) == '#')) {
+                move(1, 0, false);
+            }
 
 
 
-        if(isValidChar(map[lastPosition.x][lastPosition.y])){
-            position.setLocation(lastPosition);
+            if (isJumping) {
+                jump();
+            }
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException ignored) {
         }
     }
 
-    private boolean isValidChar(String s) {
-        for(char a : chars){
-            if(s.charAt(0) == a){}
+    private boolean isJumping = false;
+    private int jumpTick = 0;
+
+    private void jump() {
+        int f = 1;
+
+
+        if (jumpTick == 0) {
+            move(-1, 0, false);
+        } else if (jumpTick == f) {
+            move(-1, 0, false);
+        } else if (jumpTick == 3 * f) {
+            move(1, 0, true);
+        } else if (jumpTick == 4 * f) {
+            move(1, 0, true);
+        } else if (jumpTick == 5 * f) {
+            move(1, 0, true);
+            isJumping = false;
+            jumpTick = -1;
+        }
+
+        jumpTick++;
+    }
+
+    private void move(int y, int x, boolean gravityCheck) {
+        try {
+            if (isValidChar(map[position.x + y][position.y + x], gravityCheck)) {
+                position.move(position.x + y, position.y + x);
+            }
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException ignored) {
+        }
+    }
+
+    private boolean isValidChar(String s, boolean gravityCheck) {
+        char[] validChars = new char[]{' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+        char ladder = '#';
+        if (s.length() == 1) {
+            for (char a : validChars) {
+                if (s.charAt(0) == a) {
+                    return true;
+                }
+            }
+            if (!gravityCheck) {
+                if (s.charAt(0) == ladder) {
+                    return true;
+                }
+            }
+
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -64,30 +139,34 @@ public class SotaHandler {
     }
 
     private void updateKeysBooleans(boolean[] keys) {
-        right = keys[0] || keys[1];
-        left = keys[2] || keys[3];
-        jump = keys[4] || keys[5] || keys[6];
+        keyRight = keys[0] || keys[1];
+        keyLeft = keys[2] || keys[3];
+        keyUp = keys[4] || keys[5] || keys[6];
+        keyDown = keys[7] || keys[8];
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     private String display() {
+        int height = 9;
+        int width = 32;
         String[][] d = new String[width][height];
 
         for (int y = 0; y < width; y++) {
             for (int x = 0; x < height; x++) {
                 try {
-                    int Y = x + position.x - 6;
-                    int X = y + position.y - 1;
+                    int mapDetailY = x + position.x - 6;
+                    int mapDetailX = y + position.y - 1;
 
-                    if (new Point(Y, X).equals(position)) {
+                    if (new Point(mapDetailY, mapDetailX).equals(position)) {
                         d[y][x] = String.valueOf(player);
-                    } else if (String.valueOf(map[Y][X]) == null) {
-                        d[y][x] = String.valueOf(map[Y][X]);
+                    } else if (String.valueOf(map[mapDetailY][mapDetailX]) == null) {
+                        d[y][x] = String.valueOf(map[mapDetailY][mapDetailX]);
                     } else {
-                        d[y][x] = String.valueOf(map[Y][X]);
+                        d[y][x] = String.valueOf(map[mapDetailY][mapDetailX]);
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
                     d[y][x] = "§";
-                    System.out.println("ArrayIndexOutOfBoundException: " + e.getMessage());
+                    //System.out.println("ArrayIndexOutOfBoundException: " + e.getMessage());
                 }
 
                 if (d[y][x] == null)

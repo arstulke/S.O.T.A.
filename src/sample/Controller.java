@@ -17,7 +17,7 @@ public class Controller implements Initializable {
     @FXML
     TextArea console;
 
-    private boolean[] keys = new boolean[7];
+    private boolean[] keys = new boolean[9];
 
 
     public void onKeyPressed(KeyEvent keyEvent) {
@@ -53,6 +53,13 @@ public class Controller implements Initializable {
         }
         if (c == KeyCode.SPACE) {
             keys[6] = b;
+        }
+
+        if (c == KeyCode.DOWN) {
+            keys[7] = b;
+        }
+        if (c == KeyCode.S) {
+            keys[8] = b;
         }
     }
 
