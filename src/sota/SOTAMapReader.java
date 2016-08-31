@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-class SOTAMapReader {
+public class SOTAMapReader {
 
     private String[][] map;
     private int width = 0;
