@@ -7,20 +7,24 @@ public class SotaHandler {
     boolean keyRight;
     boolean keyLeft;
     boolean keyUp;
-    boolean keyDown;
+    private boolean keyDown;
 
     private String[][] map;
     private char player;
     private Point position;
 
+    private Point displayPosition;
 
-    public SotaHandler() {
+    public SotaHandler(Point displayPos) {
         SOTAMapReader mr = new SOTAMapReader();
         mr.readMap(System.getProperty("user.dir") + "\\map.txt");
 
         player = mr.getPlayer();
         position = mr.locatePlayer();
         map = mr.getMap();
+
+        displayPosition = new Point(0, 0);
+        displayPosition.setLocation(displayPos);
     }
 
     public String handle(boolean[] keys) {
@@ -52,29 +56,28 @@ public class SotaHandler {
                 move(0, -1, false);
             }
 
+
+            if (isJumping) {
+                jump();
+            }
+
             //Simple Jump Movement
-            if (keyUp && isOnGround && !isOnLadder) {
+            if (keyUp && !keyDown && isOnGround && !isOnLadder) {
                 isJumping = true;
             }
 
             //Ladder Movement (Jump, Right, Left)
-            if (keyUp && isOnLadder && !((keyRight || keyLeft) && !(keyRight && keyLeft))) {
+            if (keyUp && !keyDown && isOnLadder && !((keyRight || keyLeft) && !(keyRight && keyLeft))) {
                 move(-1, 0, false);
             }
-            if (keyUp && isOnLadder && keyRight) {
+            if (keyUp && !keyDown && isOnLadder && keyRight) {
                 isJumping = true;
             }
-            if (keyUp && isOnLadder && keyLeft) {
+            if (keyUp && !keyDown && isOnLadder && keyLeft) {
                 isJumping = true;
             }
-            if (keyDown && (isOnLadder || map[position.x + 1][position.y].charAt(0) == '#')) {
+            if (keyDown && !keyUp && (isOnLadder || map[position.x + 1][position.y].charAt(0) == '#')) {
                 move(1, 0, false);
-            }
-
-
-
-            if (isJumping) {
-                jump();
             }
         } catch (NullPointerException | ArrayIndexOutOfBoundsException ignored) {
         }
@@ -154,8 +157,8 @@ public class SotaHandler {
         for (int y = 0; y < width; y++) {
             for (int x = 0; x < height; x++) {
                 try {
-                    int mapDetailY = x + position.x - 6;
-                    int mapDetailX = y + position.y - 1;
+                    int mapDetailY = x + position.x - displayPosition.x;
+                    int mapDetailX = y + position.y - displayPosition.y;
 
                     if (new Point(mapDetailY, mapDetailX).equals(position)) {
                         d[y][x] = String.valueOf(player);

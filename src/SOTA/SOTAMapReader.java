@@ -6,14 +6,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+@SuppressWarnings("SuspiciousNameCombination")
 class SOTAMapReader {
 
     private String[][] map;
     private int width = 0;
-    private int height = 0;
 
 
-    private String[][][] eventMap;
+    //private String[][][] eventMap;
     private char player = 'X';
 
     void readMap(String path) {
@@ -23,7 +23,7 @@ class SOTAMapReader {
             String line;
             int i = 0;
             try {
-                height = 0;
+                int height = 0;
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith(":")) {
                         height++;
@@ -47,7 +47,7 @@ class SOTAMapReader {
                     } else if (line.startsWith("player:")) {
                         player = line.split(":")[1].toCharArray()[0];
                     } else if (line.startsWith("-")) {
-                        width = line.length();
+                        width = line.length() - 1;
                         map = new String[height][width];
                     }
 
@@ -65,9 +65,7 @@ class SOTAMapReader {
         return player;
     }
 
-    String[][][] getEventMap() {
-        return eventMap;
-    }
+    //String[][][] getEventMap() {return eventMap;}
 
     String[][] getMap() {
         return map;

@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -63,9 +64,17 @@ public class Controller implements Initializable {
         }
     }
 
+
+    //region Important
+    //Point displayPosition = new Point(6, 1);
+    private Point displayPosition = new Point(5, 15);
+    //endregion
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        final SotaHandler handler = new SotaHandler();
+        final SotaHandler handler = new SotaHandler(displayPosition);
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
