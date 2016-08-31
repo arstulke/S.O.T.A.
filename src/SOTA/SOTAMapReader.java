@@ -34,9 +34,9 @@ class SOTAMapReader {
 
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith(":")) {
-                        for (int k = 1; k < width; k++) {
+                        for (int k = 0; k < width; k++) {
                             try {
-                                map[i][k] = Character.toString(line.charAt(k));
+                                map[i][k] = Character.toString(line.charAt(k + 1));
                             } catch (Exception ignore) {
                                 map[i][k] = " ";
                             }
@@ -63,8 +63,12 @@ class SOTAMapReader {
         return player;
     }
 
-    String[][][] getMap() {
+    String[][][] getEventMap() {
         return eventMap;
+    }
+
+    String[][] getMap() {
+        return map;
     }
 
     Point locatePlayer() {

@@ -8,7 +8,7 @@
    <children>
       <TextArea fx:id="console" editable="false" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="500.0" prefWidth="900.0">
          <font>
-            <Font name="Courier New Bold" size="44.0" />
+            <Font name="Courier New Bold" size="30.0" />
          </font></TextArea>
    </children>
 </Pane>
