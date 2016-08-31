@@ -62,7 +62,7 @@ public class SotaHandler {
         for (int y = 0; y < width; y++) {
             for (int x = 0; x < height; x++) {
                 try {
-                    int Y = x + position.x - 7;
+                    int Y = x + position.x - 6;
                     int X = y + position.y - 1;
 
                     if (new Point(Y, X).equals(position)) {
