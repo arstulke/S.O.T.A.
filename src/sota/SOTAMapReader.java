@@ -6,14 +6,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class SOTAMapReader {
+@SuppressWarnings("SuspiciousNameCombination")
+class SOTAMapReader {
 
     private String[][] map;
     private int width = 0;
-    private int height = 0;
 
 
-    private String[][][] eventMap;
+    //private String[][][] eventMap;
     private char player = 'X';
 
     void readMap(String path) {
@@ -23,7 +23,7 @@ public class SOTAMapReader {
             String line;
             int i = 0;
             try {
-                height = 0;
+                int height = 0;
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith(":")) {
                         height++;
@@ -40,12 +40,14 @@ public class SOTAMapReader {
                             } catch (Exception ignore) {
                                 map[i][k] = " ";
                             }
+
+                            map[i][k] = map[i][k] == null ? " " : map[i][k];
                         }
                         i++;
                     } else if (line.startsWith("player:")) {
                         player = line.split(":")[1].toCharArray()[0];
                     } else if (line.startsWith("-")) {
-                        width = line.length();
+                        width = line.length() - 1;
                         map = new String[height][width];
                     }
 
@@ -63,9 +65,7 @@ public class SOTAMapReader {
         return player;
     }
 
-    String[][][] getEventMap() {
-        return eventMap;
-    }
+    //String[][][] getEventMap() {return eventMap;}
 
     String[][] getMap() {
         return map;
@@ -79,7 +79,7 @@ public class SOTAMapReader {
             for (String c : ch) {
                 if (c != null && c.equals(String.valueOf(player))) {
 
-                    map[y][x] = "";
+                    map[y][x] = " ";
                     return new Point(y, x);
                 }
 

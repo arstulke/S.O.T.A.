@@ -1,34 +1,83 @@
 player:X
 &c 
-&c Das ist ein Kommentar sie sind nur oberhalb des Spielfeldes erlaubt
-&c X ist der Player
-&c ----- symbolisiert die länge des spielfeldes
-&c höhe ist auf 16 festgesetzt
-&c Großbuchstaben sind Mauern
-&c Kleinbuchstaben sind props
-&c S = schlüssel, G = Gegner, O = Ziel
-&c unten sind die Events mit "[trigger x.y] command Value"
--------------------------------------------------------------------------
+&c Du bist eine Wache, die zum Ziel muss... das ist alles
+&c 
+&c 
+&c 
+&c
+&c
+&c         _______  ______            _______  _       _________          _______  _______ 
+&c        (  ___  )(  __  \ |\     /|(  ____ \( (    /|\__   __/|\     /|(  ____ )(  ____ \
+&c        | (   ) || (  \  )| )   ( || (    \/|  \  ( |   ) (   | )   ( || (    )|| (    \/
+&c        | (___) || |   ) || |   | || (__    |   \ | |   | |   | |   | || (____)|| (__    
+&c        |  ___  || |   | |( (   ) )|  __)   | (\ \) |   | |   | |   | ||     __)|  __)   
+&c        | (   ) || |   ) | \ \_/ / | (      | | \   |   | |   | |   | || (\ (   | (      
+&c        | )   ( || (__/  )  \   /  | (____/\| )  \  |   | |   | (___) || ) \ \__| (____/\
+&c        |/     \|(______/    \_/   (_______/|/    )_)   )_(   (_______)|/   \__/(_______/
+&c
+&c _______  _______       _________          _______        _______           _______  _______  ______  
+&c(  ___  )(  ____ \      \__   __/|\     /|(  ____ \      (  ____ \|\     /|(  ___  )(  ____ )(  __  \ 
+&c| (   ) || (    \/         ) (   | )   ( || (    \/      | (    \/| )   ( || (   ) || (    )|| (  \  )
+&c| |   | || (__             | |   | (___) || (__          | |      | |   | || (___) || (____)|| |   ) |
+&c| |   | ||  __)            | |   |  ___  ||  __)         | | ____ | |   | ||  ___  ||     __)| |   | |
+&c| |   | || (               | |   | (   ) || (            | | \_  )| |   | || (   ) || (\ (   | |   ) |
+&c| (___) || )               | |   | )   ( || (____/\      | (___) || (___) || )   ( || ) \ \__| (__/  )
+&c(_______)|/                )_(   |/     \|(_______/      (_______)(_______)|/     \||/   \__/(______/ 
+&c
+&c
+&c NICHT DIE MAP VORHER ANSCHAUEN
+&c K O S
+&c Killing On Site
+&c Dont go behind this point(!)&c 
+&c 
+&c 
+&c
+&c
+&c 
+&c 
+&c 
+&c
+&c
+&c 
+&c 
+&c 
+&c
+&c
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+:
+:
+:                     
+:
+:                                        
+:                                      
+:                                        
+:                   /\ 
+:                  /~~\                      
+:                 /~~~~\                                                               
+:                /~~~~~~\                                                                     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:               /~~~~~~~~\                                                                    MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:              WWWWWWWWWWWW                                                                   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:               I        I                                                           MMM      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:               I        I                                                        MMMMMM      MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:               I        I                                                    MMMMMMMMMM      MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:   mm  X   mm  i        i      mm        mm        mm       mm           MMMMMMMMMMMMMM      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:                                                                                      |      MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:         O                                                                            |      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:      MMMMMMMMM                                                                       |      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:                  MMMMMMMMM                                                           |      MM   MMMM                  |
+:                               MMMMMMMMM                                              |      MMMMMMMMM                  |
+:                                        MMMMMMMMM                                 o   |            MMM              o   |
+:                                              MMMMMMMMM                          i i  |                            i i  |
+:                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 :
 :
 :
 :
 :
 :
-:
-:    /\ 
-:   /  \                    =#========
-:  /    \                    #                                         o
-: /      \                   #                                        i i
-:/        \                  #                                          
-:==========                  #                                          O
-:I        I                  #    S                                   ===
-:I        I                 =#=====                                ======
-:I   o    I                  #                                 ==========
-:I  i i                      #              G       X      ==============
-:========================================================================
-6.1;8.1 decreasejump 2
-6.1 display "Your Jumpheight has been decreased" 2
-6.2 spawnhiddenenemy
-2.16 teleport 25.3
-16.3 speed 100
+:^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+16.17 display "Find your way, young master!" 50
+25.102;25.102 spawnhiddenenemy default
+25.118;25.118 teleport 25.84

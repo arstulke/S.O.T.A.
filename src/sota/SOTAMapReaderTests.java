@@ -19,7 +19,7 @@ public class SOTAMapReaderTests {
         // given:
         String path = System.getProperty("user.home") + "\\Desktop\\map.txt";
         String[][][] test = new String[][][]{{{""}}};
-        when(mapReader.getMap()).thenReturn(test);
+        //when(mapReader.getMap()).thenReturn(test);
 
         // when:
         mapReader.readMap(path);

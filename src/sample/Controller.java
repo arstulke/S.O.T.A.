@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -17,7 +18,7 @@ public class Controller implements Initializable {
     @FXML
     TextArea console;
 
-    private boolean[] keys = new boolean[7];
+    private boolean[] keys = new boolean[9];
 
 
     public void onKeyPressed(KeyEvent keyEvent) {
@@ -54,15 +55,42 @@ public class Controller implements Initializable {
         if (c == KeyCode.SPACE) {
             keys[6] = b;
         }
+
+        if (c == KeyCode.DOWN) {
+            keys[7] = b;
+        }
+        if (c == KeyCode.S) {
+            keys[8] = b;
+        }
+    }
+
+
+    //region Important
+    //Point displayPosition = new Point(6, 1);
+    private Point displayPosition = new Point(5, 15);
+    //endregion
+
+    boolean keyRight;
+    boolean keyLeft;
+    boolean keyUp;
+    boolean keyDown;
+
+    private void updateKeysBooleans() {
+        keyRight = keys[0] || keys[1];
+        keyLeft = keys[2] || keys[3];
+        keyUp = keys[4] || keys[5] || keys[6];
+        keyDown = keys[7] || keys[8];
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        final SotaHandler handler = new SotaHandler();
+        final SotaHandler handler = new SotaHandler(displayPosition);
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                String output = handler.handle(keys);
+                updateKeysBooleans();
+
+                String output = handler.handle(keyRight, keyLeft, keyUp, keyDown);
                 console.setText(output);
             }
         };
