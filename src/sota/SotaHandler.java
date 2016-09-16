@@ -29,8 +29,7 @@ public class SotaHandler {
         displayPosition.setLocation(displayPos);
     }
 
-    private void loadMap(String path)
-    {
+    private void loadMap(String path) {
         SOTAMapReader mr = new SOTAMapReader();
         mr.readMap(path);
 
@@ -195,8 +194,6 @@ public class SotaHandler {
             }
             display += line + "\n";
         }
-
-
         display = display.substring(0, display.length() - 1);
 
         return display;
