@@ -23,7 +23,7 @@ public class Main extends Application {
             }
         });
 
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("State of the art");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();

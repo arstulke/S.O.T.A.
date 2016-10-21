@@ -18,6 +18,22 @@ public class Controller implements Initializable {
     @FXML
     TextArea console;
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        final SotaHandler handler = new SotaHandler(displayPosition);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                updateKeysBooleans();
+
+                String output = handler.controlMovement(keyRight, keyLeft, keyUp, keyDown);
+                console.setText(output);
+            }
+        };
+        Timer t = new Timer();
+        t.schedule(task, 0, 100);
+    }
+
     private boolean[] keys = new boolean[9];
 
 
@@ -70,31 +86,15 @@ public class Controller implements Initializable {
     private Point displayPosition = new Point(5, 15);
     //endregion
 
-    boolean keyRight;
-    boolean keyLeft;
-    boolean keyUp;
-    boolean keyDown;
+    private boolean keyRight;
+    private boolean keyLeft;
+    private boolean keyUp;
+    private boolean keyDown;
 
     private void updateKeysBooleans() {
         keyRight = keys[0] || keys[1];
         keyLeft = keys[2] || keys[3];
         keyUp = keys[4] || keys[5] || keys[6];
         keyDown = keys[7] || keys[8];
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        final SotaHandler handler = new SotaHandler(displayPosition);
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                updateKeysBooleans();
-
-                String output = handler.handle(keyRight, keyLeft, keyUp, keyDown);
-                console.setText(output);
-            }
-        };
-        Timer t = new Timer();
-        t.schedule(task, 0, 100);
     }
 }

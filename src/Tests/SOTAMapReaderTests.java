@@ -1,10 +1,9 @@
-package sota;
-
 import org.junit.Test;
+import sota.SOTAMapReader;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
+
 
 public class SOTAMapReaderTests {
 

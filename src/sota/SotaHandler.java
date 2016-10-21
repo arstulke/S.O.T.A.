@@ -4,14 +4,17 @@ import java.awt.*;
 
 public class SotaHandler {
 
-    private boolean keyRight;
-    private boolean keyLeft;
-    private boolean keyUp;
-    private boolean keyDown;
+    private boolean keyRight; //is *Key is pressed
+    private boolean keyLeft; //is *Key is pressed
+    private boolean keyUp; //is *Key is pressed
+    private boolean keyDown; //is *Key is pressed
 
-    private String[][] map;
-    private char player;
-    Point position;
+    private boolean isJumping = false; //is Jumping
+    private int jumpTick = 0; //UP UP STAY DOWN DOWN
+
+    private char[][] map; //charMap
+    private char player; //Player Character
+    public Point position; //Player Position
 
     private Point displayPosition;
 
@@ -22,7 +25,7 @@ public class SotaHandler {
         displayPosition.setLocation(displayPos);
     }
 
-    SotaHandler(Point displayPos, String path) {
+    public SotaHandler(Point displayPos, String path) {
         loadMap(path);
 
         displayPosition = new Point(0, 0);
@@ -35,10 +38,22 @@ public class SotaHandler {
 
         player = mr.getPlayer();
         position = mr.locatePlayer();
-        map = mr.getMap();
+        map = convertToCharArray(mr.getMap());
     }
 
-    public String handle(boolean kRight, boolean kLeft, boolean kUp, boolean kDown) {
+    private char[][] convertToCharArray(String[][] map) {
+        String[] arr1 = map[0];
+        char[][] tmp = new char[map.length][arr1.length];
+        for(int y = 0; y < map.length; y++){
+            String[] array = map[y];
+            for(int x = 0; x < array.length; x++){
+                tmp[y][x] = array[x].toCharArray()[0];
+            }
+        }
+        return tmp;
+    }
+
+    public String controlMovement(boolean kRight, boolean kLeft, boolean kUp, boolean kDown) {
         keyRight = kRight;
         keyLeft = kLeft;
         keyUp = kUp;
@@ -52,24 +67,21 @@ public class SotaHandler {
 
     private void checkMovement() {
         try {
-            boolean isOnLadder = map[position.x][position.y].charAt(0) == '#';
+            boolean isOnLadder = map[position.x][position.y] == '#';
+            boolean isOnGround = !isPassableChar(map[position.x + 1][position.y], true);
 
             //GravityMovement
-            boolean isOnGround = !isValidChar(map[position.x + 1][position.y], true);
             if (!isOnGround && !isJumping && !isOnLadder) {
-                move(1, 0, true);
+                move(1, 0, true); //move 1 down
             }
-            isOnGround = !isValidChar(map[position.x + 1][position.y], true);
-
+            isOnGround = !isPassableChar(map[position.x + 1][position.y], true);
 
             //Left/Right Movement
             if (keyRight && !keyLeft) {
-                move(0, 1, false);
+                move(0, 1, false); //move right
+            } else if (!keyRight && keyLeft) {
+                move(0, -1, false); //move left
             }
-            if (!keyRight && keyLeft) {
-                move(0, -1, false);
-            }
-
 
             if (isJumping) {
                 jump();
@@ -82,27 +94,27 @@ public class SotaHandler {
 
             //Ladder Movement (Jump, Right, Left)
             if (keyUp && !keyDown && isOnLadder && !((keyRight || keyLeft) && !(keyRight && keyLeft))) {
-                move(-1, 0, false);
+                move(-1, 0, false); //move up
             }
             if (keyUp && !keyDown && isOnLadder && keyRight) {
-                isJumping = true;
+                isJumping = true; //jump from ladder to right
             }
             if (keyUp && !keyDown && isOnLadder && keyLeft) {
-                isJumping = true;
+                isJumping = true; //jump from ladder to left
             }
-            if (keyDown && !keyUp && (isOnLadder || map[position.x + 1][position.y].charAt(0) == '#')) {
-                move(1, 0, false);
+            if (keyDown && !keyUp && (isOnLadder || moveToDefinedChar(1,0,'#'))) {
+                move(1, 0, false); //move down
             }
         } catch (NullPointerException | ArrayIndexOutOfBoundsException ignored) {
         }
     }
 
-    private boolean isJumping = false;
-    private int jumpTick = 0;
+    private boolean moveToDefinedChar(int x, int y, char character) {
+        return map[position.x + x][position.y + y] == character;
+    }
 
     private void jump() {
         int f = 1;
-
 
         if (jumpTick == 0) {
             move(-1, 0, false);
@@ -123,43 +135,39 @@ public class SotaHandler {
 
     private void move(int y, int x, boolean gravityCheck) {
         try {
-            if (isValidChar(map[position.x + y][position.y + x], gravityCheck)) {
+            if (isPassableChar(map[position.x + y][position.y + x], gravityCheck)) {
                 position.move(position.x + y, position.y + x);
             }
         } catch (NullPointerException | ArrayIndexOutOfBoundsException ignored) {
         }
     }
 
-    private boolean isValidChar(String s, boolean gravityCheck) {
+    private boolean isPassableChar(char s, boolean gravityCheck) {
         char[] validChars = new char[]{' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
         char ladder = '#';
-        if (s.length() == 1) {
             for (char a : validChars) {
-                if (s.charAt(0) == a) {
+                if (s == a) {
                     return true;
                 }
             }
             if (!gravityCheck) {
-                if (s.charAt(0) == ladder) {
+                if (s == ladder) {
                     return true;
                 }
             }
 
             return false;
-        } else {
-            return true;
-        }
     }
 
     private void checkEvents() {
-
+        //NOT IMPLEMENTED YET
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
     private String display() {
         int height = 9;
         int width = 32;
-        String[][] d = new String[width][height];
+        char[][] d = new char[width][height];
 
         for (int y = 0; y < width; y++) {
             for (int x = 0; x < height; x++) {
@@ -168,19 +176,13 @@ public class SotaHandler {
                     int mapDetailX = y + position.y - displayPosition.y;
 
                     if (new Point(mapDetailY, mapDetailX).equals(position)) {
-                        d[y][x] = String.valueOf(player);
-                    } else if (String.valueOf(map[mapDetailY][mapDetailX]) == null) {
-                        d[y][x] = String.valueOf(map[mapDetailY][mapDetailX]);
+                        d[y][x] = player;
                     } else {
-                        d[y][x] = String.valueOf(map[mapDetailY][mapDetailX]);
+                        d[y][x] = map[mapDetailY][mapDetailX];
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    d[y][x] = "§";
-                    //System.out.println("ArrayIndexOutOfBoundException: " + e.getMessage());
+                    d[y][x] = '§';
                 }
-
-                if (d[y][x] == null)
-                    d[y][x] = " ";
             }
         }
 

@@ -1,13 +1,12 @@
-package sota;
-
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import sota.SotaHandler;
 
 import java.awt.*;
 
-public class SotaHandlerHandles {
+public class SotaHandlerTests {
 
     private SotaHandler sHandler;
 
@@ -21,10 +20,10 @@ public class SotaHandlerHandles {
         //Given/When/Then
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(17, 82)));
 
-        sHandler.handle(true, false, false, false);
+        sHandler.controlMovement(true, false, false, false);
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(17, 83)));
 
-        sHandler.handle(true, false, false, false);
+        sHandler.controlMovement(true, false, false, false);
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(17, 84)));
     }
 
@@ -33,10 +32,10 @@ public class SotaHandlerHandles {
         //Given/When/Then
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(17, 82)));
 
-        sHandler.handle(false, true, false, false);
+        sHandler.controlMovement(false, true, false, false);
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(17, 81)));
 
-        sHandler.handle(false, true, false, false);
+        sHandler.controlMovement(false, true, false, false);
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(17, 80)));
     }
 
@@ -45,22 +44,22 @@ public class SotaHandlerHandles {
         //Given/When/Then
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(17, 82)));
 
-        sHandler.handle(false, false, true, false);
+        sHandler.controlMovement(false, false, true, false);
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(17, 82)));
 
-        sHandler.handle(false, false, false, false);
+        sHandler.controlMovement(false, false, false, false);
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(16, 82)));
 
-        sHandler.handle(false, false, false, false);
+        sHandler.controlMovement(false, false, false, false);
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(15, 82)));
 
-        sHandler.handle(false, false, false, false);
+        sHandler.controlMovement(false, false, false, false);
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(15, 82)));
 
-        sHandler.handle(false, false, false, false);
+        sHandler.controlMovement(false, false, false, false);
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(16, 82)));
 
-        sHandler.handle(false, false, false, false);
+        sHandler.controlMovement(false, false, false, false);
         Assert.assertThat(sHandler.position, CoreMatchers.is(new Point(17, 82)));
     }
 }

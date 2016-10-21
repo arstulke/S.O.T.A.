@@ -57,19 +57,19 @@ player:X
 :                /~~~~~~\                                                                     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 :               /~~~~~~~~\                                                                    MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 :              WWWWWWWWWWWW                                                                   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:               I        I                                                           MMM      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:               I        I                                                        MMMMMM      MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:               I        I                                                    MMMMMMMMMM      MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:   mm  X   mm  i        i      mm        mm        mm       mm           MMMMMMMMMMMMMM      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:                                                                                      |      MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:         O                                                                            |      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:      MMMMMMMMM                                                                       |      MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:                  MMMMMMMMM                                                           |      MM   MMMM                  |
-:                               MMMMMMMMM                                              |      MMMMMMMMM                  |
-:                                        MMMMMMMMM                                 o   |            MMM              o   |
-:                                              MMMMMMMMM                          i i  |                            i i  |
+:               I        I                                                           MMM###   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:               I        I                                                        MMMMMM  #   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:               I        I                                                    MMMMMMMMMM  #   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:   mm  X   mm  i        i      mm        mm        mm       mm           MMMMMMMMMMMMMM  #   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM  #   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM  #   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:                                                                                      |  #   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:         O                                                                            |  #   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:      MMMMMMMMM                                                                       |  #   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:                  MMMMMMMMM                                                           |  #   MM   MMMM                  |
+:                               MMMMMMMMM                                              |  #   MMMMMMMMM                  |
+:                                        MMMMMMMMM                                 o   |  #         MMM              o   |
+:                                              MMMMMMMMM                          i i  |  #                         i i  |
 :                                                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 :
 :
@@ -78,6 +78,6 @@ player:X
 :
 :
 :^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-16.17 display "Find your way, young master!" 50
-25.102;25.102 spawnhiddenenemy default
-25.118;25.118 teleport 25.84
+~16.17 display "Find your way, young master!" 50
+~25.102;25.102 spawnhiddenenemy default
+~25.118;25.118 teleport 25.84
