@@ -79,5 +79,6 @@ player:X
 :
 :^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ~16.17 display "Find your way, young master!" 50
-~25.102;25.102 spawnhiddenenemy default
-~25.118;25.118 teleport 25.84
+&c~25.102;25.102 spawnhiddenenemy default
+~25.116;25.116 teleport 25.82
+~25.95;25.96 checkpoint 25.95

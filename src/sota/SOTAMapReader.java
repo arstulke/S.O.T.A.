@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("SuspiciousNameCombination")
@@ -46,18 +46,14 @@ public class SOTAMapReader {
                         width = line.length() - 1;
                         map = new String[height][width];
                     } else if (line.startsWith("~")){
-                        readEvent(line);
+                        Event event = EventReader.readEvent(line);
+                        eventList.add(event);
                     }
-
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void readEvent(String line) {
-        //event auslesen
     }
 
     char getPlayer() {
@@ -66,6 +62,10 @@ public class SOTAMapReader {
 
     public String[][] getMap() {
         return map;
+    }
+
+    public List<Event> getEventList() {
+        return eventList;
     }
 
     Point locatePlayer() {

@@ -1,6 +1,7 @@
 package sota;
 
 import java.awt.*;
+import java.util.List;
 
 public class SotaHandler {
 
@@ -13,10 +14,12 @@ public class SotaHandler {
     private int jumpTick = 0; //UP UP STAY DOWN DOWN
 
     private char[][] map; //charMap
+    private List<Event> eventList;
     private char player; //Player Character
     public Point position; //Player Position
 
     private Point displayPosition;
+    private Point checkpoint;
 
     public SotaHandler(Point displayPos) {
         loadMap(System.getProperty("user.dir") + "\\map.txt");
@@ -39,6 +42,7 @@ public class SotaHandler {
         player = mr.getPlayer();
         position = mr.locatePlayer();
         map = convertToCharArray(mr.getMap());
+        eventList = mr.getEventList();
     }
 
     private char[][] convertToCharArray(String[][] map) {
@@ -142,7 +146,7 @@ public class SotaHandler {
         }
     }
 
-    private boolean isPassableChar(char s, boolean gravityCheck) {
+    public static boolean isPassableChar(char s, boolean gravityCheck) {
         char[] validChars = new char[]{' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
         char ladder = '#';
             for (char a : validChars) {
@@ -161,6 +165,16 @@ public class SotaHandler {
 
     private void checkEvents() {
         //NOT IMPLEMENTED YET
+        for(Event event : eventList) {
+            if(position.x == 25) {
+                System.out.println(position);
+            }
+
+            boolean execute = event.shouldTrigger(position) && event.isTriggerable();
+            if(execute) {
+                event.execute(map, position, checkpoint);
+            }
+        }
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
