@@ -54,9 +54,9 @@ player:X
 :                   /\ 
 :                  /~~\                      
 :                 /~~~~\                                                               
-:                /~~~~~~\                                                                     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:               /~~~~~~~~\                                                                    MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:              WWWWWWWWWWWW                                                                   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:                /~~~~~~\                                                                       ^MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:               /~~~~~~~~\                                                                     ^M  MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+:              WWWWWWWWWWWW                                                                   ^M   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 :               I        I                                                           MMM###   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 :               I        I                                                        MMMMMM  #   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 :               I        I                                                    MMMMMMMMMM  #   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM

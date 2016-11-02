@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
@@ -10,5 +11,6 @@
          <font>
             <Font name="Courier New Bold" size="30.0" />
          </font></TextArea>
+      <TextField fx:id="message" alignment="CENTER" layoutX="241.0" layoutY="45.0" minWidth="300.0" prefHeight="25.0" prefWidth="399.0" text="Test message" />
    </children>
 </Pane>

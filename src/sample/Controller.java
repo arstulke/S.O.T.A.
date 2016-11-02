@@ -1,11 +1,13 @@
 package sample;
 
-import sota.SotaHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Region;
+import sota.SotaHandler;
 
 import java.awt.*;
 import java.net.URL;
@@ -18,6 +20,9 @@ public class Controller implements Initializable {
     @FXML
     TextArea console;
 
+    @FXML
+    TextField message;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         final SotaHandler handler = new SotaHandler(displayPosition);
@@ -28,6 +33,17 @@ public class Controller implements Initializable {
 
                 String output = handler.controlMovement(keyRight, keyLeft, keyUp, keyDown);
                 console.setText(output);
+
+                String msg = handler.getMessage();
+                if (!message.getText().equals(msg)) {
+                    if (msg != null) {
+                        message.setText(msg);
+                        if (!message.isVisible())
+                            message.setVisible(true);
+                    } else {
+                        message.setVisible(false);
+                    }
+                }
             }
         };
         Timer t = new Timer();

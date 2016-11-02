@@ -12,6 +12,9 @@ public class SotaHandler {
 
     private boolean isJumping = false; //is Jumping
     private int jumpTick = 0; //UP UP STAY DOWN DOWN
+    private boolean isAutoJumping = false; //small jump 1 step
+    private int autoJumpTick = 0; //UP LEFT/RIGHT
+    private int autoJumpDir = 0; //left -1      right 1
 
     private char[][] map; //charMap
     private List<Event> eventList;
@@ -19,7 +22,11 @@ public class SotaHandler {
     public Point position; //Player Position
 
     private Point displayPosition;
-    private Point checkpoint;
+
+    //Event fields
+    private Point checkpoint = new Point();
+    private String message = null;
+    private int messageTicks = -1;
 
     public SotaHandler(Point displayPos) {
         loadMap(System.getProperty("user.dir") + "\\map.txt");
@@ -43,14 +50,15 @@ public class SotaHandler {
         position = mr.locatePlayer();
         map = convertToCharArray(mr.getMap());
         eventList = mr.getEventList();
+        checkpoint.setLocation(position);
     }
 
     private char[][] convertToCharArray(String[][] map) {
         String[] arr1 = map[0];
         char[][] tmp = new char[map.length][arr1.length];
-        for(int y = 0; y < map.length; y++){
+        for (int y = 0; y < map.length; y++) {
             String[] array = map[y];
-            for(int x = 0; x < array.length; x++){
+            for (int x = 0; x < array.length; x++) {
                 tmp[y][x] = array[x].toCharArray()[0];
             }
         }
@@ -65,8 +73,15 @@ public class SotaHandler {
 
         checkMovement();
         checkEvents();
+        checkDie();
 
         return display();
+    }
+
+    private void checkDie() {
+        if (map[position.x + 1][position.y] == '^') {
+            position.setLocation(checkpoint);
+        }
     }
 
     private void checkMovement() {
@@ -75,7 +90,7 @@ public class SotaHandler {
             boolean isOnGround = !isPassableChar(map[position.x + 1][position.y], true);
 
             //GravityMovement
-            if (!isOnGround && !isJumping && !isOnLadder) {
+            if (!isOnGround && !isJumping && !isAutoJumping && !isOnLadder) {
                 move(1, 0, true); //move 1 down
             }
             isOnGround = !isPassableChar(map[position.x + 1][position.y], true);
@@ -87,13 +102,25 @@ public class SotaHandler {
                 move(0, -1, false); //move left
             }
 
-            if (isJumping) {
+            if (isAutoJumping) {
+                autoJump();
+            } else if (isJumping) {
                 jump();
             }
 
-            //Simple Jump Movement
-            if (keyUp && !keyDown && isOnGround && !isOnLadder) {
-                isJumping = true;
+            if (!keyDown && isOnGround && !isOnLadder) {
+                //Jump Movement
+                if (keyUp) {
+                    isJumping = true;
+                }
+                //Auto Jump Movement
+                else if (keyLeft && !isPassableChar(map[position.x][position.y - 1], false) && isPassableChar(map[position.x - 1][position.y - 1], false)) {
+                    isAutoJumping = true;
+                    autoJumpDir = -1;
+                } else if (keyRight && !isPassableChar(map[position.x][position.y + 1], false) && isPassableChar(map[position.x - 1][position.y + 1], false)) {
+                    isAutoJumping = true;
+                    autoJumpDir = 1;
+                }
             }
 
             //Ladder Movement (Jump, Right, Left)
@@ -106,11 +133,25 @@ public class SotaHandler {
             if (keyUp && !keyDown && isOnLadder && keyLeft) {
                 isJumping = true; //jump from ladder to left
             }
-            if (keyDown && !keyUp && (isOnLadder || moveToDefinedChar(1,0,'#'))) {
+            if (keyDown && !keyUp && (isOnLadder || moveToDefinedChar(1, 0, '#'))) {
                 move(1, 0, false); //move down
             }
         } catch (NullPointerException | ArrayIndexOutOfBoundsException ignored) {
         }
+    }
+
+    private void autoJump() {
+        int f = 1;
+
+        if (autoJumpTick == 0) {
+            move(-1, 0, false);
+        } else if (autoJumpTick == f) {
+            move(0, autoJumpDir, false);
+            isAutoJumping = false;
+            autoJumpTick = -1;
+        }
+
+        autoJumpTick++;
     }
 
     private boolean moveToDefinedChar(int x, int y, char character) {
@@ -149,32 +190,40 @@ public class SotaHandler {
     public static boolean isPassableChar(char s, boolean gravityCheck) {
         char[] validChars = new char[]{' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
         char ladder = '#';
-            for (char a : validChars) {
-                if (s == a) {
-                    return true;
-                }
+        for (char a : validChars) {
+            if (s == a) {
+                return true;
             }
-            if (!gravityCheck) {
-                if (s == ladder) {
-                    return true;
-                }
+        }
+        if (!gravityCheck) {
+            if (s == ladder) {
+                return true;
             }
+        }
 
-            return false;
+        return false;
     }
 
     private void checkEvents() {
-        //NOT IMPLEMENTED YET
-        for(Event event : eventList) {
-            if(position.x == 25) {
-                System.out.println(position);
-            }
-
-            boolean execute = event.shouldTrigger(position) && event.isTriggerable();
-            if(execute) {
+        for (Event event : eventList) {
+            boolean execute = event.shouldTriggered(position) && event.isTriggerable();
+            if (execute) {
                 event.execute(map, position, checkpoint);
+                if (event.eventype == Event.EventType.DISPLAY) {
+                    message = event.msg;
+                    messageTicks = event.time;
+                }
             }
         }
+
+        if(messageTicks == 0) {
+            message = null;
+            messageTicks = -1;
+        } else if(messageTicks > 0) {
+            messageTicks--;
+        }
+
+        eventList.stream().filter(event -> event.eventype == Event.EventType.CHECKPOINT && !event.shouldTriggered(checkpoint)).forEach(event -> event.triggerable = true);
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
@@ -213,5 +262,9 @@ public class SotaHandler {
         display = display.substring(0, display.length() - 1);
 
         return display;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

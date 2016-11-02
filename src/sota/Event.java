@@ -56,13 +56,9 @@ public class Event {
         return event;
     }
 
-    public boolean shouldTrigger(Point position) {
-        boolean inX = position.x >= triggerArea.x && position.x <= triggerArea.x + triggerArea.width;
-        boolean inY = position.y >= triggerArea.y && position.y <= triggerArea.y + triggerArea.height;
-
-        if (position.x == 25 && position.y == 116) {
-            String a = "";
-        }
+    public boolean shouldTriggered(Point position) {
+        boolean inX = position.x <= triggerArea.x && position.x >= triggerArea.x + triggerArea.height;
+        boolean inY = position.y >= triggerArea.y && position.y <= triggerArea.y + triggerArea.width;
 
         return inX && inY;
     }
@@ -86,6 +82,7 @@ public class Event {
             case CHECKPOINT:
                 ((Point) object[2]).setLocation(checkpoint);
                 System.out.println("checkpoint");
+                triggerable = false;
                 break;
         }
     }
