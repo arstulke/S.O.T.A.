@@ -1,12 +1,14 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 @SuppressWarnings("deprecation")
 public class Main extends Application {
@@ -25,10 +27,10 @@ public class Main extends Application {
 
         primaryStage.setTitle("State of the art");
         primaryStage.setScene(new Scene(root));
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.show();
+        primaryStage.setOnCloseRequest(event -> System.exit(0));
     }
-
 
     public static void main(String[] args) {
         launch(args);

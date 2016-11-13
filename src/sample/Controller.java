@@ -6,14 +6,20 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Region;
-import sota.SotaHandler;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
+import sota.GameHandler;
 
+import javax.sound.sampled.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static javax.sound.sampled.AudioSystem.getAudioInputStream;
 
 public class Controller implements Initializable {
 
@@ -23,9 +29,88 @@ public class Controller implements Initializable {
     @FXML
     TextField message;
 
+    @FXML
+    AnchorPane pane;
+
+    private Clip clip;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        final SotaHandler handler = new SotaHandler(displayPosition);
+        try {
+            AudioInputStream sound = getAudioInputStream(new File(System.getProperty("user.dir") + "/sounds/soundtrack.wav"));
+            clip = AudioSystem.getClip();
+            clip.open(sound);
+        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
+        }
+        final GameHandler handler = new GameHandler(displayPosition) {
+            @Override
+            public void onFinish() {
+                try {
+                    playSoundWithPause("win.wav");
+                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onDie() {
+                try {
+                    clip.stop();
+                    AudioInputStream sound = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/sounds/fail.wav"));
+                    Clip die = AudioSystem.getClip();
+                    die.open(sound);
+                    die.addLineListener(event -> {
+                        if (event.toString().startsWith("Stop")) {
+                            clip.loop(Clip.LOOP_CONTINUOUSLY);
+                        }
+                    });
+                    die.start();
+                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onTeleport() {
+                try {
+                    playSoundWithPause("teleport.wav");
+                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            private void playSoundWithPause(String filename) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+                long millis = clip.getMicrosecondPosition();
+                clip.stop();
+                AudioInputStream sound = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/sounds/" + filename));
+
+                Clip teleport = AudioSystem.getClip();
+                teleport.open(sound);
+                teleport.addLineListener(event -> {
+                    if (event.toString().startsWith("Stop")) {
+                        clip.setMicrosecondPosition(millis);
+                        clip.loop(Clip.LOOP_CONTINUOUSLY);
+                    }
+                });
+                teleport.start();
+            }
+
+        };
+
+        AnchorPane.setBottomAnchor(console, 0.0);
+        AnchorPane.setTopAnchor(console, 0.0);
+        AnchorPane.setLeftAnchor(console, 0.0);
+        AnchorPane.setRightAnchor(console, 0.0);
+
+        AnchorPane.setTopAnchor(message, 40.0);
+
+        pane.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
+            AnchorPane.setLeftAnchor(message, (newSceneWidth.doubleValue() - message.getPrefWidth()) / 2);
+            int fontSize = (int) (newSceneWidth.doubleValue() / 32 * 1.48148);
+            console.setFont(new Font("Courier New Bold", fontSize));
+        });
+
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
@@ -36,18 +121,20 @@ public class Controller implements Initializable {
 
                 String msg = handler.getMessage();
                 if (!message.getText().equals(msg)) {
-                    if (msg != null) {
+                    if (msg != null && msg.length() > 0) {
                         message.setText(msg);
                         if (!message.isVisible())
                             message.setVisible(true);
                     } else {
                         message.setVisible(false);
+                        message.setText("");
                     }
                 }
             }
         };
-        Timer t = new Timer();
-        t.schedule(task, 0, 100);
+        Timer game = new Timer();
+        game.schedule(task, 0, 100);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     private boolean[] keys = new boolean[9];

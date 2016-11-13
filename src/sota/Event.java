@@ -1,59 +1,25 @@
 package sota;
 
 import java.awt.*;
+import java.util.HashMap;
 
 public class Event {
-    public EventType eventype;
-    public Rectangle triggerArea;
-    public boolean triggerable;
+    public Event(EventType eventType, Rectangle trigger) {
+        params = new HashMap<>();
+        triggerable = true;
 
-    public Point teleportTarget;
-
-    public Point checkpoint;
-
-    public String msg;
-    public int time;
-
-    public static Event newTeleportEvent(Rectangle trigger, Point target) {
-        Event event = new Event();
-
-        event.msg = null;
-        event.eventype = EventType.TELEPORT;
-        event.triggerArea = trigger;
-        event.teleportTarget = target;
-        event.time = -1;
-        event.triggerable = true;
-
-        return event;
+        this.eventype = eventType;
+        this.triggerArea = trigger;
     }
 
-    public static Event newDisplayEvent(Rectangle trigger, int time, String msg) {
-        Event event = new Event();
+    private EventType eventype;
+    private Rectangle triggerArea;
+    private boolean triggerable;
 
-        event.eventype = EventType.DISPLAY;
-        event.msg = msg;
-        event.triggerArea = trigger;
-        event.time = time;
-        event.triggerable = true;
+    private HashMap<String, Object> params;
 
-        event.teleportTarget = null;
-
-        return event;
-    }
-
-    public static Event newCheckpointEvent(Rectangle triggeredArea, Point checkpoint) {
-        Event event = new Event();
-
-        event.eventype = EventType.CHECKPOINT;
-        event.triggerArea = triggeredArea;
-        event.checkpoint = checkpoint;
-        event.triggerable = true;
-
-        event.msg = null;
-        event.teleportTarget = null;
-        event.time = 0;
-
-        return event;
+    public void setParam(String key, Object value){
+        params.put(key, value);
     }
 
     public boolean shouldTriggered(Point position) {
@@ -67,64 +33,29 @@ public class Event {
         return triggerable;
     }
 
-    public void execute(Object... object) {
-        switch (eventype) {
-            case TELEPORT:
-                char targetChar = ((char[][]) object[0])[teleportTarget.x][teleportTarget.y];
-                if (SotaHandler.isPassableChar(targetChar, true))
-                    ((Point) object[1]).setLocation(teleportTarget);
-                break;
+    public EventType getEventype() {
+        return eventype;
+    }
 
-            case DISPLAY:
-                System.out.println("msg: " + msg);
-                break;
+    public HashMap<String,Object> getParams() {
+        return params;
+    }
 
-            case CHECKPOINT:
-                ((Point) object[2]).setLocation(checkpoint);
-                System.out.println("checkpoint");
-                triggerable = false;
-                break;
-        }
+    public void setTriggerable(boolean triggerable) {
+        this.triggerable = triggerable;
     }
 
     public enum EventType {
-        TELEPORT, DISPLAY, CHECKPOINT
+        TELEPORT, DISPLAY, CHECKPOINT, END, OTHER
     }
 
     @Override
     public String toString() {
-        switch (eventype) {
-            case TELEPORT:
-                return "Event {" +
-                        "eventype=" + eventype +
-                        ", triggerArea=" + triggerArea +
-                        ", triggerable=" + triggerable +
-                        ", teleportTarget=" + teleportTarget +
-                        "}";
-
-            case DISPLAY:
-                return "Event{" +
-                        "eventype=" + eventype +
-                        ", triggerArea=" + triggerArea +
-                        ", msg='" + msg + '\'' +
-                        ", time=" + time +
-                        '}';
-
-            case CHECKPOINT:
-                return "Event{" +
-                        "eventype=" + eventype +
-                        ", triggerArea=" + triggerArea +
-                        ", checkpoint=" + checkpoint +
-                        '}';
-        }
-
         return "Event{" +
                 "eventype=" + eventype +
                 ", triggerArea=" + triggerArea +
-                ", teleportTarget=" + teleportTarget +
-                ", msg='" + msg + '\'' +
-                ", time=" + time +
                 ", triggerable=" + triggerable +
+                ", params=" + params +
                 '}';
     }
 }

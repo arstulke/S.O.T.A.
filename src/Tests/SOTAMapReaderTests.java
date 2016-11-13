@@ -1,5 +1,5 @@
 import org.junit.Test;
-import sota.SOTAMapReader;
+import sota.MapReader;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -7,10 +7,10 @@ import static org.junit.Assert.assertThat;
 
 public class SOTAMapReaderTests {
 
-    private SOTAMapReader mapReader;
+    private MapReader mapReader;
 
     public SOTAMapReaderTests() {
-        mapReader = new SOTAMapReader();
+        mapReader = new MapReader();
     }
 
     @Test
