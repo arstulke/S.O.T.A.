@@ -1,4 +1,4 @@
-package sota;
+package de.sota.game;
 
 import java.awt.*;
 import java.util.HashMap;

@@ -2,7 +2,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sota.GameHandler;
+import de.sota.game.GameHandler;
 
 import java.awt.*;
 

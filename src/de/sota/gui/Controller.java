@@ -1,4 +1,4 @@
-package sample;
+package de.sota.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
-import sota.GameHandler;
+import de.sota.game.GameHandler;
 
 import javax.sound.sampled.*;
 import java.awt.*;

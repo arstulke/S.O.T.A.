@@ -1,4 +1,4 @@
-package sota;
+package de.sota.game;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -14,7 +14,7 @@ public class MapReader {
     private String[][] map;
     private int width = 0;
     private char player = 'X';
-    private List<Event> eventList = new ArrayList<>();
+    private List<de.sota.game.Event> eventList = new ArrayList<>();
 
     public void readMap(String path) {
         File file = new File(path);
@@ -46,7 +46,7 @@ public class MapReader {
                         width = line.length() - 1;
                         map = new String[height][width];
                     } else if (line.startsWith("~")) {
-                        Event event = EventReader.readEvent(line);
+                        de.sota.game.Event event = EventReader.readEvent(line);
                         if (event != null)
                             eventList.add(event);
                     }
@@ -65,7 +65,7 @@ public class MapReader {
         return map;
     }
 
-    public List<Event> getEventList() {
+    public List<de.sota.game.Event> getEventList() {
         return eventList;
     }
 

@@ -1,5 +1,5 @@
 import org.junit.Test;
-import sota.MapReader;
+import de.sota.game.MapReader;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

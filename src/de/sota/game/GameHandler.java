@@ -1,10 +1,7 @@
-package sota;
+package de.sota.game;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
 import java.awt.*;
 import java.util.List;
 
@@ -23,7 +20,7 @@ public abstract class GameHandler {
     private int ladderTick = 0; //LADDER TICKS
 
     private char[][] map; //charMap
-    private List<Event> eventList;
+    private List<de.sota.game.Event> eventList;
     private char player; //Player Character
     public Point position; //Player Position
 
@@ -90,8 +87,8 @@ public abstract class GameHandler {
     }
 
     private void die() {
-        for (Event event : eventList) {
-            event.setTriggerable(event.getEventype() != Event.EventType.CHECKPOINT || !event.getParams().get("checkpoint").equals(checkpoint));
+        for (de.sota.game.Event event : eventList) {
+            event.setTriggerable(event.getEventype() != de.sota.game.Event.EventType.CHECKPOINT || !event.getParams().get("checkpoint").equals(checkpoint));
         }
         position.setLocation(checkpoint);
 
@@ -231,7 +228,7 @@ public abstract class GameHandler {
     }
 
     private void checkEvents() {
-        for (Event event : eventList) {
+        for (de.sota.game.Event event : eventList) {
             boolean execute = event.shouldTriggered(position) && event.isTriggerable();
             if (execute) {
                 switch (event.getEventype()) {
@@ -276,7 +273,7 @@ public abstract class GameHandler {
             messageTicks--;
         }
 
-        eventList.stream().filter(event -> event.getEventype() == Event.EventType.CHECKPOINT && !event.shouldTriggered(checkpoint)).forEach(event -> event.setTriggerable(true));
+        eventList.stream().filter(event -> event.getEventype() == de.sota.game.Event.EventType.CHECKPOINT && !event.shouldTriggered(checkpoint)).forEach(event -> event.setTriggerable(true));
     }
 
     public abstract void onFinish();
