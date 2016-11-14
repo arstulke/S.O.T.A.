@@ -2,17 +2,29 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sota.SotaHandler;
+import de.sota.game.GameHandler;
 
 import java.awt.*;
 
 public class SotaHandlerTests {
 
-    private SotaHandler sHandler;
+    private GameHandler sHandler;
 
     @Before
     public void setup() {
-        sHandler = new SotaHandler(new Point(0, 0), System.getProperty("user.dir") + "\\testMap.txt");
+        sHandler = new GameHandler(new Point(0, 0), System.getProperty("user.dir") + "\\testMap.txt") {
+            @Override
+            public void onFinish() {
+
+            }
+
+            @Override
+            public void onDie() {}
+
+            @Override
+            public void onTeleport() {
+            }
+        };
     }
 
     @Test

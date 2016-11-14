@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-   <children>
-      <TextArea fx:id="console" editable="false" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="500.0" prefWidth="900.0">
-         <font>
-            <Font name="Courier New Bold" size="30.0" />
-         </font></TextArea>
-   </children>
-</Pane>
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="475.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/8.0.101"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <children>
+        <TextArea fx:id="console" editable="false" layoutY="7.0" onKeyPressed="#onKeyPressed"
+                  onKeyReleased="#onKeyReleased" prefHeight="475.0" prefWidth="880.0"><!--500, 880-->
+            <font>
+                <Font name="Courier New Bold" size="40.0"/>
+            </font>
+        </TextArea>
+        <TextField fx:id="message" layoutX="241.0" layoutY="45.0" minWidth="300.0"
+                   prefHeight="100.0" prefWidth="399.0" text="Test message"/>
+    </children>
+</AnchorPane>
