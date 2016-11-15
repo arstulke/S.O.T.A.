@@ -37,7 +37,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            AudioInputStream sound = getAudioInputStream(new File(System.getProperty("user.dir") + "/sounds/soundtrack.wav"));
+            AudioInputStream sound = getAudioInputStream(getSoundFile("soundtrack.wav"));
             clip = AudioSystem.getClip();
             clip.open(sound);
         } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
@@ -57,7 +57,7 @@ public class Controller implements Initializable {
             public void onDie() {
                 try {
                     clip.stop();
-                    AudioInputStream sound = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/sounds/fail.wav"));
+                    AudioInputStream sound = AudioSystem.getAudioInputStream(getSoundFile("fail.wav"));
                     Clip die = AudioSystem.getClip();
                     die.open(sound);
                     die.addLineListener(event -> {
@@ -135,6 +135,10 @@ public class Controller implements Initializable {
         Timer game = new Timer();
         game.schedule(task, 0, 100);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
+    }
+
+    private URL getSoundFile(String filename) {
+        return getClass().getClassLoader().getResource("sounds/" + filename);
     }
 
     private boolean[] keys = new boolean[9];

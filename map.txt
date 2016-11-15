@@ -11,8 +11,8 @@ player:X
 :
 :
 :
-:_____  #    ___            ___  		 ___
-:_____\ #   //i\\          //i\\  		//i\\                   TTTT
+:_____  #    ___            ___                  ___
+:_____\ #   //i\\          //i\\                //i\\                   TTTT
 :     | #     i     the      i       cave         i     map             IIII                TTT
 : X   i #     i              i       TTTT         i                     IIII                III
 :TTTTTTTTTTTTTTTTTTETTTTTTTTTTTTTTTTTIIIOTTTTTT  TTT  TTTT   TTTT    TTTIIII                III
