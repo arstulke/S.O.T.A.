@@ -1,0 +1,41 @@
+player:X
+&c Built by Maik Müller.
+&c                                                                                        
+&c  ,--.  ,--.                                                                            
+&c,-'  '-.|  ,---.  ,---.      ,---. ,--,--.,--.  ,--.,---.     ,--,--,--. ,--,--. ,---.  
+&c'-.  .-'|  .-.  || .-. :    | .--'' ,-.  | \  `'  /| .-. :    |        |' ,-.  || .-. | 
+&c  |  |  |  | |  |\   --.    \ `--.\ '-'  |  \    / \   --.    |  |  |  |\ '-'  || '-' ' 
+&c  `--'  `--' `--' `----'     `---' `--`--'   `--'   `----'    `--`--`--' `--`--'|  |-'  
+&c                                                                                `--'
+-------------------------------------------------------------------------------------------------------
+:
+:
+:
+:_____  #    ___            ___                  ___
+:_____\ #   //i\\          //i\\                //i\\                   TTTT
+:     | #     i     the      i       cave         i     map             IIII                TTT
+: X   i #     i              i       TTTT         i                     IIII                III
+:TTTTTTTTTTTTTTTTTTETTTTTTTTTTTTTTTTTIIIOTTTTTT  TTT  TTTT   TTTT    TTTIIII                III
+:IOIIIIOIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIII^^III^^IIII^^^IIII    IIIIIII                III 
+:IIOIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII    IIIOIII  ####TTTTTTTTTTIII
+:IIIII          VNv  v    v    vIII     V   vv        V    v         IIIIIII  #   IIIIIIIIIIIII
+:III             V              v                                    IIIIIII  #   IIIIIIIIIIIII
+:II             *               *                   *                IIIIIII  #   IIIIIIIIIIIII
+:II                  *                        #                  TTTTIIIIIII  #   IIIIIIIIIIIII
+:IIT                                    *                   TTTTTIIIIIOIIIII  #   IIIIIIIIIIIII
+:IIITTTTTTTT   TTTTTTTTTTTTTTTTTTT   TTTTTT      TTTTTTTTTTTIIIIIIIIIh4xIIII  #   IIIIIIIIIIIII
+:IIIIIIIIIII   IIIIIIIIIIIIIIIIIII^^^IIIIII^^^^^^IIIIIIIIIIIIIIIIOIIIIIIIIII  #   IIIIIIIIIIIII
+:IIIIIIIIIII   IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIII  #   IIIIIIIIIIIII
+:IIIIII	v               Vv      IIIIIIIIIIIIIIIIIIIIIIII                      #   IIIIIIIIIIIII
+:III                                            IIIIIIII ##TTTTTTTTTTTTTTT    #   IIIIIIIIIIIII
+:III                                                 II  # IIIIIIIIIIIIIOITT  #   IIIIIIIIIIIII
+:IIITTTTTTTTTTTTTTT                                      #      IIIIIIIIIIII  #   IIIIIIIIIIIII
+:IIIIIIIIIIIIIIIIIITTTTTT                                #                    #   IIIIIIIIIIIII
+:IIOIIIIIIIIIIIIIIIIIIIII    TT   TT    ___     ___     ___                   #   IIIIIIIIIIIII
+:IIIIIIIIIOIIIIIIIIIIIIII^^^^II^^^II   //i\\   //i\\   //i\\          #   #   #   IIIIIIIIIIIII
+:IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII     i       i       i         #          #   IIIIIIIIIIIII
+:IIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIII     i       i       i                    #   IIIIIIIIIIIII
+:IIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIITTTTTTTTTTTTTTTTTTTTTTTTTTTTT    rekt   TTTTTTIIIIIIIIIIIII
+:IIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIII^^^^^^^^^^^IIIIIIIIIIIIIIIIIII
+:IIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIOIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIII
+:IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII

@@ -83,7 +83,7 @@ public class Controller implements Initializable {
             private void playSoundWithPause(String filename) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
                 long millis = clip.getMicrosecondPosition();
                 clip.stop();
-                AudioInputStream sound = AudioSystem.getAudioInputStream(new File(System.getProperty("user.dir") + "/sounds/" + filename));
+                AudioInputStream sound = AudioSystem.getAudioInputStream(getSoundFile(filename));
 
                 Clip teleport = AudioSystem.getClip();
                 teleport.open(sound);
