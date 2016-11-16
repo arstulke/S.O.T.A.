@@ -1,93 +1,13 @@
 player:X
-&c 
-&c Du bist eine Wache, die zum Ziel muss... das ist alles
-&c 
-&c 
-&c 
-&c
-&c
-&c         _______  ______            _______  _       _________          _______  _______ 
-&c        (  ___  )(  __  \ |\     /|(  ____ \( (    /|\__   __/|\     /|(  ____ )(  ____ \
-&c        | (   ) || (  \  )| )   ( || (    \/|  \  ( |   ) (   | )   ( || (    )|| (    \/
-&c        | (___) || |   ) || |   | || (__    |   \ | |   | |   | |   | || (____)|| (__    
-&c        |  ___  || |   | |( (   ) )|  __)   | (\ \) |   | |   | |   | ||     __)|  __)   
-&c        | (   ) || |   ) | \ \_/ / | (      | | \   |   | |   | |   | || (\ (   | (      
-&c        | )   ( || (__/  )  \   /  | (____/\| )  \  |   | |   | (___) || ) \ \__| (____/\
-&c        |/     \|(______/    \_/   (_______/|/    )_)   )_(   (_______)|/   \__/(_______/
-&c
-&c _______  _______       _________          _______        _______           _______  _______  ______  
-&c(  ___  )(  ____ \      \__   __/|\     /|(  ____ \      (  ____ \|\     /|(  ___  )(  ____ )(  __  \ 
-&c| (   ) || (    \/         ) (   | )   ( || (    \/      | (    \/| )   ( || (   ) || (    )|| (  \  )
-&c| |   | || (__             | |   | (___) || (__          | |      | |   | || (___) || (____)|| |   ) |
-&c| |   | ||  __)            | |   |  ___  ||  __)         | | ____ | |   | ||  ___  ||     __)| |   | |
-&c| |   | || (               | |   | (   ) || (            | | \_  )| |   | || (   ) || (\ (   | |   ) |
-&c| (___) || )               | |   | )   ( || (____/\      | (___) || (___) || )   ( || ) \ \__| (__/  )
-&c(_______)|/                )_(   |/     \|(_______/      (_______)(_______)|/     \||/   \__/(______/ 
-&c
-&c
-&c NICHT DIE MAP VORHER ANSCHAUEN
-&c K O S
-&c Killing On Site
-&c Dont go behind this point(!)&c 
-&c 
-&c 
-&c
-&c
-&c 
-&c 
-&c 
-&c
-&c
-&c 
-&c 
-&c 
-&c
-&c
------------------------------------------------------------------------------------------------------------------------------------------------------
-:
-:
-:                     
-:
-:                                        
-:                                      
-:                                        
-:                   /\ 
-:                  /~~\                      
-:                 /~~~~\                                                               
-:                /~~~~~~\                                                                       ^MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:               /~~~~~~~~\                                                                     ^M  MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:              WWWWWWWWWWWW                                                                   ^M   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:               I        I                                                           MMM###   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:               I        I                                                        MMMMMM  #   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:   ^           I        I                                                    MMMMMMMMMM  #   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:  l l  X   mm  i        i      mm        mm        mm       mm           MMMMMMMMMMMMMM  #   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM^^MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM  #   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM  #  MMM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:        /^\                                                                           |  #   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:        l l                                                                           |  #   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:      MMMMMMMMM                                                                       |  #   MM   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-:                  MMMMMMMMM                                                           |  #   MM   MMMM                  |
-:                               MMMMMMMMM                                              |  #   MMMMMMMMM                  |
-:                                        MMMMMMMMM                                 o   |  #         MMM              o   |
-:                                              MMMMMMMMM                          i i  |  #                         i i  |
-:                                                         MMMMMMMMMMMMMMMMMMMM^^MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+---------------
 :
 :
 :
 :
 :
-:
-:^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-&c      @Deprecated
-&c~16.17 display "Find your way, young master! This is a very long text, but wait! what if a made a Backslash n \n did one hahahaha now a backslash \ did one again :D" 50
-&c~20.9 finish "You finished" 150
-&c~25.102;25.102 spawnhiddenenemy default
-&c~25.116;25.116 teleport 25.82
-&c~25.95;25.96 checkpoint 25.95
-
-~17.16 display "Find your way, young master! This is a very long text, but wait! what if a made a Backslash n \n did one hahahaha now a backslash \ did one again :D" 50
-~9.20 end finish
-&c~102.25;102.25 spawnhiddenenemy default
-~116.25;116.25 teleport 82.25
-~4.16 teleport 113.25
-~95.25;96.25 checkpoint 95.25
+:#_____________
+:#__  MM  ii
+:#
+:#X
+:__TTTTTTTTTTTT
+:TTTTTTTTTTTTTT

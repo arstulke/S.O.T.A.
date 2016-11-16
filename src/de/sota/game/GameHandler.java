@@ -100,25 +100,30 @@ public abstract class GameHandler {
             boolean isOnLadder = map[position.x][position.y] == '#';
             boolean isOnGround = !isPassableChar(map[position.x + 1][position.y], true);
 
-            //GravityMovement
+            //region GravityMovement
             if (!isOnGround && !isJumping && !isAutoJumping && !isOnLadder) {
                 move(1, 0, true); //move 1 down
             }
             isOnGround = !isPassableChar(map[position.x + 1][position.y], true);
+            //endregion
 
-            //Left/Right Movement
+            //region Left/Right Movement
             if (keyRight && !keyLeft) {
                 move(0, 1, false); //move right
             } else if (!keyRight && keyLeft) {
                 move(0, -1, false); //move left
             }
+            //endregion
 
+            //region jumping
             if (isAutoJumping) {
                 autoJump();
             } else if (isJumping) {
                 jump();
             }
+            //endregion
 
+            //region jump Movement
             if (!keyDown && isOnGround && !isOnLadder) {
                 //Jump Movement
                 if (keyUp) {
@@ -133,8 +138,9 @@ public abstract class GameHandler {
                     autoJumpDir = 1;
                 }
             }
+            //endregion
 
-            //Ladder Movement (Jump, Right, Left)
+            //region Ladder Movement (Jump, Right, Left)
             int ladderSpeed = 1;
             if (keyUp && !keyDown && isOnLadder && !((keyRight || keyLeft) && !(keyRight && keyLeft))) {
                 if (ladderTick == 0) {
@@ -158,6 +164,7 @@ public abstract class GameHandler {
                     ladderTick--;
                 }
             }
+            //endregion
         } catch (NullPointerException | ArrayIndexOutOfBoundsException ignored) {
         }
     }

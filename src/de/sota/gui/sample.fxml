@@ -14,7 +14,6 @@
                 <Font name="Courier New Bold" size="40.0"/>
             </font>
         </TextArea>
-        <TextField fx:id="message" layoutX="241.0" layoutY="45.0" minWidth="300.0"
-                   prefHeight="100.0" prefWidth="399.0" text="Test message"/>
+        <TextField fx:id="message" layoutX="241.0" layoutY="45.0" minWidth="300.0" text="Test message"/>
     </children>
 </AnchorPane>
