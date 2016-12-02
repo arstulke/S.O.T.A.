@@ -11,8 +11,8 @@ player:X
 :
 :
 :
-:_____  #    ___            ___  		 ___
-:_____\ #   //i\\          //i\\  		//i\\                   TTTT
+:_____  #    ___            ___                  ___
+:_____\ #   //i\\          //i\\                //i\\                   TTTT
 :     | #     i     the      i       cave         i     map             IIII                TTT
 : X   i #     i              i       TTTT         i                     IIII                III
 :TTTTTTTTTTTTTTTTTTETTTTTTTTTTTTTTTTTIIIOTTTTTT  TTT  TTTT   TTTT    TTTIIII                III
@@ -26,7 +26,7 @@ player:X
 :IIITTTTTTTT   TTTTTTTTTTTTTTTTTTT   TTTTTT      TTTTTTTTTTTIIIIIIIIIh4xIIII  #   IIIIIIIIIIIII
 :IIIIIIIIIII   IIIIIIIIIIIIIIIIIII^^^IIIIII^^^^^^IIIIIIIIIIIIIIIIOIIIIIIIIII  #   IIIIIIIIIIIII
 :IIIIIIIIIII   IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIII  #   IIIIIIIIIIIII
-:IIIIII	v               Vv      IIIIIIIIIIIIIIIIIIIIIIII                      #   IIIIIIIIIIIII
+:IIIIII v               Vv      IIIIIIIIIIIIIIIIIIIIIIII                      #   IIIIIIIIIIIII
 :III                                            IIIIIIII ##TTTTTTTTTTTTTTT    #   IIIIIIIIIIIII
 :III                                                 II  # IIIIIIIIIIIIIOITT  #   IIIIIIIIIIIII
 :IIITTTTTTTTTTTTTTT                                      #      IIIIIIIIIIII  #   IIIIIIIIIIIII
