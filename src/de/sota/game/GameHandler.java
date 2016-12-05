@@ -31,13 +31,13 @@ public abstract class GameHandler {
     private String message = "";
     private int messageTicks = -1;
 
-    public GameHandler(Point displayPos) {
+    protected GameHandler(Point displayPos) {
         loadMap(System.getProperty("user.dir") + "\\map.txt");
         displayPosition = new Point(0, 0);
         displayPosition.setLocation(displayPos);
     }
 
-    public GameHandler(Point displayPos, String path) {
+    protected GameHandler(Point displayPos, String path) {
         loadMap(path);
 
         displayPosition = new Point(0, 0);
@@ -81,7 +81,7 @@ public abstract class GameHandler {
     }
 
     private void checkDie() {
-        if (map[position.x + 1][position.y] == '^') {
+        if (getChar(1, 0) == '^') {
             die();
         }
     }
@@ -97,14 +97,14 @@ public abstract class GameHandler {
 
     private void checkMovement() {
         try {
-            boolean isOnLadder = map[position.x][position.y] == '#';
-            boolean isOnGround = !isPassableChar(map[position.x + 1][position.y], true);
+            boolean isOnLadder = getChar(0, 0) == '#';
+            boolean isOnGround = !isPassableChar(getChar(1, 0), true);
 
             //region GravityMovement
             if (!isOnGround && !isJumping && !isAutoJumping && !isOnLadder) {
                 move(1, 0, true); //move 1 down
             }
-            isOnGround = !isPassableChar(map[position.x + 1][position.y], true);
+            isOnGround = !isPassableChar(getChar(1, 0), true);
             //endregion
 
             //region Left/Right Movement
@@ -129,6 +129,7 @@ public abstract class GameHandler {
                 if (keyUp) {
                     isJumping = true;
                 }
+
                 //Auto Jump Movement
                 else if (keyLeft && !isPassableChar(map[position.x][position.y - 1], false) && isPassableChar(map[position.x - 1][position.y - 1], false)) {
                     isAutoJumping = true;
@@ -142,7 +143,7 @@ public abstract class GameHandler {
 
             //region Ladder Movement (Jump, Right, Left)
             int ladderSpeed = 1;
-            if (keyUp && !keyDown && isOnLadder && !((keyRight || keyLeft) && !(keyRight && keyLeft))) {
+            if (keyUp && !keyDown && isOnLadder && exclusiveOR(keyRight, keyLeft)) {
                 if (ladderTick == 0) {
                     move(-1, 0, false); //move up
                     ladderTick = ladderSpeed;
@@ -169,11 +170,17 @@ public abstract class GameHandler {
         }
     }
 
+    private boolean exclusiveOR(boolean a, boolean b) {
+        return !((a || b) && !(a && b));
+    }
+
     private void autoJump() {
         int f = 1;
 
         if (autoJumpTick == 0) {
-            move(-1, 0, false);
+            move(0, autoJumpDir, false);
+            isAutoJumping = false;
+            autoJumpTick = -1;
         } else if (autoJumpTick == f) {
             move(0, autoJumpDir, false);
             isAutoJumping = false;
@@ -194,11 +201,9 @@ public abstract class GameHandler {
             move(-1, 0, false);
         } else if (jumpTick == f) {
             move(-1, 0, false);
+        } else if (jumpTick == 2 * f) {
+            move(1, 0, true);
         } else if (jumpTick == 3 * f) {
-            move(1, 0, true);
-        } else if (jumpTick == 4 * f) {
-            move(1, 0, true);
-        } else if (jumpTick == 5 * f) {
             move(1, 0, true);
             isJumping = false;
             jumpTick = -1;
@@ -207,10 +212,10 @@ public abstract class GameHandler {
         jumpTick++;
     }
 
-    private void move(int y, int x, boolean gravityCheck) {
+    private void move(int x, int y, boolean gravityCheck) {
         try {
-            if (isPassableChar(map[position.x + y][position.y + x], gravityCheck)) {
-                position.move(position.x + y, position.y + x);
+            if (isPassableChar(getChar(x, y), gravityCheck)) {
+                position.move(position.x + x, position.y + y);
             }
         } catch (NullPointerException | ArrayIndexOutOfBoundsException ignored) {
         }
@@ -225,13 +230,21 @@ public abstract class GameHandler {
             }
         }
         if (!gravityCheck) {
-            for(char c : ladder){
+            for (char c : ladder) {
                 if (c == s) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    private char getChar(int x, int y) {
+        try {
+            return map[position.x + x][position.y + y];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return '§';
+        }
     }
 
     private void checkEvents() {
@@ -261,11 +274,10 @@ public abstract class GameHandler {
 
                     case END:
                         String param = (String) event.getParams().get("end");
-                        if(StringUtils.equalsIgnoreCase(param, "finish")) {
+                        if (StringUtils.equalsIgnoreCase(param, "finish")) {
                             onFinish();
                             event.setTriggerable(false);
-                        }
-                        else if(StringUtils.equalsIgnoreCase(param, "die")) {
+                        } else if (StringUtils.equalsIgnoreCase(param, "die")) {
                             onDie();
                         }
                         break;
@@ -285,7 +297,6 @@ public abstract class GameHandler {
 
     public abstract void onFinish();
 
-    @SuppressWarnings("SuspiciousNameCombination")
     private String display() {
         int height = 9;
         int width = 32;
@@ -294,13 +305,13 @@ public abstract class GameHandler {
         for (int y = 0; y < width; y++) {
             for (int x = 0; x < height; x++) {
                 try {
-                    int mapDetailY = x + position.x - displayPosition.x;
-                    int mapDetailX = y + position.y - displayPosition.y;
+                    int mapDetailX = x + position.x - displayPosition.x;
+                    int mapDetailY = y + position.y - displayPosition.y;
 
-                    if (new Point(mapDetailY, mapDetailX).equals(position)) {
+                    if (new Point(mapDetailX, mapDetailY).equals(position)) {
                         d[y][x] = player;
                     } else {
-                        d[y][x] = map[mapDetailY][mapDetailX];
+                        d[y][x] = map[mapDetailX][mapDetailY];
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
                     d[y][x] = '§';
