@@ -13,7 +13,7 @@ player:X
 :
 :_____       ___            ___                  ___
 :_____\     //i\\          //i\\                //i\\                   TTTT
-:     |       i     the      i       cave         i     map             IIII         _______TTT
+:     |       i              i                    i                     IIII         _______TTT
 : X   i       i              i       TTTT         i                     IIII        /_______III
 :TTTTTTTTTTTTTTTTTTETTTTTTTTTTTTTTTTTIIIOTTTTTT  TTT  TTTT   TTTT    TTTIIII        |       III
 :IOIIIIOIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIII^^III^^IIII^^^IIII    IIIIIII        i       III
@@ -39,6 +39,8 @@ player:X
 :IIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIII^^^^^^^^^^^IIIIIIIIIIIIIIIIIII
 :IIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIOIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIII
 :IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+~5.6  display "Welcome to\n <b>THE CAVE MAP</b>\n by Maik Müller\n <img src='http://i3.kym-cdn.com/photos/images/newsfeed/000/059/601/spiderman116_spideydancing1.gif'>" 100
+~21.21 display "<img src='https://media.tenor.co/images/588b34ea4f6fb7ebbeac77d5ef712446/raw' style='width:100%; height: 50%'>" 100
 ~56.14;48.14 checkpoint 55.14
 ~57.26;63.26 checkpoint 57.26
 ~84.8 end finish

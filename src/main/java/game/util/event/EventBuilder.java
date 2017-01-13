@@ -82,15 +82,17 @@ public class EventBuilder {
 
             if ((!inString && line.charAt(x) == ' ')) {
                 String string = line.substring(lastPartEnd, x);
-                if(string.startsWith("\"") && string.endsWith("\"")) {
+                if (string.startsWith("\"") && string.endsWith("\"")) {
                     string = string.substring(1, string.length() - 1);
                 }
 
-                strings.add(strings.size(), string);
+                if (string.length() > 0) {
+                    strings.add(strings.size(), string);
+                }
                 lastPartEnd = x + 1;
-            } else if(x == line.length() - 1) {
+            } else if (x == line.length() - 1) {
                 String string = line.substring(lastPartEnd);
-                if(string.startsWith("\"") && string.endsWith("\"")) {
+                if (string.startsWith("\"") && string.endsWith("\"")) {
                     string = string.substring(1, string.length() - 1);
                 }
 

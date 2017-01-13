@@ -1,3 +1,8 @@
+<style>
+    ul {
+        list-style-type: none;
+    }
+</style>
 <body>
 <table style="width: 100%">
     <tbody>
@@ -82,7 +87,10 @@
 	        }
 	        return out.substring(0, out.length - 4);
 	    })();
-	    document.getElementById("message").innerHTML = output;
+	    var messageOutputElement = document.getElementById("message");
+	    if(messageOutputElement.innerHTML !== output) {
+	        messageOutputElement.innerHTML = output;
+        }
 	}
 	
 	var keyManager = new KeyManager({"right":false, "left":false, "up":false, "down":false, "respawn": false});

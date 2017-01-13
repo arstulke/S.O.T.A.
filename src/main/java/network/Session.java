@@ -22,7 +22,7 @@ public class Session {
     private void sendMessage(String string) {
         try {
             session.getRemote().sendString(string);
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Can't send message to Client");
         }
     }
