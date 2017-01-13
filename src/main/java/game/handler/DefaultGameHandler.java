@@ -80,12 +80,6 @@ public class DefaultGameHandler implements GameHandler {
     }
 
     private void physics() {
-        //region gravity
-        if (!game.isPlayerOnSolidGround() && !game.isJumping() && !game.isAutoJumping()) {
-            move(0, 1);
-        }
-        //endregion
-
         //region Jump
         if (keys.up() && !keys.down() && game.isPlayerOnSolidGround() && !actual.hasSolidTop() && !game.isAutoJumping() && !game.isJumping()) {
             beginJump();
@@ -132,6 +126,12 @@ public class DefaultGameHandler implements GameHandler {
                 }
                 game.getData().getJSONObject("autoJump").put("tick", tick + 1);
             }
+        }
+        //endregion
+
+        //region gravity
+        if (!game.isPlayerOnSolidGround() && !game.isJumping() && !game.isAutoJumping()) {
+            move(0, 1);
         }
         //endregion
 

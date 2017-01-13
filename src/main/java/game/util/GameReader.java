@@ -9,6 +9,7 @@ import game.util.event.EventBuilder;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.List;
@@ -87,7 +88,11 @@ public class GameReader {
     }
 
     private String getFileContent(String fileName) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(fileName)));
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+        if (inputStream == null) {
+            throw new RuntimeException("Die Datei \"" + fileName + "\" existiert nicht.");
+        }
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         String content = "", line;
         while ((line = br.readLine()) != null) {
             content += line + "\n";
