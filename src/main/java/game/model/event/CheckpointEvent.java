@@ -11,15 +11,23 @@ import java.awt.*;
  */
 public class CheckpointEvent extends Event {
     private final Point target;
+    private final boolean display;
 
-    public CheckpointEvent(Rectangle triggerArea, Point target) {
+    public CheckpointEvent(Rectangle triggerArea, Point target, boolean display) {
         super(triggerArea);
         this.target = target;
+        this.display = display;
     }
 
     @Override
     public void execute(Session session, Game game) {
-        game.getPlayer().setSpawnPoint(target);
+        if (!game.getPlayer().getSpawnPoint().equals(target)) {
+            game.getPlayer().setSpawnPoint(target);
+            if (display) {
+                DisplayEvent event = new DisplayEvent(this.triggerArea, "⚑ Checkpoint (" + ((int) target.getX()) + ", " + ((int) target.getX()) + ")", 20);
+                event.execute(session, game);
+            }
+        }
     }
 
     @Override

@@ -47,6 +47,10 @@ public class WebSocketHandler {
                     .put("cmd", "OUTPUT")
                     .put("msg", initGame.getGameRenderer().render(initGame))
                     .put("position", toJSON(initGame.getPlayer().getPosition()))
+                    .put("style", new JSONObject()
+                            .put("background", initGame.getGameRenderer().getBackgroundColor())
+                            .put("foreground", initGame.getGameRenderer().getForegroundColor())
+                    )
             );
             TimerTask task = new TimerTask() {
                 @Override
@@ -61,6 +65,10 @@ public class WebSocketHandler {
                                             .put("cmd", "OUTPUT")
                                             .put("msg", output)
                                             .put("position", toJSON(game.getPlayer().getPosition()))
+                                            .put("style", new JSONObject()
+                                                    .put("background", game.getGameRenderer().getBackgroundColor())
+                                                    .put("foreground", game.getGameRenderer().getForegroundColor())
+                                            )
                             );
                         } else {
                             session.sendMessage(

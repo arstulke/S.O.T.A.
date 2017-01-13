@@ -61,7 +61,8 @@ public class EventBuilder {
                 return new DisplayEvent(triggerArea, message, ticks);
             case Event.Type.CHECKPOINT:
                 target = toPoint(parameters.get(0));
-                return new CheckpointEvent(triggerArea, target);
+                boolean display = parameters.size() == 1 ? false : Boolean.valueOf(parameters.get(1));
+                return new CheckpointEvent(triggerArea, target, display);
             case Event.Type.END:
                 String endType = parameters.get(0);
                 return new EndEvent(triggerArea, endType);

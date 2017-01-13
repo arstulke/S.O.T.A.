@@ -30,6 +30,7 @@ public class GameReader {
             Point playerPosition = null;
             Map<Point, Block> blocks = new HashMap<>();
             Map<Point, List<Event>> events = new HashMap<>();
+            GameRenderer gameRenderer = GameRenderer.DEFAULT;
 
             {
                 int width = 0;
@@ -73,6 +74,10 @@ public class GameReader {
                                 }
                             });
                         }
+                    } else if(line.startsWith("background:")) {
+                        gameRenderer.setBackgroundColor(line.substring(line.indexOf("background:")));
+                    } else if(line.startsWith("foreground:")) {
+                        gameRenderer.setBackgroundColor(line.substring(line.indexOf("foreground:")));
                     }
                 }
             }
@@ -81,7 +86,7 @@ public class GameReader {
                 throw new RuntimeException("You have to set the spawn position of the player with the player char (yours: \"" + playerChar + "\").");
             }
 
-            instance = new Game(new Player(playerChar, playerPosition), blocks, events);
+            instance = new Game(new Player(playerChar, playerPosition), blocks, events, gameRenderer);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

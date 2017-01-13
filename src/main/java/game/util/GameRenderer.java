@@ -11,13 +11,18 @@ import java.awt.*;
  */
 public class GameRenderer {
     public static final GameRenderer DEFAULT = new GameRenderer(31, 9);
+
     private final int width;
     private final int height;
+    private String backgroundColor;
+    private String foregroundColor;
     private final Point p;
 
     private GameRenderer(int width, int height) {
         this.width = width;
         this.height = height;
+        this.backgroundColor = "#ffffff";
+        this.foregroundColor = "#000000";
 
         this.p = new Point(width / 2, (int) (height * 0.5));
     }
@@ -51,5 +56,21 @@ public class GameRenderer {
 
         out = out.substring(0, out.length() - 1);
         return out;
+    }
+
+    public void setBackgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public void setForegroundColor(String foregroundColor) {
+        this.foregroundColor = foregroundColor;
+    }
+
+    public String getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public String getForegroundColor() {
+        return foregroundColor;
     }
 }

@@ -12,10 +12,16 @@ import java.util.Set;
  * by Arne on 11.01.2017.
  */
 public abstract class Event {
-    private final Set<Point> triggerPoints;
+    final Rectangle triggerArea;
 
     Event(Rectangle triggerArea) {
-        this.triggerPoints = new HashSet<>();
+        this.triggerArea = triggerArea;
+    }
+
+    public abstract void execute(Session session, Game game);
+
+    public Set<Point> getTriggerPoints() {
+        Set<Point> triggerPoints = new HashSet<>();
 
         int startX = (int) triggerArea.getX();
         int endX = (int) (triggerArea.getWidth() + triggerArea.getX());
@@ -33,11 +39,6 @@ public abstract class Event {
                 triggerPoints.add(new Point(x, y));
             }
         }
-    }
-
-    public abstract void execute(Session session, Game game);
-
-    public Set<Point> getTriggerPoints() {
         return triggerPoints;
     }
 
@@ -55,11 +56,11 @@ public abstract class Event {
 
         Event event = (Event) o;
 
-        return triggerPoints.equals(event.triggerPoints);
+        return getTriggerPoints().equals(event.getTriggerPoints());
     }
 
     @Override
     public int hashCode() {
-        return triggerPoints.hashCode();
+        return getTriggerPoints().hashCode();
     }
 }

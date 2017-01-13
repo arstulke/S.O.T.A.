@@ -1,6 +1,7 @@
 package game.model;
 
 import game.model.block.Block;
+import game.model.event.CheckpointEvent;
 import game.model.event.Event;
 import game.util.GameRenderer;
 import network.Session;
@@ -9,6 +10,7 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created Game.java in network
@@ -19,16 +21,17 @@ public class Game implements Cloneable {
     private final Map<Point, List<Event>> events;
     private final Set<Event> executedEvents = new HashSet<>();
     private final Player player;
-    private final GameRenderer gameRenderer = GameRenderer.DEFAULT;
+    private final GameRenderer gameRenderer;
     private final Point originSpawn;
     private final JSONObject data;
     private final int width;
     private final int height;
 
-    public Game(Player player, Map<Point, Block> blocks, Map<Point, List<Event>> events) {
+    public Game(Player player, Map<Point, Block> blocks, Map<Point, List<Event>> events, GameRenderer gameRenderer) {
         this.player = player;
         this.blocks = blocks;
         this.events = events;
+        this.gameRenderer = gameRenderer;
 
         this.originSpawn = new Point();
         this.originSpawn.setLocation(player.getSpawnPoint());
@@ -116,7 +119,9 @@ public class Game implements Cloneable {
 
     public void respawn(Session session) {
         player.setPosition(player.getSpawnPoint());
-        executedEvents.clear();
+        Set<Event> executedEvents = this.executedEvents.stream().filter(event -> event instanceof CheckpointEvent).collect(Collectors.toSet());
+        this.executedEvents.clear();
+        this.executedEvents.addAll(executedEvents);
 
         session.sendMessage(
                 new JSONObject()
@@ -125,11 +130,7 @@ public class Game implements Cloneable {
     }
 
     public Game copy() {
-        return new Game(player.copy(), new HashMap<>(blocks), new HashMap<>(events));
-    }
-
-    public boolean isPlayerAtSpawnPoint() {
-        return player.getPosition().equals(player.getSpawnPoint());
+        return new Game(player.copy(), new HashMap<>(blocks), new HashMap<>(events), gameRenderer);
     }
 
     public boolean isEventExecuted(Event event) {
