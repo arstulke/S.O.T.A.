@@ -6,15 +6,17 @@ package game.model;
  */
 public class Block {
     private final char ch;
-    private final double slowDown;
+    private final double horizontalSlowDown;
+    private final double verticalSlowDown;
 
     private final boolean solid;
     private final boolean semiSolidGround;
     private final boolean semiSolidTop;
 
-    private Block(char ch, double slowDown, boolean solid, boolean semiSolidGround, boolean semiSolidTop) {
+    private Block(char ch, double horizontalSlowDown, double verticalSlowDown, boolean solid, boolean semiSolidGround, boolean semiSolidTop) {
         this.ch = ch;
-        this.slowDown = slowDown;
+        this.horizontalSlowDown = horizontalSlowDown;
+        this.verticalSlowDown = verticalSlowDown;
         this.solid = solid;
         this.semiSolidGround = semiSolidGround;
         this.semiSolidTop = semiSolidTop;
@@ -25,15 +27,16 @@ public class Block {
         String semiSolidGroundChars = "#_";
         String semiSolidTopChars = "#";
 
-        double slowDown = c == '#' ? 2f : 1f;
+        double horizontalSlowDown = 1.0;
+        double verticalSlowDown = c == '#' ? 2.0 : 1.0;
 
         if (!nonSolidChars.contains("" + c)) {
-            return new Block(c, slowDown, true, false, false);
+            return new Block(c, horizontalSlowDown, verticalSlowDown, true, false, false);
         } else {
             boolean semiSolidGround = semiSolidGroundChars.contains("" + c);
             boolean semiSolidTop = semiSolidTopChars.contains("" + c);
 
-            return new Block(c, slowDown, false, semiSolidGround, semiSolidTop);
+            return new Block(c, horizontalSlowDown, verticalSlowDown, false, semiSolidGround, semiSolidTop);
         }
     }
 
@@ -53,7 +56,11 @@ public class Block {
         return ch;
     }
 
-    public double getSlowDown() {
-        return slowDown;
+    public double getHorizontalSlowDown() {
+        return horizontalSlowDown;
+    }
+
+    public double getVerticalSlowDown() {
+        return verticalSlowDown;
     }
 }

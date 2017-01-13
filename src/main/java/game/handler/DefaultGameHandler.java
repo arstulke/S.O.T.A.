@@ -1,9 +1,9 @@
 package game.handler;
 
 
+import game.model.Block;
 import game.model.Game;
 import game.model.Keys;
-import game.model.Block;
 import game.util.Properties;
 import network.Session;
 import org.json.JSONObject;
@@ -135,9 +135,9 @@ public class DefaultGameHandler implements GameHandler {
         //endregion
 
         //region climb Ladder
-        if (keys.up() && !keys.down() && (above.hasSolidGround() || actual.hasSolidTop()) && game.isPlayerOnSolidGround()) {
+        if (keys.up() && !keys.down() && (above.hasSolidGround() || actual.hasSolidTop()) && game.isPlayerOnSolidGround() && !keys.right() && !keys.left()) {
             move(0, -1);
-        } else if (!keys.up() && keys.down()) {
+        } else if (!keys.up() && keys.down() && !keys.right() && !keys.left()) {
             move(0, 1);
         }
         //endregion
@@ -187,7 +187,15 @@ public class DefaultGameHandler implements GameHandler {
                     slowDownTicks = 1;
                 }
 
-                if (blockToMove.getSlowDown() <= slowDownTicks) {
+
+                double slowDown = 1.0;
+                if (x == 0 && y != 0) {
+                    slowDown = blockToMove.getVerticalSlowDown();
+                } else if (x != 0 && y == 0) {
+                    slowDown = blockToMove.getHorizontalSlowDown();
+                }
+
+                if (slowDown <= slowDownTicks) {
                     game.getPlayer().setPosition(positionToMove);
                     updated = true;
 

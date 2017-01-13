@@ -17,6 +17,14 @@ public class Keys {
         }
     }
 
+    public boolean right() {
+        return key("right");
+    }
+
+    public boolean left() {
+        return key("left");
+    }
+
     public boolean up() {
         return key("up");
     }
