@@ -57,6 +57,8 @@ public class DefaultGameHandler implements GameHandler {
             }
         }
 
+        game.incrementTickCounter();
+
         return updated;
     }
 

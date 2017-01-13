@@ -12,13 +12,13 @@ foreground:#000000
 -------------------------------------------------------------------------------------------------------
 :
 :
-:
-:_____       ___            ___                  ___
-:_____\     //i\\          //i\\                //i\\                   TTTT
-:     |       i              i                    i                     IIII         _______TTT
-: X   i       i              i       TTTT         i                     IIII        /_______III
-:TTTTTTTTTTTTTTTTTTETTTTTTTTTTTTTTTTTIIIOTTTTTT  TTT  TTTT   TTTT    TTTIIII        |       III
-:IOIIIIOIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIII^^III^^IIII^^^IIII    IIIIIII        i       III
+:_______
+:_______\    ___            ___                  ___
+:       |   //i\\          //i\\                //i\\                   TTTT        ________TTT
+:       |     i              i                    i                     IIII       /________III
+: X     i     i              i       TTTT         i                     IIII       |        III
+:TTTTTTTTTTTTTTTTTTETTTTTTTTTTTTTTTTTIIIOTTTTTT  TTT  TTTT   TTTT    TTTIIII       |        III
+:IOIIIIOIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIII^^III^^IIII^^^IIII    IIIIIII       i        III
 :IIOIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII    IIIOIII  ####TTTTTTTTTTIII
 :IIIII          VNv  v    v    vIII     V   vv        V    v         IIIIIII  #   IIIIIIIIIIIII
 :III             V              v                                    IIIIIII  #   IIIIIIIIIIIII
@@ -41,10 +41,10 @@ foreground:#000000
 :IIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIII^^^^^^^^^^^IIIIIIIIIIIIIIIIIII
 :IIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIOIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIII
 :IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII^^^^^^^^
-~5.6 display "Welcome to\n <b>THE CAVE MAP</b>\n by Maik Müller" 100
+~7.6 display "Welcome to\n <b>THE CAVE MAP</b>\n by Maik Müller" 100
 ~56.14;48.14 checkpoint 55.14 true
 ~57.26;63.26 checkpoint 57.26 true
-~84.8 end finish
+~83.8 end finish
 
 
 

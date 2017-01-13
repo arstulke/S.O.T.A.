@@ -1,7 +1,10 @@
 package game.model.event;
 
 import game.model.Game;
+import game.model.Statistics;
 import network.Session;
+import network.WebSocketHandler;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -26,6 +29,10 @@ public class EndEvent extends Event {
                             .put("cmd", "END")
                             .put("msg", "finish")
             );
+
+            WebSocketHandler.addStatistics(game.buildStatistics());
+            JSONArray stats = WebSocketHandler.buildStatistics(Statistics.TICKS);
+            System.out.println(stats);
         }
     }
 

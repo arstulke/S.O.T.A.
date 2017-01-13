@@ -8,8 +8,11 @@ import network.Session;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.util.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +33,9 @@ public class Game implements Cloneable {
 
     private final int mapWidth;
     private final int mapHeight;
+
+    private final AtomicInteger failCounter = new AtomicInteger(0);
+    private final AtomicInteger tickCounter = new AtomicInteger(0);
 
     public Game(Player player, Map<Point, Block> blocks, Map<Point, List<Event>> events, GameRenderer gameRenderer) {
         this.player = player;
@@ -72,10 +78,6 @@ public class Game implements Cloneable {
         return player;
     }
 
-    public Point getOriginSpawn() {
-        return originSpawn;
-    }
-
     public int getMapWidth() {
         return mapWidth;
     }
@@ -86,10 +88,6 @@ public class Game implements Cloneable {
 
     public GameRenderer getGameRenderer() {
         return gameRenderer;
-    }
-
-    public void setGameRenderer(GameRenderer gameRenderer) {
-        this.gameRenderer.load(gameRenderer);
     }
 
     public void saveGameRenderer() {
@@ -126,6 +124,13 @@ public class Game implements Cloneable {
         this.executedEvents.clear();
         this.executedEvents.addAll(executedEvents);
         this.gameRenderer.load(this.lastGameRenderer);
+
+        this.failCounter.incrementAndGet();
+
+        if(player.getSpawnPoint().equals(originSpawn)) {
+            this.failCounter.set(0);
+            this.tickCounter.set(0);
+        }
 
         session.sendMessage(
                 new JSONObject()
@@ -167,5 +172,13 @@ public class Game implements Cloneable {
 
     public boolean isChanged() {
         return getPlayer().isChanged() || !gameRenderer.equals(lastGameRenderer);
+    }
+
+    public void incrementTickCounter() {
+        tickCounter.incrementAndGet();
+    }
+
+    public Statistics buildStatistics() {
+        return new Statistics(tickCounter.intValue(), failCounter.intValue());
     }
 }

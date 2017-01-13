@@ -3,18 +3,18 @@ package network;
 import game.handler.DefaultGameHandler;
 import game.handler.GameHandler;
 import game.model.Game;
+import game.model.Statistics;
 import game.util.GameReader;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created network.WebSocketHandler.java in PACKAGE_NAME
@@ -22,6 +22,7 @@ import java.util.TimerTask;
  */
 @WebSocket
 public class WebSocketHandler {
+    private static List<Statistics> statistics = new ArrayList<>();
     private final Map<Session, Game> games = new HashMap<>();
 
     private GameHandler gameHandler;
@@ -88,17 +89,6 @@ public class WebSocketHandler {
         }
     }
 
-    private JSONObject toJSON(Object object) {
-        if (object instanceof Point) {
-            Point point = (Point) object;
-            return new JSONObject()
-                    .put("x", (int) point.getX())
-                    .put("y", (int) point.getY());
-        } else {
-            return null;
-        }
-    }
-
     @OnWebSocketMessage
     public void onMessage(org.eclipse.jetty.websocket.api.Session webSocketSession, String message) {
         Session session = new Session(webSocketSession);
@@ -108,9 +98,33 @@ public class WebSocketHandler {
         }
     }
 
+    private JSONObject toJSON(Object object) {
+        if (object instanceof Point) {
+            Point point = (Point) object;
+            return new JSONObject()
+                    .put("x", (int) point.getX())
+                    .put("y", (int) point.getY());
+        } else {
+            return new JSONObject().put("object", object);
+        }
+    }
+
     private void initialize() {
         if (gameHandler == null) {
             gameHandler = new DefaultGameHandler();
         }
+    }
+
+    public synchronized static void addStatistics(Statistics statistics) {
+        WebSocketHandler.statistics.add(statistics);
+    }
+
+    public static JSONArray buildStatistics(Comparator<Statistics> statisticsComparator) {
+        WebSocketHandler.statistics.sort(statisticsComparator);
+        List<Statistics> statistics = new ArrayList<>(WebSocketHandler.statistics);
+        while(statistics.size() > 10) {
+            statistics.remove(statistics.size());
+        }
+        return new JSONArray(statistics);
     }
 }
