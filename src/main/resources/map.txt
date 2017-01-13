@@ -1,5 +1,6 @@
 player:X
-background:#ff0000
+foreground:#0000ff
+foreground:#00ff00
 &c Built by Maik Müller.
 &c                                                                                        
 &c  ,--.  ,--.                                                                            

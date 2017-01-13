@@ -27,6 +27,12 @@ public class GameRenderer {
         this.p = new Point(width / 2, (int) (height * 0.5));
     }
 
+    private GameRenderer(int width, int height, String backgroundColor, String foregroundColor) {
+        this(width, height);
+        this.backgroundColor = backgroundColor;
+        this.foregroundColor = foregroundColor;
+    }
+
     public String render(Game game) {
         String out = "";
         for (int y = 0; y < height; y++) {
@@ -72,5 +78,9 @@ public class GameRenderer {
 
     public String getForegroundColor() {
         return foregroundColor;
+    }
+
+    public GameRenderer copy() {
+        return new GameRenderer(this.width, this.height, this.backgroundColor, this.foregroundColor);
     }
 }

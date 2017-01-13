@@ -75,9 +75,9 @@ public class GameReader {
                             });
                         }
                     } else if(line.startsWith("background:")) {
-                        gameRenderer.setBackgroundColor(line.substring(line.indexOf("background:")));
+                        gameRenderer.setBackgroundColor(line.substring("background:".length()));
                     } else if(line.startsWith("foreground:")) {
-                        gameRenderer.setBackgroundColor(line.substring(line.indexOf("foreground:")));
+                        gameRenderer.setForegroundColor(line.substring("foreground:".length()));
                     }
                 }
             }
@@ -86,7 +86,7 @@ public class GameReader {
                 throw new RuntimeException("You have to set the spawn position of the player with the player char (yours: \"" + playerChar + "\").");
             }
 
-            instance = new Game(new Player(playerChar, playerPosition), blocks, events, gameRenderer);
+            instance = new Game(new Player(playerChar, playerPosition), blocks, events, gameRenderer.copy());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
