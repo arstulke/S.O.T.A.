@@ -1,4 +1,4 @@
-package game.model.block;
+package game.model;
 
 /**
  * Created Block.java in game.model

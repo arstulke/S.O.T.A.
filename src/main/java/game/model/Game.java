@@ -1,6 +1,6 @@
 package game.model;
 
-import game.model.block.Block;
+import game.CoordinateMap;
 import game.model.event.CheckpointEvent;
 import game.model.event.Event;
 import game.util.GameRenderer;
@@ -17,21 +17,28 @@ import java.util.stream.Collectors;
  * by Arne on 11.01.2017.
  */
 public class Game implements Cloneable {
-    private final Map<Point, Block> blocks;
-    private final Map<Point, List<Event>> events;
+    private final CoordinateMap<Block> blockMap;
+    private final CoordinateMap<List<Event>> eventMap;
     private final Set<Event> executedEvents = new HashSet<>();
     private final Player player;
+
     private final GameRenderer gameRenderer;
+    private final GameRenderer lastGameRenderer;
+
     private final Point originSpawn;
     private final JSONObject data;
-    private final int width;
-    private final int height;
+
+    private final int mapWidth;
+    private final int mapHeight;
 
     public Game(Player player, Map<Point, Block> blocks, Map<Point, List<Event>> events, GameRenderer gameRenderer) {
         this.player = player;
-        this.blocks = blocks;
-        this.events = events;
+        this.blockMap = new CoordinateMap<>(blocks);
+        this.eventMap = new CoordinateMap<>(events);
+
         this.gameRenderer = gameRenderer;
+        this.lastGameRenderer = GameRenderer.getDefault();
+        lastGameRenderer.load(gameRenderer);
 
         this.originSpawn = new Point();
         this.originSpawn.setLocation(player.getSpawnPoint());
@@ -52,37 +59,9 @@ public class Game implements Cloneable {
             }
         }
 
-        this.width = highestX;
-        this.height = highestY;
+        this.mapWidth = highestX;
+        this.mapHeight = highestY;
         //endregion
-    }
-
-    public GameRenderer getGameRenderer() {
-        return gameRenderer;
-    }
-
-    public Block getBlockAbove() {
-        return getBlock(0, -1);
-    }
-
-    public Block getBlockBelow() {
-        return getBlock(0, 1);
-    }
-
-    public Block getBlock(int x, int y) {
-        Point playerPosition = player.getPosition();
-        return blocks.get(new Point(
-                (int) playerPosition.getX() + x,
-                (int) playerPosition.getY() + y)
-        );
-    }
-
-    public Block getBlock(Point point) {
-        return blocks.get(point);
-    }
-
-    public List<Event> getEvents(Point point) {
-        return events.get(point);
     }
 
     public JSONObject getData() {
@@ -95,6 +74,67 @@ public class Game implements Cloneable {
 
     public Point getOriginSpawn() {
         return originSpawn;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public GameRenderer getGameRenderer() {
+        return gameRenderer;
+    }
+
+    public void setGameRenderer(GameRenderer gameRenderer) {
+        this.gameRenderer.load(gameRenderer);
+    }
+
+    public void saveGameRenderer() {
+        lastGameRenderer.load(gameRenderer);
+    }
+
+    public Block getBlockAbove() {
+        return getBlock(0, -1);
+    }
+
+    public Block getBlockBelow() {
+        return getBlock(0, 1);
+    }
+
+    public Block getBlock(int x, int y) {
+        Point playerPosition = player.getPosition();
+        return getBlock(new Point(
+                (int) playerPosition.getX() + x,
+                (int) playerPosition.getY() + y)
+        );
+    }
+
+    public Block getBlock(Point point) {
+        return blockMap.get(point);
+    }
+
+    public List<Event> getEvents(Point point) {
+        return eventMap.get(point);
+    }
+
+    public void respawn(Session session) {
+        player.setPosition(player.getSpawnPoint());
+        Set<Event> executedEvents = this.executedEvents.stream().filter(event -> event instanceof CheckpointEvent).collect(Collectors.toSet());
+        this.executedEvents.clear();
+        this.executedEvents.addAll(executedEvents);
+        this.gameRenderer.load(this.lastGameRenderer);
+
+        session.sendMessage(
+                new JSONObject()
+                        .put("cmd", "CLEAR-MESSAGES")
+        );
+    }
+
+    public Game copy() {
+        return new Game(player.copy(), blockMap.copy(), eventMap.copy(), gameRenderer.copy());
     }
 
     public boolean isPlayerOnSolidGround() {
@@ -117,22 +157,6 @@ public class Game implements Cloneable {
         return getBlock(player.getPosition());
     }
 
-    public void respawn(Session session) {
-        player.setPosition(player.getSpawnPoint());
-        Set<Event> executedEvents = this.executedEvents.stream().filter(event -> event instanceof CheckpointEvent).collect(Collectors.toSet());
-        this.executedEvents.clear();
-        this.executedEvents.addAll(executedEvents);
-
-        session.sendMessage(
-                new JSONObject()
-                        .put("cmd", "CLEAR-MESSAGES")
-        );
-    }
-
-    public Game copy() {
-        return new Game(player.copy(), new HashMap<>(blocks), new HashMap<>(events), gameRenderer);
-    }
-
     public boolean isEventExecuted(Event event) {
         return executedEvents.contains(event);
     }
@@ -141,11 +165,7 @@ public class Game implements Cloneable {
         executedEvents.add(event);
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
+    public boolean isChanged() {
+        return getPlayer().isChanged() || !gameRenderer.equals(lastGameRenderer);
     }
 }

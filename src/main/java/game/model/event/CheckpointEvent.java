@@ -23,6 +23,7 @@ public class CheckpointEvent extends Event {
     public void execute(Session session, Game game) {
         if (!game.getPlayer().getSpawnPoint().equals(target)) {
             game.getPlayer().setSpawnPoint(target);
+            game.saveGameRenderer();
             if (display) {
                 DisplayEvent event = new DisplayEvent(this.triggerArea, "⚑ Checkpoint (" + ((int) target.getX()) + ", " + ((int) target.getX()) + ")", 20);
                 event.execute(session, game);

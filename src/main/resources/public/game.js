@@ -18,8 +18,21 @@ String.prototype.replaceAll = function(regex, replacements) {
 			document.getElementById("right-cornor").innerHTML = "x: " + message.position.x + ", y:" + message.position.y;
 			document.getElementById("output").innerHTML = message.msg;
 
-            document.body.background = message.style.background;
-            document.getElementById("output").style.color = message.style.foreground;
+            (function() {
+                var background = message.style.background;
+                if(background.startsWith("#")) {
+                    document.body.background = "";
+                    if(document.body.style.backgroundColor !== background) {
+                        document.body.style.backgroundColor = background;
+                    }
+                } else {
+                    if(document.body.background !== background) {
+                        document.body.background = background;
+                    }
+                    document.body.style.backgroundColor = "";
+                }
+                document.getElementById("output").style.color = message.style.foreground;
+            })();
 			updateMessages();
 		} else if(message.cmd == "PING-OUTPUT") {
 		    updateMessages();

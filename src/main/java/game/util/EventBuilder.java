@@ -1,4 +1,4 @@
-package game.util.event;
+package game.util;
 
 import game.model.event.*;
 import game.model.event.Event;
@@ -66,6 +66,14 @@ public class EventBuilder {
             case Event.Type.END:
                 String endType = parameters.get(0);
                 return new EndEvent(triggerArea, endType);
+            case Event.Type.STYLE:
+                String value = parameters.get(0);
+                value = value.equals("null") ? null: value;
+
+                String value2 = parameters.size() < 2 ? "null" : parameters.get(1);
+                value2 = value2.equals("null") ? null: value2;
+
+                return new StyleEvent(triggerArea, value, value2);
             default:
                 return null;
         }

@@ -58,4 +58,8 @@ public class Player {
     public boolean isOnSpawnPoint() {
         return playerPosition.getX() == spawnPoint.getX() && playerPosition.getY() == spawnPoint.getY();
     }
+
+    public boolean isChanged() {
+        return !playerPosition.equals(spawnPoint);
+    }
 }

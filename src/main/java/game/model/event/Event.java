@@ -47,6 +47,7 @@ public abstract class Event {
         public static final String TELEPORT = "teleport";
         public static final String DISPLAY = "display";
         public static final String END = "end";
+        public static final String STYLE = "style";
     }
 
     @Override

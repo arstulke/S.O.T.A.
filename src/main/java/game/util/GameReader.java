@@ -2,9 +2,8 @@ package game.util;
 
 import game.model.Game;
 import game.model.Player;
-import game.model.block.Block;
+import game.model.Block;
 import game.model.event.Event;
-import game.util.event.EventBuilder;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -30,7 +29,7 @@ public class GameReader {
             Point playerPosition = null;
             Map<Point, Block> blocks = new HashMap<>();
             Map<Point, List<Event>> events = new HashMap<>();
-            GameRenderer gameRenderer = GameRenderer.DEFAULT;
+            GameRenderer gameRenderer = GameRenderer.getDefault();
 
             {
                 int width = 0;
@@ -86,7 +85,7 @@ public class GameReader {
                 throw new RuntimeException("You have to set the spawn position of the player with the player char (yours: \"" + playerChar + "\").");
             }
 
-            instance = new Game(new Player(playerChar, playerPosition), blocks, events, gameRenderer.copy());
+            instance = new Game(new Player(playerChar, playerPosition), blocks, events, gameRenderer);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

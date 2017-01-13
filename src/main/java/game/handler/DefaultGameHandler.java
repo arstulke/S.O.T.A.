@@ -3,7 +3,7 @@ package game.handler;
 
 import game.model.Game;
 import game.model.Keys;
-import game.model.block.Block;
+import game.model.Block;
 import game.util.Properties;
 import network.Session;
 import org.json.JSONObject;
@@ -43,8 +43,7 @@ public class DefaultGameHandler implements GameHandler {
         actual = game.getActualBlock();
 
         boolean respawn = checkDie() || game.getPlayer().getKeys().respawn();
-        boolean isPlayerOnSpawnPoint = game.getPlayer().isOnSpawnPoint();
-        if (respawn && !isPlayerOnSpawnPoint) {
+        if (respawn && game.isChanged()) {
             respawn(session, game);
         }
 
