@@ -173,14 +173,14 @@ public class Controller implements Initializable {
         }
         if (c == KeyCode.SPACE) {
             keys[6] = b;
+        }{
+            keys[8] = b;
         }
 
         if (c == KeyCode.DOWN) {
             keys[7] = b;
         }
-        if (c == KeyCode.S) {
-            keys[8] = b;
-        }
+        if (c == KeyCode.S)
     }
 
 
