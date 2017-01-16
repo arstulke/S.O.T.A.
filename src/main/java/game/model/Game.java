@@ -127,11 +127,6 @@ public class Game implements Cloneable {
 
         this.failCounter.incrementAndGet();
 
-        if(player.getSpawnPoint().equals(originSpawn)) {
-            this.failCounter.set(0);
-            this.tickCounter.set(0);
-        }
-
         session.sendMessage(
                 new JSONObject()
                         .put("cmd", "CLEAR-MESSAGES")

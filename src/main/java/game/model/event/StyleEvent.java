@@ -27,7 +27,7 @@ public class StyleEvent extends Event {
             gameRenderer.setBackgroundColor(this.backgroundValue);
         }
         if(this.foregroundValue != null) {
-            gameRenderer.setForegroundColor(this.backgroundValue);
+            gameRenderer.setForegroundColor(this.foregroundValue);
         }
     }
 }
