@@ -3,6 +3,7 @@ package game.model;
 import game.CoordinateMap;
 import game.model.event.CheckpointEvent;
 import game.model.event.Event;
+import game.model.event.StyleEvent;
 import game.util.GameRenderer;
 import network.Session;
 import org.json.JSONObject;
@@ -162,7 +163,9 @@ public class Game implements Cloneable {
     }
 
     public void executedEvent(Event event) {
-        executedEvents.add(event);
+        if (!(event instanceof StyleEvent)) {
+            executedEvents.add(event);
+        }
     }
 
     public boolean isChanged() {
