@@ -21,15 +21,15 @@ String.prototype.replaceAll = function(regex, replacements) {
             (function() {
                 var background = message.style.background;
                 if(background.startsWith("#")) {
-                    document.body.background = "";
-                    if(document.body.style.backgroundColor !== background) {
-                        document.body.style.backgroundColor = background;
+                    document.getElementById("output").style.backgroundImage = "";
+                    if(document.getElementById("output").backgroundColor !== background) {
+                        document.getElementById("output").backgroundColor = background;
                     }
                 } else {
-                    if(document.body.background !== background) {
-                        document.body.background = background;
+                    if(document.getElementById("output").style.backgroundImage !== background) {
+                        document.getElementById("output").style.backgroundImage = "url('" + background + "')";
                     }
-                    document.body.style.backgroundColor = "";
+                    document.getElementById("output").backgroundColor = "";
                 }
                 document.getElementById("output").style.color = message.style.foreground;
             })();

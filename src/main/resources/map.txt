@@ -1,6 +1,6 @@
 player:X
-background:#ffffff
-foreground:#000000
+background:http://www.techcredo.com/wp-content/uploads/2010/06/Ibex_Wallpaper_by_willwill100.png
+foreground:#ffffff
 &c Built by Maik Müller.
 &c                                                                                        
 &c  ,--.  ,--.                                                                            
@@ -46,10 +46,10 @@ foreground:#000000
 ~57.26;63.26 checkpoint 57.26 true
 ~83.8 end finish
 
-
+~6.6 style http://www.techcredo.com/wp-content/uploads/2010/06/Ibex_Wallpaper_by_willwill100.png #ffffff
+~8.6 style https://wallpaperscraft.com/image/forest_trees_background_dark_91308_3840x2160.jpg #ffffff
 
 
 #~5.6 display "Welcome to\n <b>THE CAVE MAP</b>\n by Maik Müller\n <img src='http://i3.kym-cdn.com/photos/images/newsfeed/000/059/601/spiderman116_spideydancing1.gif'>" 100
 
 #~21.21 display "<img src='https://media.tenor.co/images/588b34ea4f6fb7ebbeac77d5ef712446/raw' style='width:100%; height: 50%'>" 100
-~5.6 style https://wallpaperscraft.com/image/forest_trees_background_dark_91308_3840x2160.jpg #ffffff
