@@ -1,11 +1,14 @@
 package game.util;
 
+import game.model.Block;
 import game.model.event.*;
 import game.model.event.Event;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.Integer.parseInt;
 
@@ -38,8 +41,8 @@ public class EventBuilder {
             String[] point = string.split("\\.");
             int x = parseInt(point[0]);
             int y = parseInt(point[1]);
-            int width = 1;
-            int height = 1;
+            int width = 0;
+            int height = 0;
             return new Rectangle(x, y, width, height);
         }
     }
@@ -50,10 +53,10 @@ public class EventBuilder {
 
         String type = parameters.get(1).toLowerCase();
         parameters = parameters.subList(2, parameters.size());
-
+        Point target;
         switch (type) {
             case Event.Type.TELEPORT:
-                Point target = toPoint(parameters.get(0));
+                target = toPoint(parameters.get(0));
                 return new TeleportEvent(triggerArea, target);
             case Event.Type.DISPLAY:
                 String message = parameters.get(0);
@@ -74,6 +77,11 @@ public class EventBuilder {
                 value2 = value2.equals("null") ? null: value2;
 
                 return new StyleEvent(triggerArea, value, value2);
+            case Event.Type.SETBLOCK:
+                char block = parameters.get(0).toCharArray()[0];
+                Rectangle targetArea = toRectangle(parameters.get(1));
+
+                return new SetBlockEvent(triggerArea, block, targetArea);
             default:
                 return null;
         }
@@ -110,5 +118,27 @@ public class EventBuilder {
         }
 
         return strings;
+    }
+
+    public static Set<Point> toPoints(Rectangle triggerArea) {
+        Set<Point> triggerPoints = new HashSet<>();
+
+        int startX = (int) triggerArea.getX();
+        int endX = (int) (triggerArea.getWidth() + triggerArea.getX());
+        int startY = (int) triggerArea.getY();
+        int endY = (int) (triggerArea.getHeight() + triggerArea.getY());
+
+        int minX = Math.min(startX, endX);
+        int maxX = Math.max(startX, endX);
+
+        int minY = Math.min(startY, endY);
+        int maxY = Math.max(startY, endY);
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                triggerPoints.add(new Point(x, y));
+            }
+        }
+        return triggerPoints;
     }
 }

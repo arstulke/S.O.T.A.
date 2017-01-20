@@ -1,9 +1,10 @@
 package game.util;
 
+import game.model.Block;
 import game.model.Game;
 import game.model.Player;
-import game.model.Block;
 import game.model.event.Event;
+import game.model.event.StyleEvent;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -18,7 +19,9 @@ import java.util.List;
  * by Arne on 11.01.2017.
  */
 public class GameReader {
-    private final Game instance;
+   // private final Game instance;
+
+    private final Map<String,Game> gameInstances = new HashMap<>();
 
     public GameReader() {
         try {
@@ -26,10 +29,12 @@ public class GameReader {
             String fileContent = getFileContent(prop.getMapFilename());
 
             char playerChar = 'X';
+            String title = "";
             Point playerPosition = null;
             Map<Point, Block> blocks = new HashMap<>();
             Map<Point, List<Event>> events = new HashMap<>();
             GameRenderer gameRenderer = GameRenderer.getDefault();
+            Set<String> resources = new HashSet<>();
 
             {
                 int width = 0;
@@ -39,7 +44,9 @@ public class GameReader {
                 for (String line : lines) {
                     if (line.startsWith("player:")) {
                         playerChar = line.substring("player:".length()).toCharArray()[0];
-                    } else if (line.startsWith("-")) {
+                    } else if (line.startsWith("title:")) {
+                        title = line.substring("title:".length()).replaceAll(" ","_");
+                    }else if (line.startsWith("-")) {
                         width = line.length() - 1;
                     } else if (line.startsWith(":")) {
                         line = line.substring(1, Math.min(width + 1, line.length()));
@@ -72,10 +79,13 @@ public class GameReader {
                                     events.get(point).add(event);
                                 }
                             });
+                            if (event instanceof StyleEvent) {
+                                resources.addAll(((StyleEvent) event).getResources());
+                            }
                         }
-                    } else if(line.startsWith("background:")) {
+                    } else if (line.startsWith("background:")) {
                         gameRenderer.setBackgroundColor(line.substring("background:".length()));
-                    } else if(line.startsWith("foreground:")) {
+                    } else if (line.startsWith("foreground:")) {
                         gameRenderer.setForegroundColor(line.substring("foreground:".length()));
                     }
                 }
@@ -85,7 +95,9 @@ public class GameReader {
                 throw new RuntimeException("You have to set the spawn position of the player with the player char (yours: \"" + playerChar + "\").");
             }
 
-            instance = new Game(new Player(playerChar, playerPosition), blocks, events, gameRenderer);
+            //instance = new Game(new Player(playerChar, playerPosition), blocks, events, gameRenderer);
+            gameInstances.put(title, new Game(new Player(playerChar, playerPosition), blocks, events, gameRenderer));
+            gameInstances.get(title).addAllResources(resources);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -104,7 +116,11 @@ public class GameReader {
         return content;
     }
 
-    public Game getInstance() {
-        return instance.copy();
+    public Game getInstance(String title) {
+        return gameInstances.get(title).copy();
+    }
+
+    public Object getResources(String mapname) {
+        return gameInstances.get(mapname).getResources();
     }
 }

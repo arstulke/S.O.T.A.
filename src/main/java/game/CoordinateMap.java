@@ -27,4 +27,12 @@ public class CoordinateMap<E> {
     public Map<Point, E> copy() {
         return new HashMap<>(elements);
     }
+
+    public void set(Point point, E element) {
+        elements.put(point, element);
+    }
+
+    public void set(int y, int x, E element) {
+        set(new Point(x, y), element);
+    }
 }

@@ -5,6 +5,8 @@ import game.util.GameRenderer;
 import network.Session;
 
 import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created StyleEvent.java in game.model.event
@@ -23,11 +25,22 @@ public class StyleEvent extends Event {
     @Override
     public void execute(Session session, Game game) {
         GameRenderer gameRenderer = game.getGameRenderer();
-        if(this.backgroundValue != null) {
+        if (this.backgroundValue != null) {
             gameRenderer.setBackgroundColor(this.backgroundValue);
         }
-        if(this.foregroundValue != null) {
+        if (this.foregroundValue != null) {
             gameRenderer.setForegroundColor(this.foregroundValue);
         }
+    }
+
+    public Set<String> getResources() {
+        Set<String> res = new HashSet<>();
+        if (this.backgroundValue.startsWith("http")) {
+            res.add(backgroundValue);
+        }
+        if (this.foregroundValue.startsWith("http")) {
+            res.add(foregroundValue);
+        }
+        return res;
     }
 }

@@ -1,10 +1,12 @@
 package game.model.event;
 
 import game.model.Game;
+import game.util.EventBuilder;
 import network.Session;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.util.Set;
 
 /**
  * Created DisplayEvent.java in game.util.event
@@ -14,10 +16,20 @@ public class DisplayEvent extends Event {
     private final String message;
     private final int ticks;
 
-    public DisplayEvent(Rectangle triggerArea, String message, int ticks) {
-        super(triggerArea);
+    /**
+     * <p>
+     * @param triggerPoints the Points in which this Event would be triggered.
+     * @param message the Message that should be printed when the player passes one of the TriggerPoints.
+     * @param ticks the Time in MS the message should be displayed.
+     * */
+    public DisplayEvent(Set<Point> triggerPoints, String message, int ticks) {
+        super(triggerPoints);
         this.message = message.replaceAll("\\\\n", "\n");
-        this.ticks = ticks;
+        this.ticks = ticks / 10;
+    }
+
+    public DisplayEvent(Rectangle triggerArea, String message, int ticks) {
+        this(EventBuilder.toPoints(triggerArea), message, ticks);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package network;
 
+import application.Application;
 import game.handler.DefaultGameHandler;
 import game.handler.GameHandler;
 import game.model.Game;
@@ -26,7 +27,6 @@ public class WebSocketHandler {
     private final Map<Session, Game> games = new HashMap<>();
 
     private GameHandler gameHandler;
-    private final GameReader gameReader = new GameReader();
     private final Timer timer = new Timer();
 
     @OnWebSocketClose
@@ -40,7 +40,7 @@ public class WebSocketHandler {
 
         Session session = new Session(webSocketSession);
         if (!games.containsKey(session)) {
-            games.put(session, gameReader.getInstance());
+            games.put(session, Application.gameReader.getInstance("The_Cave_Map"));
             onConnect(session.getSession());
         } else {
             Game initGame = games.get(session);

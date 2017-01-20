@@ -1,6 +1,7 @@
 package game.model.event;
 
 import game.model.Game;
+import game.util.EventBuilder;
 import network.Session;
 
 import java.awt.*;
@@ -12,33 +13,19 @@ import java.util.Set;
  * by Arne on 11.01.2017.
  */
 public abstract class Event {
-    final Rectangle triggerArea;
+    final Set<Point> triggerPoints;
+
+    Event(Set<Point> triggerPoints) {
+        this.triggerPoints = triggerPoints;
+    }
 
     Event(Rectangle triggerArea) {
-        this.triggerArea = triggerArea;
+        this.triggerPoints = EventBuilder.toPoints(triggerArea);
     }
 
     public abstract void execute(Session session, Game game);
 
     public Set<Point> getTriggerPoints() {
-        Set<Point> triggerPoints = new HashSet<>();
-
-        int startX = (int) triggerArea.getX();
-        int endX = (int) (triggerArea.getWidth() + triggerArea.getX());
-        int startY = (int) triggerArea.getY();
-        int endY = (int) (triggerArea.getHeight() + triggerArea.getY());
-
-        int minX = Math.min(startX, endX);
-        int maxX = Math.max(startX, endX);
-
-        int minY = Math.min(startY, endY);
-        int maxY = Math.max(startY, endY);
-
-        for (int x = minX; x <= maxX; x++) {
-            for (int y = minY; y <= maxY; y++) {
-                triggerPoints.add(new Point(x, y));
-            }
-        }
         return triggerPoints;
     }
 
@@ -48,6 +35,7 @@ public abstract class Event {
         public static final String DISPLAY = "display";
         public static final String END = "end";
         public static final String STYLE = "style";
+        public static final String SETBLOCK = "setblock";
     }
 
     @Override
@@ -57,11 +45,11 @@ public abstract class Event {
 
         Event event = (Event) o;
 
-        return getTriggerPoints().equals(event.getTriggerPoints());
+        return triggerPoints.equals(event.triggerPoints);
     }
 
     @Override
     public int hashCode() {
-        return getTriggerPoints().hashCode();
+        return triggerPoints.hashCode();
     }
 }

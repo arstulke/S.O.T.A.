@@ -9,10 +9,8 @@ import network.Session;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -21,6 +19,7 @@ import java.util.stream.Collectors;
  * by Arne on 11.01.2017.
  */
 public class Game implements Cloneable {
+    private final Set<String> resources = new HashSet<>();
     private final CoordinateMap<Block> blockMap;
     private final CoordinateMap<List<Event>> eventMap;
     private final Set<Event> executedEvents = new HashSet<>();
@@ -111,6 +110,10 @@ public class Game implements Cloneable {
         );
     }
 
+    public void setBlock(Point point, Block block) {
+        blockMap.set(point, block);
+    }
+
     public Block getBlock(Point point) {
         return blockMap.get(point);
     }
@@ -178,5 +181,13 @@ public class Game implements Cloneable {
 
     public Statistics buildStatistics() {
         return new Statistics(tickCounter.intValue(), failCounter.intValue());
+    }
+
+    public void addAllResources(Collection<? extends String> resourceCollection){
+        resources.addAll(resourceCollection);
+    }
+
+    public Set<String> getResources() {
+        return resources;
     }
 }
