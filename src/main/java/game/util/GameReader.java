@@ -5,9 +5,15 @@ import game.model.Game;
 import game.model.Player;
 import game.model.event.Event;
 import game.model.event.StyleEvent;
+import org.eclipse.jetty.util.log.Log;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -25,14 +31,14 @@ public class GameReader {
     private void loadMap(String mapFilename) throws IOException {
         String fileContent = getFileContent(mapFilename);
 
+        String title = null;
         char playerChar = 'X';
-        String title = "";
         Point playerPosition = null;
         Map<Point, Block> blocks = new HashMap<>();
         Map<Point, List<Event>> events = new HashMap<>();
         Map<String, String> conditions = new HashMap<>();
-        GameRenderer gameRenderer = GameRenderer.getDefault();
         Set<String> resources = new HashSet<>();
+        GameRenderer gameRenderer = GameRenderer.getDefault();
 
         {
             int width = 0, y = 0, lineNumber = 0;
@@ -44,6 +50,7 @@ public class GameReader {
                         playerChar = line.substring("player:".length()).toCharArray()[0];
                     } else if (line.startsWith("title:")) {
                         title = line.substring("title:".length()).replaceAll(" ", "_");
+                        title = title.replaceAll("<.*?>","");
                     } else if (line.startsWith("-")) {
                         width = line.length() - 1;
                     } else if (line.startsWith(":")) {
@@ -98,10 +105,14 @@ public class GameReader {
 
         if (playerPosition == null) {
             throw new RuntimeException("You have to set the spawn position of the player with the player char (yours: \"" + playerChar + "\").");
+        } else if (title == null) {
+            throw new RuntimeException("You have to set the title (\"title:example_map\")");
         }
+
 
         gameInstances.put(title, new Game(new Player(playerChar, playerPosition), blocks, events, gameRenderer, conditions));
         gameInstances.get(title).addAllResources(resources);
+        Log.getLogger(getClass()).info(String.format("Loaded Map \"%s\" with id \"%s\"", title.replaceAll("_", " "), title));
     }
 
     private String getFileContent(String path) {
@@ -139,5 +150,11 @@ public class GameReader {
         } else {
             mapDirectory.mkdir();
         }
+    }
+
+    public JSONArray loadInstances() {
+        JSONArray arr = new JSONArray();
+        gameInstances.keySet().forEach(title -> arr.put(arr.length(), new JSONObject().put("name", title.replace("_", " ")).put("id", title)));
+        return arr;
     }
 }

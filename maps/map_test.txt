@@ -1,4 +1,5 @@
 player:X
+title:adventure_of_the_guard
 &c 
 &c Du bist eine Wache, die zum Ziel muss... das ist alles
 &c 
@@ -79,8 +80,8 @@ player:X
 :                           #                                                                                      #
 :^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 wwdadead-----------------------------
-~17.16 display "Find your way, young master! This is a very long text, but wait! what if a made a Backslash n \n did one hahahaha now a backslash \ did one again :D" 50
-~102.20 end finish
+~17.16 display "Find your way, young master! This is a very long text, but wait! what if a made a Backslash n \n did one hahahaha now a backslash \ did one again :D" 1000
+~9.20 end finish
 ~116.25;116.25 teleport 82.25
 ~4.16 teleport 113.25
-~95.25;96.23 checkpoint 95.25
+~95.25;96.23 checkpoint 95.25 true

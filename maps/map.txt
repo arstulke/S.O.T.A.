@@ -1,5 +1,5 @@
 player:X
-title:The_Cave_Map
+title:The_Cave_<h1>Map</h1>
 background:http://www.techcredo.com/wp-content/uploads/2010/06/Ibex_Wallpaper_by_willwill100.png
 foreground:#ffffff
 &c Built by Maik Müller.

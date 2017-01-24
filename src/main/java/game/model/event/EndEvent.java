@@ -40,8 +40,8 @@ public class EndEvent extends Event {
 
 
 
-            String msg1 = "You reached the finish!";
-            String msg2 = String.format("Your Statistics:\n Fails:%d\n Time:%s", stats.getFails(), ((double) stats.getTicks()) / 10.0);
+            String msg1 = "<b>You reached the finish!</b>";
+            String msg2 = String.format("Your Statistics:\n Fails:<i>%d</i>\n Time:<i>%s</i>", stats.getFails(), ((double) stats.getTicks()) / 10.0);
 
             DisplayEvent event1 = new DisplayEvent(this.triggerPoints, false, msg1, 1000);
             DisplayEvent event2 = new DisplayEvent(this.triggerPoints, false, msg2, 1000);
