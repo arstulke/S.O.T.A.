@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>S.O.T.A.</title>
+    <style>
+    ul {
+        list-style-type: none;
+    }
+    html {
+      //background: url(images/bg.jpg) no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+
+
+    </style>
+</head>
+<body background="#ff0000">
+<ul id="map-list"></ul>
+<table id="game-content" style="width: 100%; display: none;">
+    <tbody>
+    <tr>
+        <td rowspan="2" style="width: 70%">
+            <pre id="output" style="border-style: solid; border-width: 5px;"></pre>
+            <canvas id="myCanvas" width="200" height="100"></canvas>
+        </td>
+        <td style=" vertical-align: top;">
+            <pre id="right-cornor" style="margin-top: 0px; float: right; vertical-align: top;"></pre>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <center>
+                <ul id="message"></ul>
+            </center>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+<script src="jquery.js"></script>
+<script src="game.js"></script>
+</html>
