@@ -14,13 +14,15 @@ import java.util.Set;
  */
 public abstract class Event {
     final Set<Point> triggerPoints;
+    private final boolean repeatable;
 
-    Event(Set<Point> triggerPoints) {
+    Event(Set<Point> triggerPoints, boolean repeatable) {
         this.triggerPoints = triggerPoints;
+        this.repeatable = repeatable;
     }
 
-    Event(Rectangle triggerArea) {
-        this.triggerPoints = EventBuilder.toPoints(triggerArea);
+    Event(Rectangle triggerArea, boolean repeatable) {
+        this(EventBuilder.toPoints(triggerArea), repeatable);
     }
 
     public abstract void execute(Session session, Game game);
@@ -29,13 +31,19 @@ public abstract class Event {
         return triggerPoints;
     }
 
+    public boolean isRepeatable() {
+        return repeatable;
+    }
+
     public class Type {
         public static final String CHECKPOINT = "checkpoint";
         public static final String TELEPORT = "teleport";
         public static final String DISPLAY = "display";
         public static final String END = "end";
         public static final String STYLE = "style";
-        public static final String SETBLOCK = "setblock";
+        public static final String SET_BLOCK = "setblock";
+        public static final String EXECUTE_CONDITION = "if_condition";
+        public static final String SET_CONDITION = "set_condition";
     }
 
     @Override

@@ -22,22 +22,26 @@ public class Game implements Cloneable {
     private final Set<String> resources = new HashSet<>();
     private final CoordinateMap<Block> blockMap;
     private final CoordinateMap<List<Event>> eventMap;
-    private final Set<Event> executedEvents = new HashSet<>();
     private final Player player;
-
     private final GameRenderer gameRenderer;
+
     private final GameRenderer lastGameRenderer;
 
-    private final Point originSpawn;
     private final JSONObject data;
 
     private final int mapWidth;
     private final int mapHeight;
 
+    private final Set<Event> executedEvents = new HashSet<>();
+    private final CoordinateMap<Block> changedBlocks = new CoordinateMap<>();
+
+    private final HashMap<String, String> conditions = new HashMap<>();
+    private HashMap<String, String> changedConditions = new HashMap<>();
+
     private final AtomicInteger failCounter = new AtomicInteger(0);
     private final AtomicInteger tickCounter = new AtomicInteger(0);
 
-    public Game(Player player, Map<Point, Block> blocks, Map<Point, List<Event>> events, GameRenderer gameRenderer) {
+    public Game(Player player, Map<Point, Block> blocks, Map<Point, List<Event>> events, GameRenderer gameRenderer, Map<String, String> conditions) {
         this.player = player;
         this.blockMap = new CoordinateMap<>(blocks);
         this.eventMap = new CoordinateMap<>(events);
@@ -46,10 +50,9 @@ public class Game implements Cloneable {
         this.lastGameRenderer = GameRenderer.getDefault();
         lastGameRenderer.load(gameRenderer);
 
-        this.originSpawn = new Point();
-        this.originSpawn.setLocation(player.getSpawnPoint());
-
         this.data = new JSONObject();
+
+        this.conditions.putAll(conditions);
 
         //region setWidthAndHeight
         int highestX = 0;
@@ -90,10 +93,6 @@ public class Game implements Cloneable {
         return gameRenderer;
     }
 
-    public void saveGameRenderer() {
-        lastGameRenderer.load(gameRenderer);
-    }
-
     public Block getBlockAbove() {
         return getBlock(0, -1);
     }
@@ -111,6 +110,9 @@ public class Game implements Cloneable {
     }
 
     public void setBlock(Point point, Block block) {
+        if (!changedBlocks.containsKey(point)) {
+            changedBlocks.set(point, blockMap.get(point));
+        }
         blockMap.set(point, block);
     }
 
@@ -122,14 +124,26 @@ public class Game implements Cloneable {
         return eventMap.get(point);
     }
 
+    public String getCondition(String conditionName) {
+        return conditions.get(conditionName);
+    }
+
+    public void setCondition(String name, String value) {
+        changedConditions.put(name, conditions.get(name));
+        conditions.put(name, value);
+    }
+
     public void respawn(Session session) {
         player.setPosition(player.getSpawnPoint());
         Set<Event> executedEvents = this.executedEvents.stream().filter(event -> event instanceof CheckpointEvent).collect(Collectors.toSet());
         this.executedEvents.clear();
         this.executedEvents.addAll(executedEvents);
         this.gameRenderer.load(this.lastGameRenderer);
+        this.changedBlocks.forEach(this.blockMap::set);
+        this.changedConditions.forEach(this.conditions::put);
 
         this.failCounter.incrementAndGet();
+
 
         session.sendMessage(
                 new JSONObject()
@@ -137,8 +151,12 @@ public class Game implements Cloneable {
         );
     }
 
-    public Game copy() {
-        return new Game(player.copy(), blockMap.copy(), eventMap.copy(), gameRenderer.copy());
+    public void checkpoint(Point target) {
+        player.setSpawnPoint(target);
+        lastGameRenderer.load(gameRenderer);
+
+        changedBlocks.clear();
+        changedConditions.clear();
     }
 
     public boolean isPlayerOnSolidGround() {
@@ -183,11 +201,15 @@ public class Game implements Cloneable {
         return new Statistics(tickCounter.intValue(), failCounter.intValue());
     }
 
-    public void addAllResources(Collection<? extends String> resourceCollection){
+    public void addAllResources(Collection<? extends String> resourceCollection) {
         resources.addAll(resourceCollection);
     }
 
     public Set<String> getResources() {
         return resources;
+    }
+
+    public Game copy() {
+        return new Game(player.copy(), blockMap.copy(), eventMap.copy(), gameRenderer.copy(), new HashMap<>(conditions));
     }
 }

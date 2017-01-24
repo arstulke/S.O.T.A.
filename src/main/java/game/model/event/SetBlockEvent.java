@@ -18,8 +18,8 @@ public class SetBlockEvent extends Event {
     private final Set<Point> targetBlocks;
     private Block block;
 
-    public SetBlockEvent(Rectangle triggerArea, char block, Rectangle targetArea) {
-        super(triggerArea);
+    public SetBlockEvent(Rectangle triggerArea, boolean repeatable, char block, Rectangle targetArea) {
+        super(triggerArea, repeatable);
         this.block = Block.build(block);
         this.targetBlocks = EventBuilder.toPoints(targetArea);
     }

@@ -17,7 +17,7 @@ public class EndEvent extends Event {
     private final String endType;
 
     public EndEvent(Rectangle triggerArea, String endType) {
-        super(triggerArea);
+        super(triggerArea, false);
         this.endType = endType;
     }
 
@@ -43,8 +43,8 @@ public class EndEvent extends Event {
             String msg1 = "You reached the finish!";
             String msg2 = String.format("Your Statistics:\n Fails:%d\n Time:%s", stats.getFails(), ((double) stats.getTicks()) / 10.0);
 
-            DisplayEvent event1 = new DisplayEvent(this.triggerPoints, msg1, 1000);
-            DisplayEvent event2 = new DisplayEvent(this.triggerPoints, msg2, 1000);
+            DisplayEvent event1 = new DisplayEvent(this.triggerPoints, false, msg1, 1000);
+            DisplayEvent event2 = new DisplayEvent(this.triggerPoints, false, msg2, 1000);
 
 
             event1.execute(session, game);

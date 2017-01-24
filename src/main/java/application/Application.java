@@ -7,6 +7,11 @@ import spark.Response;
 import spark.Route;
 import spark.Spark;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.SyncFailedException;
+
 /**
  * Created application.Application.java in PACKAGE_NAME
  * by Arne on 11.01.2017.
@@ -14,21 +19,34 @@ import spark.Spark;
 public class Application {
     public static GameReader gameReader;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         gameReader = new GameReader();
 
         Spark.port(80);
         Spark.staticFileLocation("/public");
         Spark.webSocket("/game", WebSocketHandler.class);
-        Spark.get("/res", new Route() {
-            @Override
-            public Object handle(Request request, Response response) throws Exception {
-                String mapName = request.queryMap("map").value();
-
-                return gameReader.getResources(mapName);
-            }
-        });
+        Spark.get("/res", (request, response) -> gameReader.getResources(request.queryMap("map").value()));
 
         Spark.init();
+
+        new Thread(() -> {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            while(true) {
+                try {
+                    String line = br.readLine();
+                    switch (line) {
+                        case "reload":
+                            gameReader.reload();
+                            break;
+
+                        case "stop":
+                            System.exit(0);
+                            break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

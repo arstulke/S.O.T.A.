@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 
 /**
  * Created CoordinateMap.java in game
@@ -14,6 +15,9 @@ public class CoordinateMap<E> {
 
     public CoordinateMap(Map<Point, E> values) {
         this.elements.putAll(values);
+    }
+
+    public CoordinateMap() {
     }
 
     public E get(Point p) {
@@ -34,5 +38,17 @@ public class CoordinateMap<E> {
 
     public void set(int y, int x, E element) {
         set(new Point(x, y), element);
+    }
+
+    public boolean containsKey(Point point) {
+        return elements.containsKey(point);
+    }
+
+    public void forEach(BiConsumer<? super Point, ? super E> biConsumer) {
+        elements.forEach(biConsumer);
+    }
+
+    public void clear() {
+        elements.clear();
     }
 }

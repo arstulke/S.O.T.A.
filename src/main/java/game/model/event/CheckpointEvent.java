@@ -13,8 +13,8 @@ public class CheckpointEvent extends Event {
     private final Point target;
     private final boolean display;
 
-    public CheckpointEvent(Rectangle triggerArea, Point target, boolean display) {
-        super(triggerArea);
+    public CheckpointEvent(Rectangle triggerArea, boolean repeatable, Point target, boolean display) {
+        super(triggerArea, repeatable);
         this.target = target;
         this.display = display;
     }
@@ -22,10 +22,9 @@ public class CheckpointEvent extends Event {
     @Override
     public void execute(Session session, Game game) {
         if (!game.getPlayer().getSpawnPoint().equals(target)) {
-            game.getPlayer().setSpawnPoint(target);
-            game.saveGameRenderer();
+            game.checkpoint(target);
             if (display) {
-                DisplayEvent event = new DisplayEvent(this.triggerPoints, "⚑ Checkpoint (" + ((int) target.getX()) + ", " + ((int) target.getX()) + ")", 200);
+                DisplayEvent event = new DisplayEvent(this.triggerPoints, false, "⚑ Checkpoint (" + ((int) target.getX()) + ", " + ((int) target.getX()) + ")", 200);
                 event.execute(session, game);
             }
         }

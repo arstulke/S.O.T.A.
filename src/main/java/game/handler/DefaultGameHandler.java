@@ -50,6 +50,8 @@ public class DefaultGameHandler implements GameHandler {
         try {
             physics();
             events();
+
+            game.getPlayer().savePosition();
         } catch (NullPointerException ignore) {
         } catch (RuntimeException e) {
             if (!"You died.".equals(e.getMessage())) {
@@ -73,7 +75,7 @@ public class DefaultGameHandler implements GameHandler {
 
     private void events() {
         game.getEvents(game.getPlayer().getPosition()).forEach(event -> {
-            if (!game.isEventExecuted(event)) {
+            if (!game.isEventExecuted(event) || (event.isRepeatable() && game.getPlayer().hasMoved())) {
                 event.execute(session, game);
                 game.executedEvent(event);
             }

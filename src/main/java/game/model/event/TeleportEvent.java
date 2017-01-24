@@ -12,8 +12,8 @@ import java.awt.*;
 public class TeleportEvent extends Event {
     private final Point target;
 
-    public TeleportEvent(Rectangle triggerArea, Point target) {
-        super(triggerArea);
+    public TeleportEvent(Rectangle triggerArea, boolean repeatable, Point target) {
+        super(triggerArea, repeatable);
         this.target = target;
     }
 

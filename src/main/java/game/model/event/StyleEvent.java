@@ -17,7 +17,7 @@ public class StyleEvent extends Event {
     private final String foregroundValue;
 
     public StyleEvent(Rectangle triggerArea, String backgroundValue, String foregroundValue) {
-        super(triggerArea);
+        super(triggerArea, true);
         this.backgroundValue = backgroundValue;
         this.foregroundValue = foregroundValue;
     }

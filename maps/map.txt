@@ -47,11 +47,17 @@ foreground:#ffffff
 ~57.26;63.26 checkpoint 57.26 true
 ~83.8 end finish
 
+
+## Change Back- and Foreground
 ~6.6 style http://www.techcredo.com/wp-content/uploads/2010/06/Ibex_Wallpaper_by_willwill100.png #ffffff
 ~8.6 style https://wallpaperscraft.com/image/forest_trees_background_dark_91308_3840x2160.jpg #ffffff
 
-~8.6 setblock | 7.6
+## Conditions
+#* condition schlüssel1 false
+#~8.6 set_condition schlüssel1 true
+#~15.6 if_condition schlüssel1 true -> setblock | 7.6
 
+## Display Images or Text
 #~5.6 display "Welcome to\n <b>THE CAVE MAP</b>\n by Maik Müller\n <img src='http://i3.kym-cdn.com/photos/images/newsfeed/000/059/601/spiderman116_spideydancing1.gif'>" 1000
 #~21.21 display "<img src='https://media.tenor.co/images/588b34ea4f6fb7ebbeac77d5ef712446/raw' style='width:100%; height: 50%'>" 1000
 

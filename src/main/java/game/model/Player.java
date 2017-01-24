@@ -9,6 +9,7 @@ import java.awt.*;
 public class Player {
     private final char playerChar;
     private final Point playerPosition;
+    private final Point lastTickPosition;
     private final Point spawnPoint;
     private final Keys keys;
 
@@ -19,6 +20,9 @@ public class Player {
 
         this.spawnPoint = new Point();
         this.spawnPoint.setLocation(playerPosition);
+
+        this.lastTickPosition = new Point();
+        this.lastTickPosition.setLocation(playerPosition);
 
         this.keys = new Keys();
     }
@@ -61,5 +65,13 @@ public class Player {
 
     public boolean isChanged() {
         return !playerPosition.equals(spawnPoint);
+    }
+
+    public boolean hasMoved() {
+        return !lastTickPosition.equals(playerPosition);
+    }
+
+    public void savePosition() {
+        this.lastTickPosition.setLocation(this.playerPosition);
     }
 }

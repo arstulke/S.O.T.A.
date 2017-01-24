@@ -22,14 +22,14 @@ public class DisplayEvent extends Event {
      * @param message the Message that should be printed when the player passes one of the TriggerPoints.
      * @param ticks the Time in MS the message should be displayed.
      * */
-    public DisplayEvent(Set<Point> triggerPoints, String message, int ticks) {
-        super(triggerPoints);
+    public DisplayEvent(Set<Point> triggerPoints, boolean repeatable, String message, int ticks) {
+        super(triggerPoints, repeatable);
         this.message = message.replaceAll("\\\\n", "\n");
         this.ticks = ticks / 10;
     }
 
-    public DisplayEvent(Rectangle triggerArea, String message, int ticks) {
-        this(EventBuilder.toPoints(triggerArea), message, ticks);
+    public DisplayEvent(Rectangle triggerArea, boolean repeatable, String message, int ticks) {
+        this(EventBuilder.toPoints(triggerArea), repeatable, message, ticks);
     }
 
     @Override
