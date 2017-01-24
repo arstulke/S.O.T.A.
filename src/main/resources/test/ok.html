@@ -1,0 +1,35 @@
+
+<script type="text/javascript">
+    var lolz;
+    function onload() { 
+        lolz = document.getElementById('lolz');
+    }
+    function kk(){
+        validate(lolz.value);
+    }
+	
+	function validate(str){
+	
+		for (var i = 0, len = str.length; i < len; i++) {
+			if(str[i]=="b"){
+				show_image("b.png");
+			} else if(str[i]=="g"){
+				show_image("g.png");
+			}else if(str[i]=="r"){
+				show_image("r.png");
+			}
+		}
+	}
+	
+	function show_image(src) {
+    var img = document.createElement("img");
+    img.src = "./img/"+src;
+    // This next line will just add it to the <body> tag
+    document.body.appendChild(img);
+}
+</script>
+
+<body onload="onload();">
+    <input type="text" name="enter" class="enter" value="" id="lolz"/>
+    <input type="button" value="click" onclick="kk();"/>
+</body>
