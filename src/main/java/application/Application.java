@@ -2,15 +2,11 @@ package application;
 
 import game.util.GameReader;
 import network.WebSocketHandler;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 import spark.Spark;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.SyncFailedException;
 
 /**
  * Created application.Application.java in PACKAGE_NAME
@@ -26,12 +22,16 @@ public class Application {
         Spark.staticFileLocation("/public");
         Spark.webSocket("/game", WebSocketHandler.class);
         Spark.get("/res", (request, response) -> gameReader.getResources(request.queryMap("map").value()));
+        Spark.get("/maps", (request, response) -> {
+            response.header("Content-type", "application/json");
+            return gameReader.loadInstances().toString();
+        });
 
         Spark.init();
 
         new Thread(() -> {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            while(true) {
+            while (true) {
                 try {
                     String line = br.readLine();
                     switch (line) {

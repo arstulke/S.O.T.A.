@@ -1,4 +1,5 @@
 player:X
+title:adventure_of_the_guard
 &c 
 &c Du bist eine Wache, die zum Ziel muss... das ist alles
 &c 

@@ -40,7 +40,9 @@ public class WebSocketHandler {
 
         Session session = new Session(webSocketSession);
         if (!games.containsKey(session)) {
-            games.put(session, Application.gameReader.getInstance("The_Cave_Map"));
+            String title = session.getQueryParam("title");
+
+            games.put(session, Application.gameReader.getInstance(title));
             onConnect(session.getSession());
         } else {
             Game initGame = games.get(session);

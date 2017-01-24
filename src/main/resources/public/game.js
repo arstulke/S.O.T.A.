@@ -1,65 +1,79 @@
 String.prototype.replaceAll = function(regex, replacements) {
-		return this.split(regex).join(replacements);
-	}
+    return this.split(regex).join(replacements);
+}
 
 
-	if(window.location.search.length > 0) {
-        var size = window.location.search.substring(1);
-		document.getElementById("output").style.fontSize = size;
-		document.getElementById("right-cornor").style.fontSize = Math.round(size * 0.2778);
-		document.getElementById("message").style.fontSize = Math.round(size * 0.2778);
-	}
+if (window.location.search.length > 0) {
+    var size = window.location.search.substring(1);
+    document.getElementById("output").style.fontSize = size;
+    document.getElementById("right-cornor").style.fontSize = Math.round(size * 0.2778);
+    document.getElementById("message").style.fontSize = Math.round(size * 0.2778);
+}
 
-	var webSocket = new WebSocket('ws://' + window.location["hostname"] + '/game');
-	var messages = [];
-	webSocket.onmessage = function(message) {
-		message = JSON.parse(message.data);
-		if(message.cmd == "OUTPUT") {
-			document.getElementById("right-cornor").innerHTML = "x: " + message.position.x + ", y:" + message.position.y;
-			document.getElementById("output").innerHTML = message.msg;
+$.ajax({
+    url: "/maps",
+    success: function(response) {
+        for (var i = 0; i < response.length; i++) {
+            var item = "<li onclick='startGame(\"" + response[i].id + "\")' style='cursor: pointer;'>" + response[i].name + "</li>";
+            $("#map-list").html($("#map-list").html() + item);
+        }
+    }
+})
+
+function startGame(mapID) {
+    $("#map-list").css("display", "none");
+    $("#game-content").css("display", "block");
+
+    var webSocket = new WebSocket('ws://' + window.location["hostname"] + '/game?title=' + mapID);
+    var messages = [];
+    webSocket.onmessage = function(message) {
+        message = JSON.parse(message.data);
+        if (message.cmd == "OUTPUT") {
+            document.getElementById("right-cornor").innerHTML = "x: " + message.position.x + ", y:" + message.position.y;
+            document.getElementById("output").innerHTML = message.msg;
 
             (function() {
                 var background = message.style.background;
-                if(background.startsWith("#")) {
+                if (background.startsWith("#")) {
                     document.getElementById("output").style.backgroundImage = "";
-                    if(document.getElementById("output").backgroundColor !== background) {
+                    if (document.getElementById("output").backgroundColor !== background) {
                         document.getElementById("output").backgroundColor = background;
                     }
                 } else {
-                    if(document.getElementById("output").style.backgroundImage !== background) {
+                    if (document.getElementById("output").style.backgroundImage !== background) {
                         document.getElementById("output").style.backgroundImage = "url('" + background + "')";
                     }
                     document.getElementById("output").backgroundColor = "";
                 }
                 document.getElementById("output").style.color = message.style.foreground;
             })();
-			updateMessages();
-		} else if(message.cmd == "PING-OUTPUT") {
-		    updateMessages();
-		} else if(message.cmd == "CLEAR-MESSAGES") {
-		    messages = [];
-		    updateMessages();
-		} else if(message.cmd == "MESSAGE") {
+            updateMessages();
+        } else if (message.cmd == "PING-OUTPUT") {
+            updateMessages();
+        } else if (message.cmd == "CLEAR-MESSAGES") {
+            messages = [];
+            updateMessages();
+        } else if (message.cmd == "MESSAGE") {
             messages[messages.length] = message.msg;
-		}
-	}
+        }
+    }
 
-	function updateMessages() {
-	    //countdown ticks
+    function updateMessages() {
+        //countdown ticks
         (function() {
-            for(var i = 0; i < messages.length; i++) {
+            for (var i = 0; i < messages.length; i++) {
                 messages[i].ticks = messages[i].ticks - 1;
-                if(messages[i].ticks == 0) {
+                if (messages[i].ticks == 0) {
                     messages[i] = null;
                 }
             }
         })();
 
         //remove expired messages
-	    (function() {
+        (function() {
             newMessages = [];
-            for(var i = 0; i < messages.length; i++) {
-                if(messages[i] != null) {
+            for (var i = 0; i < messages.length; i++) {
+                if (messages[i] != null) {
                     newMessages[newMessages.length] = messages[i];
                 }
             }
@@ -67,72 +81,75 @@ String.prototype.replaceAll = function(regex, replacements) {
         })();
 
         //build output from messages
-	    var output = (function() {
-	        var out = "<li>";
-	        for(var i = 0; i < messages.length; i++) {
-	            out += messages[i].text.replaceAll("\n", "<br>") + "</li><li>";
-	        }
-	        return out.substring(0, out.length - 4);
-	    })();
-	    var messageOutputElement = document.getElementById("message");
-	    if(messageOutputElement.innerHTML !== output) {
-	        messageOutputElement.innerHTML = output;
+        var output = (function() {
+            var out = "<li>";
+            for (var i = 0; i < messages.length; i++) {
+                out += messages[i].text.replaceAll("\n", "<br>") + "</li><li>";
+            }
+            return out.substring(0, out.length - 4);
+        })();
+        var messageOutputElement = document.getElementById("message");
+        if (messageOutputElement.innerHTML !== output) {
+            messageOutputElement.innerHTML = output;
         }
-	}
+    }
 
-	var keyManager = new KeyManager({"right":false, "left":false, "up":false, "down":false, "respawn": false});
-	var up = false;
-	window.onkeydown = function(e) {
-		keyManager.changeKeyDown("w", "up", e);
-		keyManager.changeKeyDown("ArrowUp", "up", e);
-		keyManager.changeKeyDown(" ", "up", e);
+    var keyManager = new KeyManager({
+        "right": false,
+        "left": false,
+        "up": false,
+        "down": false,
+        "respawn": false
+    });
+    var up = false;
+    window.onkeydown = function(e) {
+        keyManager.changeKeyDown("w", "up", e);
+        keyManager.changeKeyDown("ArrowUp", "up", e);
+        keyManager.changeKeyDown(" ", "up", e);
 
-		keyManager.changeKeyDown("d", "right", e);
-		keyManager.changeKeyDown("ArrowRight", "right", e);
+        keyManager.changeKeyDown("d", "right", e);
+        keyManager.changeKeyDown("ArrowRight", "right", e);
 
-		keyManager.changeKeyDown("a", "left", e);
-		keyManager.changeKeyDown("ArrowLeft", "left", e);
+        keyManager.changeKeyDown("a", "left", e);
+        keyManager.changeKeyDown("ArrowLeft", "left", e);
 
-		keyManager.changeKeyDown("s", "down", e);
-		keyManager.changeKeyDown("ArrowDown", "down", e);
+        keyManager.changeKeyDown("s", "down", e);
+        keyManager.changeKeyDown("ArrowDown", "down", e);
 
-		keyManager.changeKeyDown("r", "respawn", e);
-	}
-	window.onkeyup = function(e) {
-		keyManager.changeKeyUp("w", "up", e);
-		keyManager.changeKeyUp("ArrowUp", "up", e);
-		keyManager.changeKeyUp(" ", "up", e);
+        keyManager.changeKeyDown("r", "respawn", e);
+    }
+    window.onkeyup = function(e) {
+        keyManager.changeKeyUp("w", "up", e);
+        keyManager.changeKeyUp("ArrowUp", "up", e);
+        keyManager.changeKeyUp(" ", "up", e);
 
-		keyManager.changeKeyUp("d", "right", e);
-		keyManager.changeKeyUp("ArrowRight", "right", e);
+        keyManager.changeKeyUp("d", "right", e);
+        keyManager.changeKeyUp("ArrowRight", "right", e);
 
-		keyManager.changeKeyUp("a", "left", e);
-		keyManager.changeKeyUp("ArrowLeft", "left", e);
+        keyManager.changeKeyUp("a", "left", e);
+        keyManager.changeKeyUp("ArrowLeft", "left", e);
 
-		keyManager.changeKeyUp("s", "down", e);
-		keyManager.changeKeyUp("ArrowDown", "down", e);
+        keyManager.changeKeyUp("s", "down", e);
+        keyManager.changeKeyUp("ArrowDown", "down", e);
 
-		keyManager.changeKeyUp("r", "respawn", e);
-	}
+        keyManager.changeKeyUp("r", "respawn", e);
+    }
 
-	function KeyManager(keyCodes){
-		return {
-			keys: keyCodes,
-			changeKeyDown: function(key, name, event){
-				if(key == event.key && !this.keys[name]){
-					this.keys[name] = true;
-					sendToServer(name);
-				}
-			},
-			changeKeyUp: function(key, name, event) {
-				if(key == event.key && this.keys[name]) {
-					this.keys[name] = false;
-					sendToServer(name);
-				}
-			}
-		};
-	}
-
-	function sendToServer(msg) {
-		webSocket.send(msg);
-	}
+    function KeyManager(keyCodes) {
+        return {
+            keys: keyCodes,
+            changeKeyDown: function(key, name, event) {
+                if (key == event.key && !this.keys[name]) {
+                    this.keys[name] = true;
+                    webSocket.send(name);
+                }
+            },
+            changeKeyUp: function(key, name, event) {
+                if (key == event.key && this.keys[name]) {
+                    this.keys[name] = false;
+                    webSocket.send(name);
+                }
+            }
+        };
+    }
+}
