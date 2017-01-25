@@ -40,9 +40,9 @@ public class WebSocketHandler {
 
         Session session = new Session(webSocketSession);
         if (!games.containsKey(session)) {
-            String title = session.getQueryParam("title");
+            String map = session.getQueryParam("map");
 
-            games.put(session, Application.gameReader.getInstance(title));
+            games.put(session, Application.gameReader.getInstance(map));
             onConnect(session.getSession());
         } else {
             Game initGame = games.get(session);
@@ -54,6 +54,7 @@ public class WebSocketHandler {
                             .put("background", initGame.getGameRenderer().getBackgroundColor())
                             .put("foreground", initGame.getGameRenderer().getForegroundColor())
                     )
+                    .put("player_char", initGame.getPlayer().getPlayerChar() + "")
             );
             TimerTask task = new TimerTask() {
                 @Override
@@ -72,6 +73,7 @@ public class WebSocketHandler {
                                                     .put("background", game.getGameRenderer().getBackgroundColor())
                                                     .put("foreground", game.getGameRenderer().getForegroundColor())
                                             )
+                                            .put("player_char", initGame.getPlayer().getPlayerChar() + "")
                             );
                         } else {
                             session.sendMessage(

@@ -1,18 +1,18 @@
 package game.util;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * Created Reader in game.util
  * by ARSTULKE on 24.01.2017.
  */
 public class Reader {
-    private final InputStreamReader inputStream;
+    private final FileReader inputStream;
 
-    public Reader(InputStreamReader inputStream) {
-        this.inputStream = inputStream;
+    public Reader(FileReader fileReader) {
+        this.inputStream = fileReader;
     }
 
 

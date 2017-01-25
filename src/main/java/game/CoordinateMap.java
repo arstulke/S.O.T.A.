@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 /**
  * Created CoordinateMap.java in game
@@ -50,5 +51,9 @@ public class CoordinateMap<E> {
 
     public void clear() {
         elements.clear();
+    }
+
+    public Stream<Map.Entry<Point, E>> stream() {
+        return elements.entrySet().stream();
     }
 }

@@ -46,9 +46,10 @@ public class GameRenderer {
                 Point blockPosition = new Point(X, Y);
                 Block block = game.getBlock(blockPosition);
                 char ch = ' ';
-                if (x == p.getX() && y == p.getY()) {
+                /*if (x == p.getX() && y == p.getY()) {
                     ch = game.getPlayer().getPlayerChar();
-                } else if (block != null) {
+                } else */
+                if (block != null) {
                     ch = block.getChar();
                 } else {
                     if ((X == -1 || X == game.getMapWidth() + 1) && Y >= -1 && Y <= game.getMapHeight() + 1) {

@@ -63,4 +63,34 @@ public class Block {
     public double getVerticalSlowDown() {
         return verticalSlowDown;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Block block = (Block) o;
+
+        if (ch != block.ch) return false;
+        if (Double.compare(block.horizontalSlowDown, horizontalSlowDown) != 0) return false;
+        if (Double.compare(block.verticalSlowDown, verticalSlowDown) != 0) return false;
+        if (solid != block.solid) return false;
+        if (semiSolidGround != block.semiSolidGround) return false;
+        return semiSolidTop == block.semiSolidTop;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = (int) ch;
+        temp = Double.doubleToLongBits(horizontalSlowDown);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(verticalSlowDown);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (solid ? 1 : 0);
+        result = 31 * result + (semiSolidGround ? 1 : 0);
+        result = 31 * result + (semiSolidTop ? 1 : 0);
+        return result;
+    }
 }

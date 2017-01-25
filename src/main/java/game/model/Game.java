@@ -12,6 +12,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -211,5 +212,35 @@ public class Game implements Cloneable {
 
     public Game copy() {
         return new Game(player.copy(), blockMap.copy(), eventMap.copy(), gameRenderer.copy(), new HashMap<>(conditions));
+    }
+
+    public Set<String> getTextures() {
+        Function<Character, String> function = character -> {
+            String ch = character + "";
+            if (Character.isLowerCase(ch.charAt(0))) {
+                ch = "k" + ch;
+            } else {
+                ch = ch.toLowerCase();
+            }
+            return "./img/" + ch.replace("/", "slash")
+                    .replace("\\", "backslash")
+                    .replace(":", "double")
+                    .replace("*", "star")
+                    .replace("?", "questionmark")
+                    .replace("\"", "syno")
+                    .replace("<", "smaller")
+                    .replace(">", "bigger")
+                    .replace("|", "stick")
+                    .replace(" ", "space")
+                    .replace("^", "spike")
+                    .replace("#", "hashtag")
+                    .replace("_", "k_") + ".png";
+        };
+
+        Set<String> textures = blockMap.stream().map(Map.Entry::getValue).map(Block::getChar).collect(Collectors.toSet()).stream().map(function).collect(Collectors.toSet());
+        textures.add(function.apply(player.getPlayerChar()));
+        textures.add("./img/error.png");
+
+        return textures;
     }
 }

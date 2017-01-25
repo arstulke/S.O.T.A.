@@ -10,7 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -104,31 +106,20 @@ public class GameReader {
         instances.get(title).addAllResources(resources);
     }
 
-    private String getFileContent(String path) {
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            String content = "", line;
-            while ((line = br.readLine()) != null) {
-                content += line + "\n";
-            }
-            return content;
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-            throw new RuntimeException(e);
-        }
-    }
-
     public Game getInstance(String title) {
         return instances.get(title).copy();
     }
 
-    public Set<String> getResources(String mapname) {
-        return instances.get(mapname).getResources();
+    public Set<String> getResources(String map, String mode) {
+        Set<String> resources = instances.get(map).getResources();
+        if (mode != null && mode.equals("textures")) {
+            resources.addAll(instances.get(map).getTextures());
+        }
+        return resources;
     }
 
-    public void reload() {
+    public void reload(boolean log) {
         instances.clear();
-        Log.getLogger(getClass()).info("Reloading Maps.");
         getMaps().forEach(map -> {
             try {
                 loadMap(new Reader(new FileReader(map.getAbsolutePath())).read());
@@ -136,7 +127,10 @@ public class GameReader {
                 e.printStackTrace();
             }
         });
-        instances.forEach((s, game) -> Log.getLogger(getClass()).info(String.format("Loaded Map \"%s\" with id \"%s\"", s.replaceAll("_", " "), s)));
+        if (log) {
+            Log.getLogger(getClass()).info("Reloading Maps.");
+            instances.forEach((s, game) -> Log.getLogger(getClass()).info(String.format("Loaded Map \"%s\" with id \"%s\"", s.replaceAll("_", " "), s)));
+        }
     }
 
     public JSONArray loadInstances() {
@@ -145,27 +139,23 @@ public class GameReader {
         return arr;
     }
 
-    public Map<String, Game> getInstances() {
+    private Map<String, Game> getInstances() {
         return instances;
     }
 
-    public boolean saveMap(String content) throws IOException {
+    public boolean validateMap(String content) throws IOException {
         loadMap(content);
         String title = new ArrayList<>(instances.entrySet()).get(0).getKey();
 
         GameReader reader = new GameReader();
-        reader.reload();
+        reader.reload(false);
         if (reader.getInstances().containsKey(title)) {
             throw new RuntimeException("This title is used already.");
-        } else {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/maps/" + title + ".txt"));
-            writer.write(content);
-            writer.close();
         }
         return true;
     }
 
-    public Set<File> getMaps() {
+    private Set<File> getMaps() {
         File mapDirectory = new File(System.getProperty("user.dir") + "/maps/");
         if (mapDirectory.exists()) {
             File[] maps = mapDirectory.listFiles(pathname -> pathname.isFile() && pathname.getName().endsWith(".txt"));
