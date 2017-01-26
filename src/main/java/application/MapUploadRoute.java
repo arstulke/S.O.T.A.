@@ -1,7 +1,9 @@
 package application;
 
-import game.util.GameReader;
+import game.util.GameBuilder;
+import game.util.GameLoader;
 import game.util.Reader;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.jetty.util.log.Log;
 import spark.Request;
@@ -34,12 +36,14 @@ public class MapUploadRoute implements Route {
         Part file = request.raw().getPart("file");
         ZipInputStream input = new ZipInputStream(file.getInputStream());
 
+        String mapToken = generateToken();
         try {
-            String mapToken = generateToken();
             unzip(input, mapToken);
-            boolean result = validateMap(mapToken);
-            return result ? "Successfully uploaded map" : "Unknown Error";
+            validateMap(mapToken);
+            return "Successfully uploaded map";
         } catch (Exception e) {
+            File directory = new File(System.getProperty("user.dir") + "/unverifiedMaps/" + mapToken);
+            FileUtils.deleteDirectory(directory);
             return e.getMessage();
         }
     }
@@ -54,7 +58,7 @@ public class MapUploadRoute implements Route {
         return token;
     }
 
-    private boolean validateMap(String mapToken) throws IOException {
+    private void validateMap(String mapToken) throws IOException {
         Path path = Paths.get(System.getProperty("user.dir") + "/unverifiedMaps/" + mapToken + "/");
 
         if (!path.resolve("textures").toFile().exists()) {
@@ -67,10 +71,19 @@ public class MapUploadRoute implements Route {
         } else if (textFiles.size() == 0) {
             throw new RuntimeException("You have to create a .txt file in the uploaded .zip file.");
         } else {
-            GameReader reader = new GameReader();
-            boolean valid = reader.validateMap(new Reader(new FileReader(textFiles.get(0))).read());
-            Log.getLogger(getClass()).info("A new Map has been successfully uploaded (token: \"" + mapToken + "\").");
-            return valid;
+            File file = textFiles.get(0);
+            if (!file.getName().equals("map.txt")) {
+                File newFile = new File(file.getParent() + "/map.txt");
+                file.renameTo(newFile);
+                file = newFile;
+            }
+
+            GameLoader reader = new GameLoader();
+            GameBuilder builder = reader.validateMap(new Reader(new FileReader(file)).read());
+
+            Log.getLogger(getClass()).info("A new Map has been successfully uploaded (token: \"" + mapToken + "\", title: \"" + builder.getTitle() + "\").");
+            Application.gameloader.reload(false, true);
+            Application.textureLoader.reload();
         }
     }
 

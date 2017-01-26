@@ -5,12 +5,10 @@ import game.handler.DefaultGameHandler;
 import game.handler.GameHandler;
 import game.model.Game;
 import game.model.Statistics;
-import game.util.GameReader;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -42,7 +40,7 @@ public class WebSocketHandler {
         if (!games.containsKey(session)) {
             String map = session.getQueryParam("map");
 
-            games.put(session, Application.gameReader.getInstance(map));
+            games.put(session, Application.gameloader.getInstance(map));
             onConnect(session.getSession());
         } else {
             Game initGame = games.get(session);
@@ -121,14 +119,5 @@ public class WebSocketHandler {
 
     public synchronized static void addStatistics(Statistics statistics) {
         WebSocketHandler.statistics.add(statistics);
-    }
-
-    public static JSONArray buildStatistics(Comparator<Statistics> statisticsComparator) {
-        WebSocketHandler.statistics.sort(statisticsComparator);
-        List<Statistics> statistics = new ArrayList<>(WebSocketHandler.statistics);
-        while(statistics.size() > 10) {
-            statistics.remove(statistics.size());
-        }
-        return new JSONArray(statistics);
     }
 }

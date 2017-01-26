@@ -1,6 +1,7 @@
 package game.model.event;
 
 import game.model.Game;
+import game.model.Player;
 import game.model.Statistics;
 import network.Session;
 import network.WebSocketHandler;
@@ -27,8 +28,6 @@ public class EndEvent extends Event {
             Statistics stats = game.buildStatistics();
 
             WebSocketHandler.addStatistics(stats);
-            JSONArray statistics = WebSocketHandler.buildStatistics(Statistics.TICKS);
-            System.out.println(statistics);
 
             session.sendMessage(
                     new JSONObject()
@@ -36,8 +35,8 @@ public class EndEvent extends Event {
                             .put("msg", "finish")
             );
 
-
-
+            Player p = game.getPlayer();
+            p.setSpawnPoint(p.getPosition());
 
 
             String msg1 = "<b>You reached the finish!</b>";

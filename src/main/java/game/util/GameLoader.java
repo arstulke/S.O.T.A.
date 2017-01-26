@@ -13,17 +13,18 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 
 /**
- * Created GameReader.java in game
+ * Created GameLoader.java in game
  * by Arne on 11.01.2017.
  */
-public class GameReader {
-    private final Map<String, Game> instances = new HashMap<>();
+public class GameLoader {
+    private final Map<String, GameBuilder> builder = new HashMap<>();
 
-    private void loadMap(String fileContent) {
+    private void loadMap(String fileContent, String token) {
         String title = null;
         char playerChar = 'X';
         Point playerPosition = null;
@@ -102,72 +103,104 @@ public class GameReader {
             throw new RuntimeException("You have to set the title (\"title:example_map\")");
         }
 
-        instances.put(title, new Game(new Player(playerChar, playerPosition), blocks, events, gameRenderer, conditions));
-        instances.get(title).addAllResources(resources);
+        String key = token == null ? title : token;
+        builder.put(key, new GameBuilder(new Player(playerChar, playerPosition), blocks, events, gameRenderer, conditions, title, resources));
     }
 
     public Game getInstance(String title) {
-        return instances.get(title).copy();
+        return builder.get(title).build();
     }
 
     public Set<String> getResources(String map, String mode) {
-        Set<String> resources = instances.get(map).getResources();
+        Set<String> resources = builder.get(map).getResources();
         if (mode != null && mode.equals("textures")) {
-            resources.addAll(instances.get(map).getTextures());
+            resources.addAll(builder.get(map).getTextures(map));
+            resources.add("/error.png");
         }
         return resources;
     }
 
-    public void reload(boolean log) {
-        instances.clear();
-        getMaps().forEach(map -> {
-            try {
-                loadMap(new Reader(new FileReader(map.getAbsolutePath())).read());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    public void reload(boolean log, boolean loadUnverified) {
+        builder.clear();
+        getMaps(true)
+                .stream()
+                .map(file -> {
+                    try {
+                        return new Reader(new FileReader(file.getAbsolutePath())).read();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).forEach(map -> loadMap(map, null));
+        if (loadUnverified) {
+            getMaps(false)
+                    .stream()
+                    .map(file -> {
+                        try {
+                            HashMap<String, String> tmp = new HashMap<>();
+                            tmp.put(new Reader(new FileReader(file.getAbsolutePath())).read(), new File(file.getParent()).getName());
+                            return new ArrayList<>(tmp.entrySet()).get(0);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }).forEach(entry -> loadMap(entry.getKey(), entry.getValue()));
+        }
+
         if (log) {
             Log.getLogger(getClass()).info("Reloading Maps.");
-            instances.forEach((s, game) -> Log.getLogger(getClass()).info(String.format("Loaded Map \"%s\" with id \"%s\"", s.replaceAll("_", " "), s)));
+            builder.forEach((s, game) -> Log.getLogger(getClass()).info(String.format("Loaded Map \"%s\" with id \"%s\"", s.replaceAll("_", " "), s)));
         }
     }
 
-    public JSONArray loadInstances() {
+    public JSONArray loadInstances(boolean verified, boolean unverified) {
         JSONArray arr = new JSONArray();
-        instances.keySet().forEach(title -> arr.put(arr.length(), new JSONObject().put("name", title.replace("_", " ")).put("id", title)));
+        builder.keySet().stream().filter(s -> {
+            if(verified && unverified) return true;
+
+            boolean statusVerified = builder.get(s).getTitle().equals(s);
+            if(verified && statusVerified) return true;
+            if(unverified && !statusVerified) return true;
+
+            return false;
+        }).forEach(title -> arr.put(arr.length(), new JSONObject().put("name", title.replace("_", " ")).put("id", title)));
         return arr;
     }
 
-    private Map<String, Game> getInstances() {
-        return instances;
+    private Map<String, GameBuilder> getInstances() {
+        return builder;
     }
 
-    public boolean validateMap(String content) throws IOException {
-        loadMap(content);
-        String title = new ArrayList<>(instances.entrySet()).get(0).getKey();
+    public GameBuilder validateMap(String content) throws IOException {
+        loadMap(content, null);
+        String title = new ArrayList<>(builder.entrySet()).get(0).getKey();
 
-        GameReader reader = new GameReader();
-        reader.reload(false);
+        GameLoader reader = new GameLoader();
+        reader.reload(false, false);
         if (reader.getInstances().containsKey(title)) {
             throw new RuntimeException("This title is used already.");
         }
-        return true;
+        return builder.get(title);
     }
 
-    private Set<File> getMaps() {
-        File mapDirectory = new File(System.getProperty("user.dir") + "/maps/");
+    private Set<File> getMaps(boolean b) {
+        File mapDirectory = new File(System.getProperty("user.dir") + (b ? "/maps/" : "/unverifiedMaps/"));
         if (mapDirectory.exists()) {
-            File[] maps = mapDirectory.listFiles(pathname -> pathname.isFile() && pathname.getName().endsWith(".txt"));
+            Set<File> files = new HashSet<>();
 
-            Set<File> mapSet = new HashSet<>();
-            if (maps != null) {
-                Collections.addAll(mapSet, maps);
+            for (File mapDir : mapDirectory.listFiles()) {
+                File mapFile = Paths.get(mapDir.toURI()).resolve("map.txt").toFile();
+                if (mapFile.exists()) {
+                    files.add(mapFile);
+                }
             }
-            return mapSet;
+
+            return files;
         } else {
             mapDirectory.mkdir();
         }
-        return null;
+        return new HashSet<>();
+    }
+
+    public GameBuilder getBuilder(String key) {
+        return builder.get(key);
     }
 }

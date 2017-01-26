@@ -20,7 +20,8 @@ import java.util.stream.Collectors;
  * by Arne on 11.01.2017.
  */
 public class Game implements Cloneable {
-    private final Set<String> resources = new HashSet<>();
+    private final String title;
+
     private final CoordinateMap<Block> blockMap;
     private final CoordinateMap<List<Event>> eventMap;
     private final Player player;
@@ -39,17 +40,21 @@ public class Game implements Cloneable {
     private final HashMap<String, String> conditions = new HashMap<>();
     private HashMap<String, String> changedConditions = new HashMap<>();
 
+    private final Set<String> resources = new HashSet<>();
+
     private final AtomicInteger failCounter = new AtomicInteger(0);
     private final AtomicInteger tickCounter = new AtomicInteger(0);
 
-    public Game(Player player, Map<Point, Block> blocks, Map<Point, List<Event>> events, GameRenderer gameRenderer, Map<String, String> conditions) {
+    public Game(Player player, Map<Point, Block> blocks, Map<Point, List<Event>> events, GameRenderer gameRenderer, Map<String, String> conditions, String title) {
+        this.title = title;
+
         this.player = player;
         this.blockMap = new CoordinateMap<>(blocks);
         this.eventMap = new CoordinateMap<>(events);
 
         this.gameRenderer = gameRenderer;
         this.lastGameRenderer = GameRenderer.getDefault();
-        lastGameRenderer.load(gameRenderer);
+        this.lastGameRenderer.load(gameRenderer);
 
         this.data = new JSONObject();
 
@@ -200,47 +205,5 @@ public class Game implements Cloneable {
 
     public Statistics buildStatistics() {
         return new Statistics(tickCounter.intValue(), failCounter.intValue());
-    }
-
-    public void addAllResources(Collection<? extends String> resourceCollection) {
-        resources.addAll(resourceCollection);
-    }
-
-    public Set<String> getResources() {
-        return resources;
-    }
-
-    public Game copy() {
-        return new Game(player.copy(), blockMap.copy(), eventMap.copy(), gameRenderer.copy(), new HashMap<>(conditions));
-    }
-
-    public Set<String> getTextures() {
-        Function<Character, String> function = character -> {
-            String ch = character + "";
-            if (Character.isLowerCase(ch.charAt(0))) {
-                ch = "k" + ch;
-            } else {
-                ch = ch.toLowerCase();
-            }
-            return "./img/" + ch.replace("/", "slash")
-                    .replace("\\", "backslash")
-                    .replace(":", "double")
-                    .replace("*", "star")
-                    .replace("?", "questionmark")
-                    .replace("\"", "syno")
-                    .replace("<", "smaller")
-                    .replace(">", "bigger")
-                    .replace("|", "stick")
-                    .replace(" ", "space")
-                    .replace("^", "spike")
-                    .replace("#", "hashtag")
-                    .replace("_", "k_") + ".png";
-        };
-
-        Set<String> textures = blockMap.stream().map(Map.Entry::getValue).map(Block::getChar).collect(Collectors.toSet()).stream().map(function).collect(Collectors.toSet());
-        textures.add(function.apply(player.getPlayerChar()));
-        textures.add("./img/error.png");
-
-        return textures;
     }
 }

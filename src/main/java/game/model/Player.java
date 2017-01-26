@@ -55,7 +55,7 @@ public class Player {
         this.keys.setKey(key);
     }
 
-    Player copy() {
+    public Player copy() {
         return new Player(this.playerChar, new Point(this.playerPosition));
     }
 

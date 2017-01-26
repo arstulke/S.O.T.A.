@@ -1,11 +1,17 @@
 package application;
 
-import game.util.GameReader;
+import game.util.GameLoader;
 import network.WebSocketHandler;
-import org.json.JSONArray;
+import org.apache.commons.io.FileUtils;
+import spark.Request;
+import spark.Response;
+import spark.Route;
 import spark.Spark;
+
+import javax.imageio.ImageIO;
 import java.io.*;
-import java.util.Set;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static spark.Spark.*;
 
@@ -14,30 +20,21 @@ import static spark.Spark.*;
  * by Arne on 11.01.2017.
  */
 public class Application {
-    public static GameReader gameReader;
+    public static GameLoader gameloader = new GameLoader();
+    static TextureLoader textureLoader = new TextureLoader();
 
     public static void main(String[] args) throws IOException {
-        gameReader = new GameReader();
-        gameReader.reload(true);
+        gameloader.reload(true, true);
+        textureLoader.reload();
 
         port(80);
         staticFileLocation("/public");
         webSocket("/game", WebSocketHandler.class);
-        get("/resources", (request, response) -> {
-            String map = request.queryMap("map").value();
-            String mode = request.queryMap("mode").value();
 
-            Set<String> resources = gameReader.getResources(map, mode);
-
-            JSONArray arr = new JSONArray();
-            resources.forEach(s -> arr.put(arr.length(), s));
-
-            response.header("Content-type", "application/json");
-            return arr.toString();
-        });
+        get("/resources", new ResourceRoute());
         get("/maps", (request, response) -> {
             response.header("Content-type", "application/json");
-            return gameReader.loadInstances().toString();
+            return gameloader.loadInstances(true, false).toString();
         });
 
         get("/upload", (request, response) -> "<form method=\"post\" action=\"/upload\" enctype=\"multipart/form-data\">\n" +
@@ -48,26 +45,19 @@ public class Application {
                 "</form>");
         post("/upload", new MapUploadRoute());
 
+        get("/texture", (request, response) -> {
+            String map = request.queryMap("map").value();
+            String name = request.queryMap("name").value();
+
+            response.raw().setContentType("image/png");
+            try (OutputStream out = response.raw().getOutputStream()) {
+                ImageIO.write(textureLoader.getTexture(map, name), "png", out);
+            }
+            return response;
+        });
+
         Spark.init();
 
-        new Thread(() -> {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            while (true) {
-                try {
-                    String line = br.readLine();
-                    switch (line) {
-                        case "reload":
-                            gameReader.reload(true);
-                            break;
-
-                        case "stop":
-                            System.exit(0);
-                            break;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        new CommandLine().start();
     }
 }

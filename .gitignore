@@ -17,3 +17,6 @@ hs_err_pid*
 *.mp3
 application.properties
 target/
+
+maps/
+unverifiedMaps/
