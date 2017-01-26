@@ -16,13 +16,15 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Created GameLoader.java in game
  * by Arne on 11.01.2017.
  */
 public class GameLoader {
-    private final Map<String, GameBuilder> builder = new HashMap<>();
+    private final Map<String, GameBuilder> gameBuilders = new HashMap<>();
 
     private void loadMap(String fileContent, String token) {
         String title = null;
@@ -104,24 +106,24 @@ public class GameLoader {
         }
 
         String key = token == null ? title : token;
-        builder.put(key, new GameBuilder(new Player(playerChar, playerPosition), blocks, events, gameRenderer, conditions, title, resources));
+        gameBuilders.put(key, new GameBuilder(new Player(playerChar, playerPosition), blocks, events, gameRenderer, conditions, title, resources));
     }
 
     public Game getInstance(String title) {
-        return builder.get(title).build();
+        return gameBuilders.get(title).build();
     }
 
     public Set<String> getResources(String map, String mode) {
-        Set<String> resources = builder.get(map).getResources();
+        Set<String> resources = gameBuilders.get(map).getResources();
         if (mode != null && mode.equals("textures")) {
-            resources.addAll(builder.get(map).getTextures(map));
+            resources.addAll(gameBuilders.get(map).getTextures(map));
             resources.add("/error.png");
         }
         return resources;
     }
 
     public void reload(boolean log, boolean loadUnverified) {
-        builder.clear();
+        gameBuilders.clear();
         getMaps(true)
                 .stream()
                 .map(file -> {
@@ -147,16 +149,16 @@ public class GameLoader {
 
         if (log) {
             Log.getLogger(getClass()).info("Reloading Maps.");
-            builder.forEach((s, game) -> Log.getLogger(getClass()).info(String.format("Loaded Map \"%s\" with id \"%s\"", s.replaceAll("_", " "), s)));
+            gameBuilders.forEach((s, game) -> Log.getLogger(getClass()).info(String.format("Loaded Map \"%s\" with id \"%s\"", s.replaceAll("_", " "), s)));
         }
     }
 
     public JSONArray loadInstances(boolean verified, boolean unverified) {
         JSONArray arr = new JSONArray();
-        builder.keySet().stream().filter(s -> {
+        gameBuilders.keySet().stream().filter(s -> {
             if(verified && unverified) return true;
 
-            boolean statusVerified = builder.get(s).getTitle().equals(s);
+            boolean statusVerified = gameBuilders.get(s).getTitle().equals(s);
             if(verified && statusVerified) return true;
             if(unverified && !statusVerified) return true;
 
@@ -166,19 +168,19 @@ public class GameLoader {
     }
 
     private Map<String, GameBuilder> getInstances() {
-        return builder;
+        return gameBuilders;
     }
 
     public GameBuilder validateMap(String content) throws IOException {
         loadMap(content, null);
-        String title = new ArrayList<>(builder.entrySet()).get(0).getKey();
+        String title = new ArrayList<>(gameBuilders.entrySet()).get(0).getKey();
 
         GameLoader reader = new GameLoader();
         reader.reload(false, false);
         if (reader.getInstances().containsKey(title)) {
             throw new RuntimeException("This title is used already.");
         }
-        return builder.get(title);
+        return gameBuilders.get(title);
     }
 
     private Set<File> getMaps(boolean b) {
@@ -201,6 +203,18 @@ public class GameLoader {
     }
 
     public GameBuilder getBuilder(String key) {
-        return builder.get(key);
+        return gameBuilders.get(key);
+    }
+
+    public Map<String, String> listUnverifiedMaps() {
+        HashMap<String, String> maps = new HashMap<>();
+
+        gameBuilders.entrySet()
+                .stream()
+                .filter(entry -> !entry.getKey().equals(entry.getValue().getTitle()))
+                .map(Map.Entry::getKey)
+                .forEach(mapKey -> maps.put(mapKey, gameBuilders.get(mapKey).getTitle()));
+
+        return maps;
     }
 }

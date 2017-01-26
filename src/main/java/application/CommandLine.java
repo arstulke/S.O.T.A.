@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created CommandLine in application
@@ -28,12 +30,42 @@ class CommandLine extends Thread {
                     } else if (line.startsWith("verify")) {
                         String token = line.split(" ")[1];
                         Log.getLogger(Thread.class).info(verifyMap(token));
+                    } else if (line.startsWith("delete")) {
+                        String token = line.split(" ")[1];
+                        Log.getLogger(Thread.class).info(deleteMap(token));
+                    } else if (line.startsWith("list")) {
+                        Log.getLogger(Thread.class).info(listMap());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private static String listMap() {
+        StringBuilder output = new StringBuilder("");
+
+        Map<String, String> maps = Application.gameloader.listUnverifiedMaps();
+        maps.forEach((s, s2) -> output.append("-\t").append(s2).append("\n\t").append(s).append("\n"));
+
+        return (maps.size() == 0)? "No maps found to verify" : output.toString();
+    }
+
+    private static String deleteMap(String token) throws IOException {
+        String title;
+        File dir = Paths.get(System.getProperty("user.dir")).resolve("unverifiedMaps/" + token).toFile();
+        if (dir.exists() && dir.isDirectory()) {
+            title = Application.gameloader.getBuilder(token).getTitle();
+            FileUtils.deleteDirectory(dir);
+
+            Application.gameloader.reload(false, true);
+            Application.textureLoader.reload();
+
+        } else {
+            return "This map doesn't exists";
+        }
+        return "The Map (\"" + title + "\") has been successfully deleted.";
     }
 
 
