@@ -2,16 +2,11 @@ package application;
 
 import game.util.GameLoader;
 import network.WebSocketHandler;
-import org.apache.commons.io.FileUtils;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 import spark.Spark;
 
 import javax.imageio.ImageIO;
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import static spark.Spark.*;
 
@@ -24,9 +19,6 @@ public class Application {
     static TextureLoader textureLoader = new TextureLoader();
 
     public static void main(String[] args) throws IOException {
-        gameloader.reload(true, true);
-        textureLoader.reload();
-
         port(80);
         staticFileLocation("/public");
         webSocket("/game", WebSocketHandler.class);
