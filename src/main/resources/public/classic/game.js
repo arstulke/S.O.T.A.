@@ -10,12 +10,18 @@ if (window.location.search.length > 0) {
     document.getElementById("message").style.fontSize = Math.round(size * 0.2778);
 }
 
+
+
 $.ajax({
     url: "/maps",
     success: function(response) {
         for (var i = 0; i < response.length; i++) {
             var item = "<li onclick='startGame(\"" + response[i].id + "\")' style='cursor: pointer;'>" + response[i].name + "</li>";
             $("#map-list").html($("#map-list").html() + item);
+
+            $("#map-input-btn").click(function(event) {
+                initGame($("#map-input").val());
+            });
         }
     }
 })
@@ -24,29 +30,16 @@ function startGame(mapID) {
     $("#map-list").css("display", "none");
     $("#game-content").css("display", "block");
 
-    var webSocket = new WebSocket('ws://' + window.location["hostname"] + '/game?title=' + mapID);
+    var webSocket = new WebSocket('ws://' + window.location["hostname"] + '/game?map=' + mapID);
     var messages = [];
+
+
+    var actualBackground = null;
     webSocket.onmessage = function(message) {
         message = JSON.parse(message.data);
         if (message.cmd == "OUTPUT") {
             document.getElementById("right-cornor").innerHTML = "x: " + message.position.x + ", y:" + message.position.y;
-            document.getElementById("output").innerHTML = message.msg;
-
-            (function() {
-                var background = message.style.background;
-                if (background.startsWith("#")) {
-                    document.getElementById("output").style.backgroundImage = "";
-                    if (document.getElementById("output").backgroundColor !== background) {
-                        document.getElementById("output").backgroundColor = background;
-                    }
-                } else {
-                    if (document.getElementById("output").style.backgroundImage !== background) {
-                        document.getElementById("output").style.backgroundImage = "url('" + background + "')";
-                    }
-                    document.getElementById("output").backgroundColor = "";
-                }
-                document.getElementById("output").style.color = message.style.foreground;
-            })();
+            show(message.msg, message.player_char);
             updateMessages();
         } else if (message.cmd == "PING-OUTPUT") {
             updateMessages();
@@ -152,4 +145,11 @@ function startGame(mapID) {
             }
         };
     }
+
+
+    function show(str, playerChar) {
+    document.getElementById("output").innerHTML = str;
+    document.getElementById("output").innerHTML = document.getElementById("output").innerHTML.substr(0, 143) + playerChar + document.getElementById("output").innerHTML.substr(143 + 1);
+    }
 }
+

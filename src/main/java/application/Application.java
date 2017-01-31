@@ -37,7 +37,7 @@ public class Application {
                 "</form>");
         post("/upload", new MapUploadRoute());
 
-        get("/texture", (request, response) -> {
+        get("/textures", (request, response) -> {
             String map = request.queryMap("map").value();
             String name = request.queryMap("name").value();
 

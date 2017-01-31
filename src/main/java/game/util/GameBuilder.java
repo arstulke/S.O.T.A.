@@ -73,7 +73,7 @@ public class GameBuilder {
                     .replace("#", "hashtag")
                     .replace("_", "k_");
 
-            return "/texture?map=" + title + "&name=" + ch;
+            return "/textures?map=" + title + "&name=" + ch;
         };
 
         Set<String> textures = blocks.stream().map(Map.Entry::getValue).map(Block::getChar).collect(Collectors.toSet()).stream().map(function).collect(Collectors.toSet());

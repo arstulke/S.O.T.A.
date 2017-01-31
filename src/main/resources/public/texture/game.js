@@ -225,7 +225,7 @@ function startGame(mapID) {
 
     function show_image(src, x, y) {
         try {
-            canvasContext.drawImage(images["/texture?map=" + mapID + "&name=" + src], x * 16, y * 32);
+            canvasContext.drawImage(images["/textures?map=" + mapID + "&name=" + src], x * 16, y * 32);
         } catch (e) {
             canvasContext.drawImage(images["/error.png"], x * 16, y * 32);
             console.error("src: " + src + ", x:" + x + ", y:" + y);
