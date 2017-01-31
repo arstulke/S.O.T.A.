@@ -7,6 +7,8 @@ import spark.Spark;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
 import static spark.Spark.*;
 
@@ -19,7 +21,7 @@ public class Application {
     static TextureLoader textureLoader = new TextureLoader();
 
     public static void main(String[] args) throws IOException {
-        port(80);
+        setPort(80);
         staticFileLocation("/public");
         webSocket("/game", WebSocketHandler.class);
 
@@ -47,9 +49,30 @@ public class Application {
             }
             return response;
         });
-
         Spark.init();
 
         new CommandLine().start();
     }
+
+    private static void setPort(int port) {
+        boolean isPortInUse;
+        try {
+            Socket socket = new Socket();
+            socket.connect(new InetSocketAddress("localhost", port), 10);
+            socket.close();
+            isPortInUse = true;
+        } catch (Exception ex) {
+            isPortInUse = false;
+        }
+
+        if (isPortInUse) {
+            int min = 1111;
+            int max = 9999;
+            int nextPort = (int) (Math.random() * (max - min) + min);
+            setPort(nextPort);
+        } else {
+            port(port);
+        }
+    }
+
 }
