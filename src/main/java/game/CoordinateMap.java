@@ -1,7 +1,6 @@
 package game;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
@@ -14,7 +13,7 @@ import java.util.stream.Stream;
 public class CoordinateMap<E> {
     private final Map<Point, E> elements = new ConcurrentHashMap<>();
 
-    public CoordinateMap(Map<Point, E> values) {
+    private CoordinateMap(Map<Point, E> values) {
         this.elements.putAll(values);
     }
 
@@ -25,20 +24,8 @@ public class CoordinateMap<E> {
         return elements.get(p);
     }
 
-    public E get(int x, int y) {
-        return get(new Point(x, y));
-    }
-
-    public Map<Point, E> copy() {
-        return new HashMap<>(elements);
-    }
-
     public void set(Point point, E element) {
         elements.put(point, element);
-    }
-
-    public void set(int y, int x, E element) {
-        set(new Point(x, y), element);
     }
 
     public boolean containsKey(Point point) {
@@ -53,7 +40,27 @@ public class CoordinateMap<E> {
         elements.clear();
     }
 
-    public Stream<Map.Entry<Point, E>> stream() {
-        return elements.entrySet().stream();
+    public static class Builder<T> {
+        private final Map<Point, T> elements = new ConcurrentHashMap<>();
+
+        public CoordinateMap<T> build() {
+            return new CoordinateMap<>(elements);
+        }
+
+        public Stream<Map.Entry<Point, T>> stream() {
+            return elements.entrySet().stream();
+        }
+
+        public void put(Point p, T element) {
+            elements.put(p, element);
+        }
+
+        public boolean containsKey(Point point) {
+            return elements.containsKey(point);
+        }
+
+        public T get(Point point) {
+            return elements.get(point);
+        }
     }
 }

@@ -12,7 +12,7 @@ import java.awt.*;
 public class ExecuteConditionEvent extends Event {
     private final String conditionName;
     private final String expectedConditionValue;
-    private Event event;
+    private final Event event;
 
     public ExecuteConditionEvent(Rectangle triggerArea, boolean repeatable, String conditionName, String expectedConditionValue, Event event) {
         super(triggerArea, repeatable);

@@ -38,11 +38,11 @@ public class Keys {
     }
 
     public boolean onlyRight() {
-        return key("right") && !key("left");
+        return right() && !left();
     }
 
     public boolean onlyLeft() {
-        return !key("right") && key("left");
+        return !right() && left();
     }
 
     public boolean respawn() {

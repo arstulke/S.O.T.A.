@@ -5,6 +5,8 @@ import game.model.event.CheckpointEvent;
 import game.model.event.Event;
 import game.model.event.StyleEvent;
 import game.util.GameRenderer;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import network.Session;
 import org.json.JSONObject;
 
@@ -20,7 +22,6 @@ import java.util.stream.Collectors;
  * by Arne on 11.01.2017.
  */
 public class Game implements Cloneable {
-    private final String title;
 
     private final CoordinateMap<Block> blockMap;
     private final CoordinateMap<List<Event>> eventMap;
@@ -38,44 +39,36 @@ public class Game implements Cloneable {
     private final CoordinateMap<Block> changedBlocks = new CoordinateMap<>();
 
     private final HashMap<String, String> conditions = new HashMap<>();
-    private HashMap<String, String> changedConditions = new HashMap<>();
-
-    private final Set<String> resources = new HashSet<>();
+    private final HashMap<String, String> changedConditions = new HashMap<>();
 
     private final AtomicInteger failCounter = new AtomicInteger(0);
     private final AtomicInteger tickCounter = new AtomicInteger(0);
 
-    public Game(Player player, Map<Point, Block> blocks, Map<Point, List<Event>> events, GameRenderer gameRenderer, Map<String, String> conditions, String title) {
-        this.title = title;
-
+    private Game(Player player, CoordinateMap<Block> blocks, CoordinateMap<List<Event>> events, GameRenderer gameRenderer) {
         this.player = player;
-        this.blockMap = new CoordinateMap<>(blocks);
-        this.eventMap = new CoordinateMap<>(events);
+        this.blockMap = blocks;
+        this.eventMap = events;
 
         this.gameRenderer = gameRenderer;
-        this.lastGameRenderer = GameRenderer.getDefault();
-        this.lastGameRenderer.load(gameRenderer);
+        this.lastGameRenderer = gameRenderer;
 
         this.data = new JSONObject();
 
-        this.conditions.putAll(conditions);
-
         //region setWidthAndHeight
-        int highestX = 0;
-        int highestY = 0;
+        IntegerProperty highestX = new SimpleIntegerProperty(0);
+        IntegerProperty highestY = new SimpleIntegerProperty(0);
 
-        for (Map.Entry<Point, Block> entry : blocks.entrySet()) {
-            Point p = entry.getKey();
-            if (p.getX() > highestX) {
-                highestX = (int) p.getX();
+        blocks.forEach((p, block) -> {
+            if (p.getX() > highestX.get()) {
+                highestX.set((int) p.getX());
             }
-            if (p.getY() > highestY) {
-                highestY = (int) p.getY();
+            if (p.getY() > highestY.get()) {
+                highestY.set((int) p.getY());
             }
-        }
+        });
 
-        this.mapWidth = highestX;
-        this.mapHeight = highestY;
+        this.mapWidth = highestX.get();
+        this.mapHeight = highestY.get();
         //endregion
     }
 
@@ -196,7 +189,7 @@ public class Game implements Cloneable {
     }
 
     public boolean isChanged() {
-        return getPlayer().isChanged() || !gameRenderer.equals(lastGameRenderer);
+        return getPlayer().isNotOnSpawnPoint() || !gameRenderer.equals(lastGameRenderer);
     }
 
     public void incrementTickCounter() {
@@ -205,5 +198,85 @@ public class Game implements Cloneable {
 
     public Statistics buildStatistics() {
         return new Statistics(tickCounter.intValue(), failCounter.intValue());
+    }
+
+    public static class Builder {
+        private final Player.Builder playerBuilder;
+        private final CoordinateMap.Builder<Block> blocks;
+        private final CoordinateMap.Builder<List<Event>> events;
+        private final GameRenderer.Builder gameRenderer;
+        private final String title;
+        private final Set<String> resources;
+        private boolean textures = true;
+
+        public Builder(Player.Builder playerBuilder, CoordinateMap.Builder<Block> blocks, CoordinateMap.Builder<List<Event>> events, GameRenderer.Builder gameRenderer, String title, Set<String> resources) {
+            this.playerBuilder = playerBuilder;
+            this.blocks = blocks;
+            this.events = events;
+            this.gameRenderer = gameRenderer;
+            this.title = title;
+            this.resources = resources;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public Game build() {
+            return new Game(playerBuilder.build(), blocks.build(), events.build(), gameRenderer.build());
+        }
+
+        public void setToEditorMode() {
+            this.textures = true;
+        }
+
+        public Set<String> getResources(String mode) {
+            Set<String> resources = new HashSet<>(this.resources);
+            if (mode != null && mode.equals("textures")) {
+                if (textures) {
+                    resources.addAll(getTextures());
+                }
+                resources.add("/error.png");
+            }
+            return resources;
+        }
+
+        private Set<String> getTextures() {
+            Function<Character, String> function = character -> {
+                String ch = character + "";
+                if (Character.isLowerCase(ch.charAt(0))) {
+                    ch = "k" + ch;
+                } else {
+                    ch = ch.toLowerCase();
+                }
+
+                ch = ch
+                        .replace("/", "slash")
+                        .replace("\\", "backslash")
+                        .replace(":", "double")
+                        .replace("*", "star")
+                        .replace("?", "questionmark")
+                        .replace("\"", "syno")
+                        .replace("<", "smaller")
+                        .replace(">", "bigger")
+                        .replace("|", "stick")
+                        .replace(" ", "space")
+                        .replace("^", "spike")
+                        .replace("#", "hashtag")
+                        .replace("_", "k_");
+
+                return "/textures?map=" + title + "&name=" + ch;
+            };
+
+            Set<String> textures = blocks.stream()
+                    .map(Map.Entry::getValue)
+                    .map(Block::getChar)
+                    .distinct()
+                    .map(function)
+                    .collect(Collectors.toSet());
+            textures.add(function.apply(playerBuilder.getPlayerChar()));
+
+            return textures;
+        }
     }
 }

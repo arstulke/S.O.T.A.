@@ -1,7 +1,7 @@
 package game.util;
 
-import game.model.Game;
 import game.model.Block;
+import game.model.Game;
 
 import java.awt.*;
 
@@ -16,23 +16,20 @@ public class GameRenderer {
     private String backgroundColor;
     private String foregroundColor;
 
-    private GameRenderer(int width, int height) {
-        this.width = width;
-        this.height = height;
+    private GameRenderer(String backgroundColor, String foregroundColor) {
+        this.width = 31;
+        this.height = 9;
         this.backgroundColor = "#ffffff";
         this.foregroundColor = "#000000";
 
         this.p = new Point(width / 2, (int) (height * 0.5));
-    }
 
-    private GameRenderer(int width, int height, String backgroundColor, String foregroundColor) {
-        this(width, height);
-        this.backgroundColor = backgroundColor;
-        this.foregroundColor = foregroundColor;
-    }
-
-    private GameRenderer() {
-        this(31, 9);
+        if (backgroundColor != null) {
+            this.backgroundColor = backgroundColor;
+        }
+        if (backgroundColor != null) {
+            this.foregroundColor = foregroundColor;
+        }
     }
 
     public String render(Game game) {
@@ -83,19 +80,6 @@ public class GameRenderer {
         return foregroundColor;
     }
 
-    public GameRenderer copy() {
-        return new GameRenderer(
-                this.width,
-                this.height,
-                this.backgroundColor,
-                this.foregroundColor
-        );
-    }
-
-    public static GameRenderer getDefault() {
-        return new GameRenderer();
-    }
-
     public void load(GameRenderer gameRenderer) {
         this.backgroundColor = gameRenderer.backgroundColor;
         this.foregroundColor = gameRenderer.foregroundColor;
@@ -123,5 +107,26 @@ public class GameRenderer {
         result = 31 * result + backgroundColor.hashCode();
         result = 31 * result + foregroundColor.hashCode();
         return result;
+    }
+
+    public static class Builder {
+        private String backgroundColor;
+        private String foregroundColor;
+
+        static Builder getDefault() {
+            return new Builder();
+        }
+
+        void setBackgroundColor(String backgroundColor) {
+            this.backgroundColor = backgroundColor;
+        }
+
+        void setForegroundColor(String foregroundColor) {
+            this.foregroundColor = foregroundColor;
+        }
+
+        public GameRenderer build() {
+            return new GameRenderer(backgroundColor, foregroundColor);
+        }
     }
 }
