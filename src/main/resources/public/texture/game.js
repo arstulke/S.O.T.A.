@@ -190,36 +190,28 @@ function startGame(mapID) {
     }
 
     function showImageByChar(char, x, y) {
-        if (char == "/") {
-            show_image("slash", x, y);
-        } else if (char == "\\") {
-            show_image("backslash", x, y);
-        } else if (char == ":") {
-            show_image("double", x, y);
-        } else if (char == "*") {
-            show_image("star", x, y);
-        } else if (char == "?") {
-            show_image("questionmark", x, y);
-        } else if (char == "\"") {
-            show_image("syno", x, y);
-        } else if (char == "<") {
-            show_image("smaller", x, y);
-        } else if (char == ">") {
-            show_image("bigger", x, y);
-        } else if (char == "|") {
-            show_image("stick", x, y);
-        } else if (char == " ") {
-            show_image("space", x, y);
-        } else if (char == "^") {
-            show_image("spike", x, y);
-        } else if (char == "#") {
-            show_image("hashtag", x, y);
+        var replacements = {};
+        replacements["/"] = "slash";
+        replacements["\\"] = "backslash";
+        replacements[":"] = "double";
+        replacements["*"] = "star";
+        replacements["?"] = "questionmark";
+        replacements["\""] = "syno";
+        replacements["<"] = "smaller";
+        replacements[">"] = "bigger";
+        replacements["|"] = "stick";
+        replacements[" "] = "space";
+        replacements["^"] = "spike";
+        replacements["#"] = "hashtag";
+        replacements["+"] = "plus";
+        replacements["-"] = "minus";
+
+        if(replacements[char] !== undefined) {
+            show_image(replacements[char], x, y);
+        } else if (char == char.toLowerCase()) {
+            show_image("k" + char, x, y);
         } else {
-            if (char == char.toLowerCase()) {
-                show_image("k" + char, x, y);
-            } else {
-                show_image(char.toLowerCase(), x, y);
-            }
+            show_image(char.toLowerCase(), x, y);
         }
     }
 

@@ -58,15 +58,15 @@ public class GameLoader {
                             if (line.charAt(x) == playerChar) {
                                 playerPosition = new Point();
                                 playerPosition.setLocation(p);
-                                blocks.put(p, Block.build(' '));
+                                blocks.put(p, new Block.Builder().build(' '));
                             } else {
-                                blocks.put(p, Block.build(line.charAt(x)));
+                                blocks.put(p, new Block.Builder().build(line.charAt(x)));
                             }
                         }
                         if (line.length() < width) {
                             for (int x = line.length(); x < width; x++) {
                                 Point p = new Point(x, y);
-                                blocks.put(p, Block.build(' '));
+                                blocks.put(p, new Block.Builder().build(' '));
                             }
                         }
 

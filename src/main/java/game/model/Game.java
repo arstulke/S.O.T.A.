@@ -201,11 +201,11 @@ public class Game implements Cloneable {
     }
 
     public static class Builder {
+        private String title;
         private final Player.Builder playerBuilder;
         private final CoordinateMap.Builder<Block> blocks;
         private final CoordinateMap.Builder<List<Event>> events;
         private final GameRenderer.Builder gameRenderer;
-        private final String title;
         private final Set<String> resources;
         private boolean textures = true;
 
@@ -235,6 +235,8 @@ public class Game implements Cloneable {
             if (mode != null && mode.equals("textures")) {
                 if (textures) {
                     resources.addAll(getTextures());
+                    resources.add("/textures?map=" + title + "&name=stick");
+                    resources.add("/textures?map=" + title + "&name=minus");
                 }
                 resources.add("/error.png");
             }
@@ -242,7 +244,7 @@ public class Game implements Cloneable {
         }
 
         private Set<String> getTextures() {
-            Function<Character, String> function = character -> {
+            Function<? super Character, String> function = character -> {
                 String ch = character + "";
                 if (Character.isLowerCase(ch.charAt(0))) {
                     ch = "k" + ch;
@@ -263,7 +265,9 @@ public class Game implements Cloneable {
                         .replace(" ", "space")
                         .replace("^", "spike")
                         .replace("#", "hashtag")
-                        .replace("_", "k_");
+                        .replace("_", "k_")
+                        .replace("+", "plus")
+                        .replace("-", "minus");
 
                 return "/textures?map=" + title + "&name=" + ch;
             };

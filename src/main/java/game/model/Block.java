@@ -22,24 +22,6 @@ public class Block {
         this.semiSolidTop = semiSolidTop;
     }
 
-    public static Block build(char c) {
-        String nonSolidChars = "abcdefghijklmnopqrstuvwxyz#*_ ";
-        String semiSolidGroundChars = "#_";
-        String semiSolidTopChars = "#";
-
-        double horizontalSlowDown = 1.0;
-        double verticalSlowDown = c == '#' ? 2.0 : 1.0;
-
-        if (!nonSolidChars.contains("" + c)) {
-            return new Block(c, horizontalSlowDown, verticalSlowDown, true, false, false);
-        } else {
-            boolean semiSolidGround = semiSolidGroundChars.contains("" + c);
-            boolean semiSolidTop = semiSolidTopChars.contains("" + c);
-
-            return new Block(c, horizontalSlowDown, verticalSlowDown, false, semiSolidGround, semiSolidTop);
-        }
-    }
-
     public boolean hasSolidGround() {
         return semiSolidGround;
     }
@@ -92,5 +74,25 @@ public class Block {
         result = 31 * result + (semiSolidGround ? 1 : 0);
         result = 31 * result + (semiSolidTop ? 1 : 0);
         return result;
+    }
+
+    public static class Builder {
+        public static Block build(char c) {
+            String nonSolidChars = "abcdefghijklmnopqrstuvwxyz#*_äöü ";
+            String semiSolidGroundChars = "#_";
+            String semiSolidTopChars = "#";
+
+            double horizontalSlowDown = 1.0;
+            double verticalSlowDown = c == '#' ? 2.0 : 1.0;
+
+            if (!nonSolidChars.contains("" + c)) {
+                return new Block(c, horizontalSlowDown, verticalSlowDown, true, false, false);
+            } else {
+                boolean semiSolidGround = semiSolidGroundChars.contains("" + c);
+                boolean semiSolidTop = semiSolidTopChars.contains("" + c);
+
+                return new Block(c, horizontalSlowDown, verticalSlowDown, false, semiSolidGround, semiSolidTop);
+            }
+        }
     }
 }
