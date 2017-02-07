@@ -2,6 +2,17 @@ String.prototype.replaceAll = function(regex, replacements) {
     return this.split(regex).join(replacements);
 }
 
+function updateSlider(size, focus) {
+    if(focus === false){
+        $("#output").focus();
+    }
+    document.getElementById("output").style.fontSize = size;
+}
+
+$( document ).ready(function() {
+    updateSlider(size, true)
+});
+
 
 if (window.location.search.length > 0) {
     var size = window.location.search.substring(1);

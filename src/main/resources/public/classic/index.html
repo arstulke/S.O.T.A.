@@ -2,43 +2,42 @@
 <head>
     <title>S.O.T.A.</title>
     <style>
+    html {
+        //background: url(images/bg.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 100%;
+    }
+    body {
+        height: 100%;
+        //overflow: hidden;
+    }
     ul {
         list-style-type: none;
     }
-    html {
-      //background: url(images/bg.jpg) no-repeat center center fixed;
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
-    }
-
-
 
     </style>
 </head>
 <body background="#ff0000">
 <ul id="map-list"></ul>
-<table id="game-content" style="width: 100%; display: none;">
-    <tbody>
-    <tr>
-        <td rowspan="2" style="width: 70%">
-            <pre id="output" style="border-style: solid; border-width: 5px;"></pre>
-        </td>
-        <td style=" vertical-align: top;">
+<div id="game-content" style="width: 100%; display: none;">
+    <div style="display: table; float:left; width : 80%; ">
+        <pre id="output" style="border-style: solid; border-width: 5px;">
+        </pre>
+    </div>
+    <div style="display: table; float:left; width : 20%; ">
+        <input id="slider" type="range" min="20" max="100" value="20" style="width:100%"
+               onchange="updateSlider(this.value, false)" oninput="updateSlider(this.value), true"/>
+        <div style="display: table; float:top; width : 100%; ">
             <pre id="right-cornor" style="margin-top: 0px; float: right; vertical-align: top;"></pre>
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <center>
-                <ul id="message"></ul>
-            </center>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        </div>
+        <center>
+            <ul id="message"></ul>
+        </center>
+    </div>
+</div>
 </body>
 <script src="jquery.js"></script>
 <script src="game.js"></script>
