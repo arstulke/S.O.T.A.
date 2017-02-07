@@ -78,7 +78,7 @@ public class Block {
 
     public static class Builder {
         public static Block build(char c) {
-            String nonSolidChars = "abcdefghijklmnopqrstuvwxyz#*_äöü ";
+            String nonSolidChars = "abcdefghijklmnopqrstuvwxyz#*_äöü .,'`´";
             String semiSolidGroundChars = "#_";
             String semiSolidTopChars = "#";
 
