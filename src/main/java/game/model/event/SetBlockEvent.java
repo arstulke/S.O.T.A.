@@ -16,11 +16,11 @@ import java.util.Set;
 public class SetBlockEvent extends Event {
 
     private final Set<Point> targetBlocks;
-    private Block block;
+    private final Block block;
 
     public SetBlockEvent(Rectangle triggerArea, boolean repeatable, char block, Rectangle targetArea) {
         super(triggerArea, repeatable);
-        this.block = Block.build(block);
+        this.block = new Block.Builder().build(block);
         this.targetBlocks = EventBuilder.toPoints(targetArea);
     }
 

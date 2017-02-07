@@ -4,8 +4,10 @@ import game.model.event.*;
 import game.model.event.Event;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.Integer.parseInt;
 
@@ -170,13 +172,5 @@ public class EventBuilder {
             return triggerPoints;
         }
         return null;
-    }
-
-    public static Map.Entry<String, String> buildCondition(String line) {
-        List<String> params = split(line);
-        params = params.subList(2, params.size());
-        Map<String, String> conditions = new HashMap<>();
-        conditions.put(params.get(0), params.get(1));
-        return new ArrayList<>(conditions.entrySet()).get(0);
     }
 }

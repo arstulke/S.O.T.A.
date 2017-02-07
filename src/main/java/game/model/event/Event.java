@@ -5,7 +5,6 @@ import game.util.EventBuilder;
 import network.Session;
 
 import java.awt.*;
-import java.util.HashSet;
 import java.util.Set;
 
 /**

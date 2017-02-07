@@ -1,5 +1,6 @@
 package application;
 
+import game.util.ApplicationProperties;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.util.log.Log;
 import spark.Spark;
@@ -8,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -17,6 +17,9 @@ import java.util.Map;
  * by ARSTULKE on 26.01.2017.
  */
 class CommandLine extends Thread {
+
+    private final static ApplicationProperties properties = new ApplicationProperties();
+
     CommandLine() {
         super(() -> {
             Log.getLogger(Thread.class).info("Starting...");
@@ -31,8 +34,7 @@ class CommandLine extends Thread {
                 try {
                     line = br.readLine();
                     if (line.equals("reload")) {
-                        Application.gameloader.reload(true, true);
-                        Application.textureLoader.reload();
+                        Application.reload(true);
                     } else if (line.equals("stop")) {
                         Log.getLogger(Thread.class).info("Have a nice day ;)");
                         System.exit(0);
@@ -59,8 +61,7 @@ class CommandLine extends Thread {
     private static void waitForSpark() {
         Spark.awaitInitialization();
 
-        Application.gameloader.reload(true, true);
-        Application.textureLoader.reload();
+        Application.reload(true);
     }
 
     private static String sayHello() {
@@ -92,13 +93,12 @@ class CommandLine extends Thread {
 
     private static String deleteMap(String token) throws IOException {
         String title;
-        File dir = Paths.get(System.getProperty("user.dir")).resolve("unverifiedMaps/" + token).toFile();
+        File dir = properties.getUnverifiedMapsPath().resolve(token).toFile();
         if (dir.exists() && dir.isDirectory()) {
             title = Application.gameloader.getBuilder(token).getTitle();
             FileUtils.deleteDirectory(dir);
 
-            Application.gameloader.reload(false, true);
-            Application.textureLoader.reload();
+            Application.reload(false);
 
         } else {
             return "This map doesn't exists";
@@ -108,16 +108,15 @@ class CommandLine extends Thread {
 
 
     private static String verifyMap(String token) throws IOException {
-        File dir = Paths.get(System.getProperty("user.dir")).resolve("unverifiedMaps/" + token).toFile();
+        File dir = properties.getUnverifiedMapsPath().resolve(token).toFile();
         String title;
         if (dir.exists() && dir.isDirectory()) {
             title = Application.gameloader.getBuilder(token).getTitle();
-            File dest = Paths.get(System.getProperty("user.dir")).resolve("maps/" + title).toFile();
+            File dest = properties.getVerifiedMapsPath().resolve(title).toFile();
             if (!dest.exists()) {
                 FileUtils.moveDirectory(dir, dest);
 
-                Application.gameloader.reload(false, true);
-                Application.textureLoader.reload();
+                Application.reload(false);
             } else {
                 return "error";
             }

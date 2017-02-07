@@ -11,13 +11,13 @@ import java.util.Set;
  * Created ResourceRoute in application
  * by ARSTULKE on 26.01.2017.
  */
-public class ResourceRoute implements Route {
+class ResourceRoute implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String map = request.queryMap("map").value();
         String mode = request.queryMap("mode").value();
 
-        Set<String> resources = Application.gameloader.getResources(map, mode);
+        Set<String> resources = Application.gameloader.getBuilder(map).getResources(mode);
 
         JSONArray arr = new JSONArray();
         resources.forEach(s -> arr.put(arr.length(), s));

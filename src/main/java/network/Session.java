@@ -32,8 +32,8 @@ public class Session {
         return urlParams;
     }
 
-    public String getQueryParam(String key) {
-        return urlParams.get(key);
+    public String getMap() {
+        return urlParams.get("map");
     }
 
     public void sendMessage(JSONObject json) {

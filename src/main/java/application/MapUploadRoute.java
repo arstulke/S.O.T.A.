@@ -1,8 +1,10 @@
 package application;
 
-import game.util.GameBuilder;
+import game.model.Game;
+import game.util.ApplicationProperties;
 import game.util.GameLoader;
 import game.util.Reader;
+import game.util.Utils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.jetty.util.log.Log;
@@ -17,8 +19,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -27,7 +27,9 @@ import java.util.zip.ZipInputStream;
  * Created MapUploadRoute in application
  * by ARSTULKE on 25.01.2017.
  */
-public class MapUploadRoute implements Route {
+class MapUploadRoute implements Route {
+    private final ApplicationProperties properties = new ApplicationProperties();
+
     @Override
     public Object handle(Request request, Response response) throws Exception {
         MultipartConfigElement multipartConfigElement = new MultipartConfigElement("/upload");
@@ -42,7 +44,7 @@ public class MapUploadRoute implements Route {
             validateMap(mapToken);
             return "Successfully uploaded map";
         } catch (Exception e) {
-            File directory = new File(System.getProperty("user.dir") + "/unverifiedMaps/" + mapToken);
+            File directory = properties.getUnverifiedMapsPath().resolve(mapToken).toFile();
             FileUtils.deleteDirectory(directory);
             return e.getMessage();
         }
@@ -51,7 +53,7 @@ public class MapUploadRoute implements Route {
     private String generateToken() {
         int count = 32;
         String token = RandomStringUtils.random(count, true, true);
-        while (Paths.get(System.getProperty("user.dir") + "/unverifiedMaps/" + token + "/").toFile().exists()) {
+        while (properties.getUnverifiedMapsPath().resolve(token + "/").toFile().exists()) {
             token = RandomStringUtils.random(count, true, true);
         }
 
@@ -59,13 +61,9 @@ public class MapUploadRoute implements Route {
     }
 
     private void validateMap(String mapToken) throws IOException {
-        Path path = Paths.get(System.getProperty("user.dir") + "/unverifiedMaps/" + mapToken + "/");
+        Path path = properties.getUnverifiedMapsPath().resolve(mapToken + "/");
 
-        if (!path.resolve("textures").toFile().exists()) {
-            throw new RuntimeException("You have to create the \"textures\" directory in the uploaded .zip file.");
-        }
-
-        List<File> textFiles = Arrays.asList(path.toFile().listFiles((dir, name) -> name.endsWith(".txt")));
+        List<File> textFiles = Utils.listFiles(path, (dir, name) -> name.endsWith(".txt"));
         if (textFiles.size() > 1) {
             throw new RuntimeException("Only one .txt file is allowed in the uploaded .zip file.");
         } else if (textFiles.size() == 0) {
@@ -79,31 +77,22 @@ public class MapUploadRoute implements Route {
             }
 
             GameLoader reader = new GameLoader();
-            GameBuilder builder = reader.validateMap(new Reader(new FileReader(file)).read());
+            Game.Builder builder = reader.validateMap(new Reader(new FileReader(file)).read());
 
             Log.getLogger(getClass()).info("A new Map has been successfully uploaded (token: \"" + mapToken + "\", title: \"" + builder.getTitle() + "\").");
-            Application.gameloader.reload(false, true);
-            Application.textureLoader.reload();
+            Application.reload(false);
         }
     }
 
-    /*
-    *  else {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/maps/" + title + ".txt"));
-            writer.write(content);
-            writer.close();
-        }
-    * */
-
     private void unzip(ZipInputStream input, String mapToken) throws IOException {
-        String path = System.getProperty("user.dir") + "/unverifiedMaps/" + mapToken + "/";
-        new File(path).mkdir();
+        Path path = properties.getUnverifiedMapsPath().resolve(mapToken + "/");
+        path.toFile().mkdir();
         ZipEntry entry;
         while ((entry = input.getNextEntry()) != null) {
-            File outputFile = new File(path + entry.getName());
             if (!entry.getName().contains(".")) {
                 new File(path + entry.getName()).mkdir();
             } else {
+                File outputFile = path.resolve(entry.getName()).toFile();
                 outputFile.createNewFile();
                 try (FileOutputStream out = new FileOutputStream(outputFile)) {
                     for (int c = input.read(); c != -1; c = input.read()) {

@@ -52,8 +52,7 @@ public class DisplayEvent extends Event {
 
         DisplayEvent that = (DisplayEvent) o;
 
-        if (ticks != that.ticks) return false;
-        return message.equals(that.message);
+        return ticks == that.ticks && message.equals(that.message);
     }
 
     @Override

@@ -4,8 +4,6 @@ import game.model.Game;
 import game.model.Player;
 import game.model.Statistics;
 import network.Session;
-import network.WebSocketHandler;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -26,8 +24,6 @@ public class EndEvent extends Event {
     public void execute(Session session, Game game) {
         if (endType.equals("finish")) {
             Statistics stats = game.buildStatistics();
-
-            WebSocketHandler.addStatistics(stats);
 
             session.sendMessage(
                     new JSONObject()

@@ -13,7 +13,7 @@ public class Player {
     private final Point spawnPoint;
     private final Keys keys;
 
-    public Player(char playerChar, Point playerPosition) {
+    private Player(char playerChar, Point playerPosition) {
         this.playerChar = playerChar;
         this.playerPosition = new Point();
         this.playerPosition.setLocation(playerPosition);
@@ -55,15 +55,7 @@ public class Player {
         this.keys.setKey(key);
     }
 
-    public Player copy() {
-        return new Player(this.playerChar, new Point(this.playerPosition));
-    }
-
-    public boolean isOnSpawnPoint() {
-        return playerPosition.getX() == spawnPoint.getX() && playerPosition.getY() == spawnPoint.getY();
-    }
-
-    public boolean isChanged() {
+    public boolean isNotOnSpawnPoint() {
         return !playerPosition.equals(spawnPoint);
     }
 
@@ -73,5 +65,23 @@ public class Player {
 
     public void savePosition() {
         this.lastTickPosition.setLocation(this.playerPosition);
+    }
+
+    public static class Builder {
+        private final char playerChar;
+        private final Point playerPosition;
+
+        public Builder(char playerChar, Point playerPosition) {
+            this.playerChar = playerChar;
+            this.playerPosition = playerPosition;
+        }
+
+        public Player build() {
+            return new Player(playerChar, playerPosition);
+        }
+
+        char getPlayerChar() {
+            return playerChar;
+        }
     }
 }

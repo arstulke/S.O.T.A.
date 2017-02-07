@@ -4,7 +4,6 @@ import application.Application;
 import game.handler.DefaultGameHandler;
 import game.handler.GameHandler;
 import game.model.Game;
-import game.model.Statistics;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
@@ -12,16 +11,18 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.util.*;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created network.WebSocketHandler.java in PACKAGE_NAME
  * by Arne on 11.01.2017.
  */
+@SuppressWarnings("unused")
 @WebSocket
 public class WebSocketHandler {
-    private static List<Statistics> statistics = new ArrayList<>();
     private final Map<Session, Game> games = new HashMap<>();
 
     private GameHandler gameHandler;
@@ -38,9 +39,7 @@ public class WebSocketHandler {
 
         Session session = new Session(webSocketSession);
         if (!games.containsKey(session)) {
-            String map = session.getQueryParam("map");
-
-            games.put(session, Application.gameloader.getInstance(map));
+            games.put(session, Application.gameloader.getInstance(session.getMap()));
             onConnect(session.getSession());
         } else {
             Game initGame = games.get(session);
@@ -115,9 +114,5 @@ public class WebSocketHandler {
         if (gameHandler == null) {
             gameHandler = new DefaultGameHandler();
         }
-    }
-
-    public synchronized static void addStatistics(Statistics statistics) {
-        WebSocketHandler.statistics.add(statistics);
     }
 }

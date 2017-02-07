@@ -4,7 +4,6 @@ package game.handler;
 import game.model.Block;
 import game.model.Game;
 import game.model.Keys;
-import game.util.Properties;
 import network.Session;
 import org.json.JSONObject;
 
@@ -16,8 +15,6 @@ import java.awt.*;
  */
 public class DefaultGameHandler implements GameHandler {
 
-    private Properties properties;
-
     private boolean updated;
     private Session session;
     private Game game;
@@ -26,11 +23,6 @@ public class DefaultGameHandler implements GameHandler {
     private Block above;
     private Block below;
     private Block actual;
-
-
-    public DefaultGameHandler() {
-        this.properties = new Properties();
-    }
 
     @Override
     public boolean update(Session session, Game game) {
@@ -106,29 +98,27 @@ public class DefaultGameHandler implements GameHandler {
         //endregion
 
         //region AutoJump
-        if (properties.isAutoJumpEnabled()) {
-            if ((keys.onlyLeft() || keys.onlyRight()) && !keys.up() && !keys.down() && !game.isJumping() && !game.isAutoJumping() && game.isPlayerOnSolidGround()) {
-                Block blockToMove = game.getBlock(keys.onlyLeft() ? -1 : 1, 0);
-                Block aboveBlockToMove = game.getBlock(keys.onlyLeft() ? -1 : 1, -1);
-                if (blockToMove.isSolid() && !aboveBlockToMove.isSolid()) {
-                    beginAutoJump();
-                }
+        if ((keys.onlyLeft() || keys.onlyRight()) && !keys.up() && !keys.down() && !game.isJumping() && !game.isAutoJumping() && game.isPlayerOnSolidGround()) {
+            Block blockToMove = game.getBlock(keys.onlyLeft() ? -1 : 1, 0);
+            Block aboveBlockToMove = game.getBlock(keys.onlyLeft() ? -1 : 1, -1);
+            if (blockToMove.isSolid() && !aboveBlockToMove.isSolid()) {
+                beginAutoJump();
+            }
+        }
+
+        if (game.isAutoJumping()) {
+            int tick = game.getData().getJSONObject("autoJump").getInt("tick");
+
+            if (tick == 1) {
+                move(0, -1);
+            } else if (tick == 2) {
+                move(game.getData().getJSONObject("autoJump").getInt("direction"), 0);
             }
 
-            if (game.isAutoJumping()) {
-                int tick = game.getData().getJSONObject("autoJump").getInt("tick");
-
-                if (tick == 1) {
-                    move(0, -1);
-                } else if (tick == 2) {
-                    move(game.getData().getJSONObject("autoJump").getInt("direction"), 0);
-                }
-
-                if (tick == 2) {
-                    game.getData().put("autoJumping", false);
-                }
-                game.getData().getJSONObject("autoJump").put("tick", tick + 1);
+            if (tick == 2) {
+                game.getData().put("autoJumping", false);
             }
+            game.getData().getJSONObject("autoJump").put("tick", tick + 1);
         }
         //endregion
 
@@ -224,6 +214,6 @@ public class DefaultGameHandler implements GameHandler {
     private boolean checkDie() {
         Block below = game.getBlockBelow();
         Block actual = game.getActualBlock();
-        return below != null && below.getChar() == '^' && !actual.hasSolidGround();
+        return below != null && below.getChar() == '^' && !actual.hasSolidGround() && game.getPlayer().isNotOnSpawnPoint();
     }
 }

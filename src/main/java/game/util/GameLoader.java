@@ -1,5 +1,7 @@
 package game.util;
 
+import application.Application;
+import game.CoordinateMap;
 import game.model.Block;
 import game.model.Game;
 import game.model.Player;
@@ -13,28 +15,27 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Created GameLoader.java in game
  * by Arne on 11.01.2017.
  */
 public class GameLoader {
-    private final Map<String, GameBuilder> gameBuilders = new HashMap<>();
+    private final Map<String, Game.Builder> gameBuilders = new HashMap<>();
+    private final ApplicationProperties properties = new ApplicationProperties();
 
     private void loadMap(String fileContent, String token) {
         String title = null;
         char playerChar = 'X';
         Point playerPosition = null;
-        Map<Point, Block> blocks = new HashMap<>();
-        Map<Point, List<Event>> events = new HashMap<>();
-        Map<String, String> conditions = new HashMap<>();
+        CoordinateMap.Builder<Block> blocks = new CoordinateMap.Builder<>();
+        CoordinateMap.Builder<List<Event>> events = new CoordinateMap.Builder<>();
         Set<String> resources = new HashSet<>();
-        GameRenderer gameRenderer = GameRenderer.getDefault();
+        GameRenderer.Builder gameRenderer = GameRenderer.Builder.getDefault();
 
         {
             int width = 0, y = 0, lineNumber = 0;
@@ -57,15 +58,15 @@ public class GameLoader {
                             if (line.charAt(x) == playerChar) {
                                 playerPosition = new Point();
                                 playerPosition.setLocation(p);
-                                blocks.put(p, Block.build(' '));
+                                blocks.put(p, new Block.Builder().build(' '));
                             } else {
-                                blocks.put(p, Block.build(line.charAt(x)));
+                                blocks.put(p, new Block.Builder().build(line.charAt(x)));
                             }
                         }
                         if (line.length() < width) {
                             for (int x = line.length(); x < width; x++) {
                                 Point p = new Point(x, y);
-                                blocks.put(p, Block.build(' '));
+                                blocks.put(p, new Block.Builder().build(' '));
                             }
                         }
 
@@ -88,9 +89,6 @@ public class GameLoader {
                         gameRenderer.setBackgroundColor(line.substring("background:".length()));
                     } else if (line.startsWith("foreground:")) {
                         gameRenderer.setForegroundColor(line.substring("foreground:".length()));
-                    } else if (line.startsWith("* condition")) {
-                        Map.Entry<String, String> condition = EventBuilder.buildCondition(line);
-                        conditions.put(condition.getKey(), condition.getValue());
                     }
                     lineNumber += 1;
                 } catch (Exception e) {
@@ -106,26 +104,16 @@ public class GameLoader {
         }
 
         String key = token == null ? title : token;
-        gameBuilders.put(key, new GameBuilder(new Player(playerChar, playerPosition), blocks, events, gameRenderer, conditions, title, resources));
+        gameBuilders.put(key, new Game.Builder(new Player.Builder(playerChar, playerPosition), blocks, events, gameRenderer, title, resources));
     }
 
     public Game getInstance(String title) {
         return gameBuilders.get(title).build();
     }
 
-    public Set<String> getResources(String map, String mode) {
-        Set<String> resources = gameBuilders.get(map).getResources();
-        if (mode != null && mode.equals("textures")) {
-            resources.addAll(gameBuilders.get(map).getTextures(map));
-            resources.add("/error.png");
-        }
-        return resources;
-    }
-
-    public void reload(boolean log, boolean loadUnverified) {
+    public void reload(boolean log) {
         gameBuilders.clear();
-        getMaps(true)
-                .stream()
+        getMaps(properties.getVerifiedMapsPath())
                 .map(file -> {
                     try {
                         return new Reader(new FileReader(file.getAbsolutePath())).read();
@@ -133,19 +121,18 @@ public class GameLoader {
                         throw new RuntimeException(e);
                     }
                 }).forEach(map -> loadMap(map, null));
-        if (loadUnverified) {
-            getMaps(false)
-                    .stream()
-                    .map(file -> {
-                        try {
-                            HashMap<String, String> tmp = new HashMap<>();
-                            tmp.put(new Reader(new FileReader(file.getAbsolutePath())).read(), new File(file.getParent()).getName());
-                            return new ArrayList<>(tmp.entrySet()).get(0);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }).forEach(entry -> loadMap(entry.getKey(), entry.getValue()));
-        }
+
+        getMaps(properties.getUnverifiedMapsPath())
+                .map(file -> {
+                    try {
+                        HashMap<String, String> tmp = new HashMap<>();
+                        tmp.put(new Reader(new FileReader(file.getAbsolutePath())).read(), new File(file.getParent()).getName());
+                        return new ArrayList<>(tmp.entrySet()).get(0);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).forEach(entry -> loadMap(entry.getKey(), entry.getValue()));
+
 
         if (log) {
             Log.getLogger(getClass()).info("Reloading Maps.");
@@ -153,56 +140,35 @@ public class GameLoader {
         }
     }
 
-    public JSONArray loadInstances(boolean verified, boolean unverified) {
+    public JSONArray loadInstances() {
         JSONArray arr = new JSONArray();
-        gameBuilders.keySet().stream().filter(s -> {
-            if(verified && unverified) return true;
-
-            boolean statusVerified = gameBuilders.get(s).getTitle().equals(s);
-            if(verified && statusVerified) return true;
-            if(unverified && !statusVerified) return true;
-
-            return false;
-        }).forEach(title -> arr.put(arr.length(), new JSONObject().put("name", title.replace("_", " ")).put("id", title)));
+        gameBuilders.keySet().stream()
+                .filter(s -> gameBuilders.get(s).getTitle().equals(s))
+                .forEach(title -> arr.put(arr.length(), new JSONObject().put("name", title.replace("_", " ")).put("id", title)));
         return arr;
     }
 
-    private Map<String, GameBuilder> getInstances() {
+    private Map<String, Game.Builder> getInstances() {
         return gameBuilders;
     }
 
-    public GameBuilder validateMap(String content) throws IOException {
+    public Game.Builder validateMap(String content) {
         loadMap(content, null);
         String title = new ArrayList<>(gameBuilders.entrySet()).get(0).getKey();
 
-        GameLoader reader = new GameLoader();
-        reader.reload(false, false);
-        if (reader.getInstances().containsKey(title)) {
+        if (Application.gameloader.getInstances().containsKey(title)) {
             throw new RuntimeException("This title is used already.");
         }
         return gameBuilders.get(title);
     }
 
-    private Set<File> getMaps(boolean b) {
-        File mapDirectory = new File(System.getProperty("user.dir") + (b ? "/maps/" : "/unverifiedMaps/"));
-        if (mapDirectory.exists()) {
-            Set<File> files = new HashSet<>();
-
-            for (File mapDir : mapDirectory.listFiles()) {
-                File mapFile = Paths.get(mapDir.toURI()).resolve("map.txt").toFile();
-                if (mapFile.exists()) {
-                    files.add(mapFile);
-                }
-            }
-
-            return files;
-        } else {
-            mapDirectory.mkdir();
-        }
-        return new HashSet<>();
+    private Stream<File> getMaps(Path path) {
+        return Utils.listPaths(path).stream()
+                .map(mapDir -> mapDir.resolve("map.txt").toFile())
+                .filter(File::exists);
     }
 
-    public GameBuilder getBuilder(String key) {
+    public Game.Builder getBuilder(String key) {
         return gameBuilders.get(key);
     }
 
