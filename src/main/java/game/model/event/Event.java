@@ -34,15 +34,31 @@ public abstract class Event {
         return repeatable;
     }
 
-    public class Type {
-        public static final String CHECKPOINT = "checkpoint";
-        public static final String TELEPORT = "teleport";
-        public static final String DISPLAY = "display";
-        public static final String END = "end";
-        public static final String STYLE = "style";
-        public static final String SET_BLOCK = "setblock";
-        public static final String EXECUTE_CONDITION = "if_condition";
-        public static final String SET_CONDITION = "set_condition";
+    public enum Type {
+        CHECKPOINT("checkpoint"),
+        TELEPORT("teleport"),
+        DISPLAY("display"),
+        END("end"),
+        STYLE("style"),
+        SET_BLOCK("setblock"),
+        EXECUTE_CONDITION("if_condition"),
+        SET_CONDITION("set_condition");
+
+        private final String name;
+
+        Type(String name) {
+            this.name = name;
+        }
+
+        public static Type find(String s) {
+            for (Type type : Type.values()) {
+                if (type.name.equals(s)) {
+                    return type;
+                }
+            }
+
+            return null;
+        }
     }
 
     @Override

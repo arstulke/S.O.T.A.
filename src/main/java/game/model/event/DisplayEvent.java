@@ -2,6 +2,7 @@ package game.model.event;
 
 import game.model.Game;
 import game.util.EventBuilder;
+import game.util.TimeConverter;
 import network.Session;
 import org.json.JSONObject;
 
@@ -20,12 +21,12 @@ public class DisplayEvent extends Event {
      * <p>
      * @param triggerPoints the Points in which this Event would be triggered.
      * @param message the Message that should be printed when the player passes one of the TriggerPoints.
-     * @param ticks the Time in MS the message should be displayed.
+     * @param ms the Time in MS the message should be displayed.
      * */
-    public DisplayEvent(Set<Point> triggerPoints, boolean repeatable, String message, int ticks) {
+    public DisplayEvent(Set<Point> triggerPoints, boolean repeatable, String message, int ms) {
         super(triggerPoints, repeatable);
         this.message = message.replaceAll("\\\\n", "\n");
-        this.ticks = ticks / 10;
+        this.ticks = TimeConverter.toTicks(ms);
     }
 
     public DisplayEvent(Rectangle triggerArea, boolean repeatable, String message, int ticks) {
