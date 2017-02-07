@@ -26,11 +26,12 @@ public class Game implements Cloneable {
     private final CoordinateMap<Block> blockMap;
     private final CoordinateMap<List<Event>> eventMap;
     private final Player player;
-    private final GameRenderer gameRenderer;
 
+    private final GameRenderer gameRenderer;
     private final GameRenderer lastGameRenderer;
 
     private final JSONObject data;
+    private final Set<Event> eventQueue = new HashSet<>();
 
     private final int mapWidth;
     private final int mapHeight;
@@ -127,9 +128,10 @@ public class Game implements Cloneable {
         return conditions.get(conditionName);
     }
 
-    public void setCondition(String name, String value) {
+    public boolean setCondition(String name, String value) {
         changedConditions.put(name, conditions.get(name));
         conditions.put(name, value);
+        return true;
     }
 
     public void respawn(Session session) {
@@ -200,21 +202,29 @@ public class Game implements Cloneable {
         return new Statistics(tickCounter.intValue(), failCounter.intValue());
     }
 
+    public Set<Event> getEventQueue() {
+        return eventQueue;
+    }
+
     public static class Builder {
         private String title;
+        private final String token;
         private final Player.Builder playerBuilder;
         private final CoordinateMap.Builder<Block> blocks;
         private final CoordinateMap.Builder<List<Event>> events;
         private final GameRenderer.Builder gameRenderer;
         private final Set<String> resources;
+        private final boolean verified;
         private boolean textures = true;
 
-        public Builder(Player.Builder playerBuilder, CoordinateMap.Builder<Block> blocks, CoordinateMap.Builder<List<Event>> events, GameRenderer.Builder gameRenderer, String title, Set<String> resources) {
+        public Builder(Player.Builder playerBuilder, CoordinateMap.Builder<Block> blocks, CoordinateMap.Builder<List<Event>> events, GameRenderer.Builder gameRenderer, String title, String token, Set<String> resources) {
             this.playerBuilder = playerBuilder;
             this.blocks = blocks;
             this.events = events;
             this.gameRenderer = gameRenderer;
             this.title = title;
+            this.token = token;
+            this.verified = title.equals(token);
             this.resources = resources;
         }
 
@@ -232,6 +242,7 @@ public class Game implements Cloneable {
 
         public Set<String> getResources(String mode) {
             Set<String> resources = new HashSet<>(this.resources);
+            resources.addAll(gameRenderer.getResources());
             if (mode != null && mode.equals("textures")) {
                 if (textures) {
                     resources.addAll(getTextures());
@@ -281,6 +292,10 @@ public class Game implements Cloneable {
             textures.add(function.apply(playerBuilder.getPlayerChar()));
 
             return textures;
+        }
+
+        public String getKey() {
+            return verified ? title : token;
         }
     }
 }

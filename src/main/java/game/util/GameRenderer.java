@@ -4,6 +4,8 @@ import game.model.Block;
 import game.model.Game;
 
 import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created GameRenderer.java in game
@@ -127,6 +129,15 @@ public class GameRenderer {
 
         public GameRenderer build() {
             return new GameRenderer(backgroundColor, foregroundColor);
+        }
+
+        public Set<String> getResources() {
+            Set<String> set = new HashSet<>();
+            if (!backgroundColor.startsWith("#")) {
+                set.add(backgroundColor);
+            }
+
+            return set;
         }
     }
 }

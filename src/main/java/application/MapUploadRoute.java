@@ -2,10 +2,9 @@ package application;
 
 import game.model.Game;
 import game.util.ApplicationProperties;
+import game.util.FileUtils;
 import game.util.GameLoader;
 import game.util.Reader;
-import game.util.Utils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.jetty.util.log.Log;
 import spark.Request;
@@ -45,7 +44,7 @@ class MapUploadRoute implements Route {
             return "Successfully uploaded map";
         } catch (Exception e) {
             File directory = properties.getUnverifiedMapsPath().resolve(mapToken).toFile();
-            FileUtils.deleteDirectory(directory);
+            org.apache.commons.io.FileUtils.deleteDirectory(directory);
             return e.getMessage();
         }
     }
@@ -63,7 +62,7 @@ class MapUploadRoute implements Route {
     private void validateMap(String mapToken) throws IOException {
         Path path = properties.getUnverifiedMapsPath().resolve(mapToken + "/");
 
-        List<File> textFiles = Utils.listFiles(path, (dir, name) -> name.endsWith(".txt"));
+        List<File> textFiles = FileUtils.listFiles(path, (dir, name) -> name.endsWith(".txt"));
         if (textFiles.size() > 1) {
             throw new RuntimeException("Only one .txt file is allowed in the uploaded .zip file.");
         } else if (textFiles.size() == 0) {
@@ -76,9 +75,7 @@ class MapUploadRoute implements Route {
                 file = newFile;
             }
 
-            GameLoader reader = new GameLoader();
-            Game.Builder builder = reader.validateMap(new Reader(new FileReader(file)).read());
-
+            Game.Builder builder = GameLoader.validateMap(new Reader(new FileReader(file)).read());
             Log.getLogger(getClass()).info("A new Map has been successfully uploaded (token: \"" + mapToken + "\", title: \"" + builder.getTitle() + "\").");
             Application.reload(false);
         }

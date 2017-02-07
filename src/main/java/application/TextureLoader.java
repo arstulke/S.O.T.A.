@@ -1,7 +1,7 @@
 package application;
 
 import game.util.ApplicationProperties;
-import game.util.Utils;
+import game.util.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -31,8 +31,8 @@ class TextureLoader {
         textures.clear();
 
         Set<File> mapDirectories = new HashSet<>();
-        mapDirectories.addAll(Utils.listFiles(properties.getVerifiedMapsPath()));
-        mapDirectories.addAll(Utils.listFiles(properties.getUnverifiedMapsPath()));
+        mapDirectories.addAll(FileUtils.listFiles(properties.getVerifiedMapsPath()));
+        mapDirectories.addAll(FileUtils.listFiles(properties.getUnverifiedMapsPath()));
 
         mapDirectories.forEach(this::loadMap);
     }
@@ -42,7 +42,7 @@ class TextureLoader {
 
         if (mapDirectory.toPath().resolve("textures").toFile().exists()) {
             Set<File> textures = new HashSet<>();
-            textures.addAll(Utils.listFiles(mapDirectory.toPath().resolve("textures"), (dir, name) -> name.endsWith(".png")));
+            textures.addAll(FileUtils.listFiles(mapDirectory.toPath().resolve("textures"), (dir, name) -> name.endsWith(".png")));
 
             textures.forEach(textureFile -> loadTexture(mapKey, textureFile));
         } else {

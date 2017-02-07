@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -28,7 +29,7 @@ public class GameLoader {
     private final Map<String, Game.Builder> gameBuilders = new HashMap<>();
     private final ApplicationProperties properties = new ApplicationProperties();
 
-    private void loadMap(String fileContent, String token) {
+    private static Game.Builder loadMap(String fileContent, String key) {
         String title = null;
         char playerChar = 'X';
         Point playerPosition = null;
@@ -58,15 +59,15 @@ public class GameLoader {
                             if (line.charAt(x) == playerChar) {
                                 playerPosition = new Point();
                                 playerPosition.setLocation(p);
-                                blocks.put(p, new Block.Builder().build(' '));
+                                blocks.put(p, Block.Builder.build(' '));
                             } else {
-                                blocks.put(p, new Block.Builder().build(line.charAt(x)));
+                                blocks.put(p, Block.Builder.build(line.charAt(x)));
                             }
                         }
                         if (line.length() < width) {
                             for (int x = line.length(); x < width; x++) {
                                 Point p = new Point(x, y);
-                                blocks.put(p, new Block.Builder().build(' '));
+                                blocks.put(p, Block.Builder.build(' '));
                             }
                         }
 
@@ -103,8 +104,7 @@ public class GameLoader {
             throw new RuntimeException("You have to set the title (\"title:example_map\")");
         }
 
-        String key = token == null ? title : token;
-        gameBuilders.put(key, new Game.Builder(new Player.Builder(playerChar, playerPosition), blocks, events, gameRenderer, title, resources));
+        return new Game.Builder(new Player.Builder(playerChar, playerPosition), blocks, events, gameRenderer, title, key, resources);
     }
 
     public Game getInstance(String title) {
@@ -113,26 +113,20 @@ public class GameLoader {
 
     public void reload(boolean log) {
         gameBuilders.clear();
-        getMaps(properties.getVerifiedMapsPath())
-                .map(file -> {
-                    try {
-                        return new Reader(new FileReader(file.getAbsolutePath())).read();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).forEach(map -> loadMap(map, null));
 
-        getMaps(properties.getUnverifiedMapsPath())
-                .map(file -> {
-                    try {
-                        HashMap<String, String> tmp = new HashMap<>();
-                        tmp.put(new Reader(new FileReader(file.getAbsolutePath())).read(), new File(file.getParent()).getName());
-                        return new ArrayList<>(tmp.entrySet()).get(0);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).forEach(entry -> loadMap(entry.getKey(), entry.getValue()));
+        Consumer<File> fileConsumer = file -> {
+            try {
+                String content = new Reader(new FileReader(file.getAbsolutePath())).read();
+                String title = new File(file.getParent()).getName();
 
+                Game.Builder builder = loadMap(content, title);
+                gameBuilders.put(builder.getKey(), builder);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        };
+        getMaps(properties.getUnverifiedMapsPath()).forEach(fileConsumer);
+        getMaps(properties.getVerifiedMapsPath()).forEach(fileConsumer);
 
         if (log) {
             Log.getLogger(getClass()).info("Reloading Maps.");
@@ -152,18 +146,16 @@ public class GameLoader {
         return gameBuilders;
     }
 
-    public Game.Builder validateMap(String content) {
-        loadMap(content, null);
-        String title = new ArrayList<>(gameBuilders.entrySet()).get(0).getKey();
-
-        if (Application.gameloader.getInstances().containsKey(title)) {
+    public static Game.Builder validateMap(String content) {
+        Game.Builder builder = loadMap(content, null);
+        if (Application.gameloader.getInstances().containsKey(builder.getTitle())) {
             throw new RuntimeException("This title is used already.");
         }
-        return gameBuilders.get(title);
+        return builder;
     }
 
     private Stream<File> getMaps(Path path) {
-        return Utils.listPaths(path).stream()
+        return FileUtils.listPaths(path).stream()
                 .map(mapDir -> mapDir.resolve("map.txt").toFile())
                 .filter(File::exists);
     }
