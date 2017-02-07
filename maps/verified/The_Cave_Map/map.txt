@@ -8,18 +8,18 @@ foreground:#ffffff
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Eine Zeile der Map beginnt immer mit einem ":",
 # danach können beliebige Zeichen des deutschen Alphebetes benutzt werden.
-:
-:
-:_______
-:_______\    ___            ___                  ___                      b
-:       |   //i\\          //i\\                //i\\                   TTTT        ________TTT
-:       |     i              i          b         i                     IIII       /________III
-: X     i     i     b        i       TTTT         i    b                IIII       |        III
-:TTTTTTTTTTTTTTTTTTETTTTTTTTTTTTTTTTTIIIOTTTTTT  TTT  TTTT   TTTT    TTTIIII       |                                                      TTTT
-:IOIIIIOIIIIIIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIII^^III^^IIII^^^IIII    IIIIIII       i        TTT                                           IIII
-:IIOIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII    IIIOIII  ####TTTTTTTTTTIII          b                  b           ^^IIII
+:                                                                                                      b      b             b          b
+:                                                                                                DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+:_______     BBB            BBB                  BBB                                            DGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+:_______\   BBBBB          BBBBB                BBBBB                     b                 b DDGGTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+:       |   BBBBB          BBBBB                BBBBB                   DDDD        ________DDGGTTTTTTTT            VNV           TTTTTTTTTTTT
+:       |     i              i          b         i                     GGGG       /________IGITTT   V               V            v  TTTTTTTTT
+: X     i     i     b        i       DDDD         i    b                GIIG       |        III                                        TTTTTTT
+:HHHHHHHHDDDDDDDDDDDDDDDDDDDDDDDDDDDDGGGGDDDDDD  DDD  DDDD   DDDD    DDDGIIG       |        omz                                           TTTT
+:TTTTTTTTTGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGI^^IGI^^IGGI^^^IGGI    IIIIGII       i    u u TTT                                           IIII
+:IIOIIIIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII    IIIOIII  #ZZZTHHHHHHHHHIII          b                  b           ^^IIII
 :IIIII          VNv  v    v    vIII     V   vv        V    v         IIIIIII  #   IIIIIIIIIIIIITTTTTTTTTTTTTTTTTTTT   TTTTTTTTTTTTTTTTTTTTIIII
-:III             V              v                                    IIIIIII  #   IIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIII   IIIIIIIIIIIIIIIIIIIIIIII
+:III             V              v                                    IGIIIII  #   IIIIIIIIIOIIIIIIIIIIIIIIIIIIIIIII   IIIIIIIIIIIIIIIIIIIIIIII
 :II             *               *                   *                IIIIIII  #   IIIIOIIIIIIIIIIOIIIIIIIIOIIIIIIII   IIIIIIIOIIIIIIIIIIIIIIII
 :II                  *                        #                  TTTTIIIIIII  #   IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII   IIIIIIIIIIIIIIIIIIIIIIII
 :IIT                                    *                   TTTTTIIIIIOIIIII  #   IIIIIIIIIIIIIIIIIIIII   Vv              v  V    IIIIIIIIIIII
