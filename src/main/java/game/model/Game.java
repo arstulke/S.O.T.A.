@@ -264,6 +264,8 @@ public class Game implements Cloneable {
                 }
 
                 ch = ch
+                        .replace(",", "comma")
+                        .replace(".", "dot")
                         .replace("/", "slash")
                         .replace("\\", "backslash")
                         .replace(":", "double")

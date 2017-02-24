@@ -192,6 +192,8 @@ function startGame(mapID) {
     function showImageByChar(char, x, y) {
         var replacements = {};
         replacements["/"] = "slash";
+        replacements["."] = "dot";
+        replacements[","] = "comma";
         replacements["\\"] = "backslash";
         replacements[":"] = "double";
         replacements["*"] = "star";
