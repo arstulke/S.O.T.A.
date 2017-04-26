@@ -1,41 +1,55 @@
 <html>
 <head>
     <title>S.O.T.A.</title>
-    <style>
-    html {
-        //background: url(images/bg.jpg) no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-        height: 100%;
-    }
-    body {
-        height: 100%;
-        //overflow: hidden;
-    }
-    ul {
-        list-style-type: none;
-    }
-
-    </style>
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
 </head>
-<body background="#ff0000">
-<ul id="map-list"></ul>
-<div id="game-content" style="width: 100%; display: none;">
-    <div style="display: table; float:left; width : 80%; ">
-        <pre id="output" style="border-style: solid; border-width: 5px;">
-        </pre>
-    </div>
-    <div style="display: table; float:left; width : 20%; ">
-        <input id="slider" type="range" min="20" max="100" value="20" style="width:100%"
-               onchange="updateSlider(this.value, false)" oninput="updateSlider(this.value), true"/>
-        <div style="display: table; float:top; width : 100%; ">
-            <pre id="right-cornor" style="margin-top: 0px; float: right; vertical-align: top;"></pre>
+<body style="background: #fff000">
+<div id="map-selection">
+    <div class="container">
+        <div class="row" style="margin-top: 50px">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Maps</div>
+                    <div class="card-block">
+                        <ul id="map-list"></ul>
+                        <input id="map-input" type="text">
+                        <button id="map-input-btn">Start</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
         </div>
-        <center>
-            <ul id="message"></ul>
-        </center>
+    </div>
+</div>
+<div id="game-content" style="display: none; margin-top:30px; margin-left:30px;">
+    <div class="row">
+        <div class="col-md-10">
+            <input id="slider" type="range" min="20" max="100" value="20" style="width: 85%; margin-bottom: 15px;"
+                   onchange="updateSlider(this.value, false)" oninput="updateSlider(this.value, true)"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="card">
+            <div class="card-header">
+                <div id="right-corner" class="float-right"></div>
+            </div>
+            <div class="card-block">
+                <pre id="output" style="border: 5px solid;"></pre>
+            </div>
+        </div>
+        <div id="message-container" class="col-md-4" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    Messages
+                </div>
+                <div class="card-block">
+                    <ul id="message"></ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

@@ -1,4 +1,4 @@
-package game.model.event;
+package game.event;
 
 import game.model.Game;
 import network.Session;
@@ -6,7 +6,7 @@ import network.Session;
 import java.awt.*;
 
 /**
- * Created CheckpointEvent.java in game.model.event
+ * Created CheckpointEvent.java in event.event
  * by Arne on 11.01.2017.
  */
 public class CheckpointEvent extends Event {

@@ -5,7 +5,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created ResourceRoute in application
@@ -17,7 +17,7 @@ class ResourceRoute implements Route {
         String map = request.queryMap("map").value();
         String mode = request.queryMap("mode").value();
 
-        Set<String> resources = Application.gameloader.getBuilder(map).getResources(mode);
+        List<String> resources = Application.gameloader.getBuilder(map).getResources(mode);
 
         JSONArray arr = new JSONArray();
         resources.forEach(s -> arr.put(arr.length(), s));

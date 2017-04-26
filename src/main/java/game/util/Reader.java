@@ -17,12 +17,13 @@ public class Reader {
 
 
     public String read() throws IOException {
-        String content = "", line;
+        StringBuilder content = new StringBuilder();
+        String line;
         BufferedReader br = new BufferedReader(inputStream);
         while ((line = br.readLine()) != null) {
-            content += line + "\n";
+            content.append(line).append("\n");
         }
         br.close();
-        return content;
+        return content.toString();
     }
 }

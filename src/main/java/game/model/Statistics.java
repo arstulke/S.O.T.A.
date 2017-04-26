@@ -4,6 +4,7 @@ package game.model;
  * Created Statistics.java in game.model
  * by Arne on 13.01.2017.
  */
+@SuppressWarnings("SimplifiableIfStatement")
 public class Statistics {
     private final int ticks;
     private final int fails;

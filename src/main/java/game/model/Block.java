@@ -4,6 +4,7 @@ package game.model;
  * Created Block.java in game.model
  * by Arne on 11.01.2017.
  */
+@SuppressWarnings("SimplifiableIfStatement")
 public class Block {
     private final char ch;
     private final double horizontalSlowDown;
@@ -77,6 +78,7 @@ public class Block {
     }
 
     public static class Builder {
+        @SuppressWarnings("SpellCheckingInspection")
         public static Block build(char c) {
             String nonSolidChars = "abcdefghijklmnopqrstuvwxyz#*_äöü .,'`´";
             String semiSolidGroundChars = "#_";

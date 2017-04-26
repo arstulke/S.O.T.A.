@@ -2,11 +2,11 @@ package game.util;
 
 import application.Application;
 import game.CoordinateMap;
+import game.event.Event;
+import game.event.StyleEvent;
 import game.model.Block;
 import game.model.Game;
 import game.model.Player;
-import game.model.event.Event;
-import game.model.event.StyleEvent;
 import org.eclipse.jetty.util.log.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,9 +37,9 @@ public class GameLoader {
         CoordinateMap.Builder<List<Event>> events = new CoordinateMap.Builder<>();
         Set<String> resources = new HashSet<>();
         GameRenderer.Builder gameRenderer = GameRenderer.Builder.getDefault();
-
+        int width = 0;
         {
-            int width = 0, y = 0, lineNumber = 0;
+            int y = 0, lineNumber = 0;
 
             String[] lines = fileContent.split("\n");
             for (String line : lines) {
@@ -98,7 +98,9 @@ public class GameLoader {
             }
         }
 
-        if (playerPosition == null) {
+        if (width == 0) {
+            throw new RuntimeException("You have to set a line with \"-\" to set the width of the map.");
+        } else if (playerPosition == null) {
             throw new RuntimeException("You have to set the spawn position of the player with the player char (yours: \"" + playerChar + "\").");
         } else if (title == null) {
             throw new RuntimeException("You have to set the title (\"title:example_map\")");

@@ -11,6 +11,7 @@ import java.util.Set;
  * Created GameRenderer.java in game
  * by Arne on 11.01.2017.
  */
+@SuppressWarnings("SimplifiableIfStatement")
 public class GameRenderer {
     private final int width;
     private final int height;
@@ -35,7 +36,7 @@ public class GameRenderer {
     }
 
     public String render(Game game) {
-        String out = "";
+        StringBuilder out = new StringBuilder();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Point position = game.getPlayer().getPosition();
@@ -57,13 +58,13 @@ public class GameRenderer {
                         ch = '-';
                     }
                 }
-                out += ch;
+                out.append(ch);
             }
-            out += "\n";
+            out.append("\n");
         }
 
-        out = out.substring(0, out.length() - 1);
-        return out;
+        out = new StringBuilder(out.substring(0, out.length() - 1));
+        return out.toString();
     }
 
     public void setBackgroundColor(String backgroundColor) {

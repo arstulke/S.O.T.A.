@@ -1,4 +1,4 @@
-package game.model.event;
+package game.event;
 
 import game.model.Game;
 import game.model.Player;
@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.awt.*;
 
 /**
- * Created EndEvent.java in game.model.event
+ * Created EndEvent.java in event.event
  * by Arne on 11.01.2017.
  */
 public class EndEvent extends Event {
@@ -38,8 +38,8 @@ public class EndEvent extends Event {
             String msg1 = "<b>You reached the finish!</b>";
             String msg2 = String.format("Your Statistics:\n Fails:%d\n Time:%s", stats.getFails(), ((double) stats.getTicks()) / 10.0);
 
-            DisplayEvent event1 = new DisplayEvent(this.triggerPoints, false, msg1, 1000);
-            DisplayEvent event2 = new DisplayEvent(this.triggerPoints, false, msg2, 1000);
+            DisplayEvent event1 = new DisplayEvent(this.triggerPoints, false, msg1, 5000);
+            DisplayEvent event2 = new DisplayEvent(this.triggerPoints, false, msg2, 5000);
 
 
             event1.execute(session, game);

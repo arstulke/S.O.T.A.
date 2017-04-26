@@ -53,6 +53,7 @@ public class Application {
                     texture = read(Application.class.getClassLoader().getResourceAsStream("public/error.png"));
                 }
                 write(texture, "png", out);
+            } catch (IOException ignored) {
             }
             return response;
         });

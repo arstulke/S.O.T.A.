@@ -1,4 +1,4 @@
-package game.model.event;
+package game.event;
 
 import game.model.Block;
 import game.model.Game;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 /**
  * SOTA:
- * * game.model.event:
+ * * event.event:
  * * * Created by KAABERT on 19.01.2017.
  */
 public class SetBlockEvent extends Event {
@@ -20,7 +20,7 @@ public class SetBlockEvent extends Event {
 
     public SetBlockEvent(Rectangle triggerArea, boolean repeatable, char block, Rectangle targetArea) {
         super(triggerArea, repeatable);
-        this.block = new Block.Builder().build(block);
+        this.block = Block.Builder.build(block);
         this.targetBlocks = EventBuilder.toPoints(targetArea);
     }
 

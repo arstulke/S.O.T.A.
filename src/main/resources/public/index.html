@@ -3,13 +3,13 @@
 <html lang="de">
 
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
 
-	<title>State of the art</title>
-	<meta name="description" content="State of the art">
-	<meta name="author" content="Aska">
+    <title>State of the art</title>
+    <meta name="description" content="State of the art">
+    <meta name="author" content="Aska">
 
-	<style>
+    <style>
         html {
             background: url(images/bg.png) no-repeat center center fixed;
             -webkit-background-size: cover;
@@ -38,40 +38,40 @@
     </style>
 </head>
 
-<body style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;">
-<img class="logo" src="images/logo.png" width="35%"/>
+<body style="margin: 0;">
+<img class="logo" src="images/logo.png" style="width: 35%"/>
 <div style="width: 100%;">
-	<a href="/texture">
-		<div id="left" style="display: table; float:left; width: 50%; background-Image: url('images/hover.png')">
-			<div style="display:table-cell; vertical-align:middle; text-align:center">
-				<img class="img" src="images/texture.png" width="50%"/>
-			</div>
-		</div>
-	</a>
-	<a href="/classic">
-		<div id="right" style="display: table; float:right; width: 50%; background-Image: url('images/hover.png')">
-			<div style="display:table-cell; vertical-align:middle; text-align:center">
-				<img class="img" src="images/classic.png" width="50%"/>
-			</div>
-		</div>
-	</a>
+    <a href="./texture">
+        <div id="left" style="display: table; float:left; width: 50%; background-Image: url('images/hover.png')">
+            <div style="display:table-cell; vertical-align:middle; text-align:center">
+                <img class="img" src="images/texture.png" style="width: 50%"/>
+            </div>
+        </div>
+    </a>
+    <a href="./classic">
+        <div id="right" style="display: table; float:right; width: 50%; background-Image: url('images/hover.png')">
+            <div style="display:table-cell; vertical-align:middle; text-align:center">
+                <img class="img" src="images/classic.png" style="width: 50%"/>
+            </div>
+        </div>
+    </a>
 </div>
 <div style="clear:both"></div>
 </body>
 <script>
-    document.getElementById("left").onmouseover = function() {
+    document.getElementById("left").onmouseover = function () {
         document.getElementById("right").style.backgroundImage = 'url(images/hover.png) repeat';
         document.getElementById("left").style.background = 'url(images/lhover.png) repeat-y right';
-    }
-    document.getElementById("left").onmouseout = function() {
+    };
+    document.getElementById("left").onmouseout = function () {
         document.getElementById("left").style.background = 'url(images/hover.png) repeat';
-    }
+    };
 
-    document.getElementById("right").onmouseover = function() {
+    document.getElementById("right").onmouseover = function () {
         document.getElementById("left").style.backgroundImage = 'url(images/hover.png) repeat';
         document.getElementById("right").style.background = 'url(images/rhover.png) repeat-y';
-    }
-    document.getElementById("right").onmouseout = function() {
+    };
+    document.getElementById("right").onmouseout = function () {
         document.getElementById("right").style.background = 'url(images/hover.png) repeat';
     }
 

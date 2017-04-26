@@ -1,4 +1,4 @@
-package game.model.event;
+package game.event;
 
 import game.model.Game;
 import network.Session;
@@ -6,7 +6,7 @@ import network.Session;
 import java.awt.*;
 
 /**
- * Created SetConditionEvent in game.model.event
+ * Created SetConditionEvent in event.event
  * by ARSTULKE on 23.01.2017.
  */
 public class SetConditionEvent extends Event {

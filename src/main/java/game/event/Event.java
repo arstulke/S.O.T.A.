@@ -1,4 +1,4 @@
-package game.model.event;
+package game.event;
 
 import game.model.Game;
 import game.util.EventBuilder;
@@ -34,6 +34,7 @@ public abstract class Event {
         return repeatable;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public enum Type {
         CHECKPOINT("checkpoint"),
         TELEPORT("teleport"),

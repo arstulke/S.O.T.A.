@@ -8,8 +8,4 @@ public class TimeConverter {
     public static int toTicks(int ms) {
         return ms / 100;
     }
-
-    public static int toMS(int ticks) {
-        return ticks * 100;
-    }
 }

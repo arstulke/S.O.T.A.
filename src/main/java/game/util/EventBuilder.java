@@ -1,7 +1,7 @@
 package game.util;
 
-import game.model.event.*;
-import game.model.event.Event;
+import game.event.*;
+import game.event.Event;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -104,7 +104,7 @@ public class EventBuilder {
                     String name = parameters.get(0);
                     String expectedValue = parameters.get(1);
 
-                    Event event = buildChainedEvent(null, parameters);
+                    Event event = buildChainedEvent(parameters);
                     return new ExecuteConditionEvent(triggerArea, repeatable, name, expectedValue, event);
                 case SET_CONDITION:
                     name = parameters.get(0);
@@ -115,7 +115,7 @@ public class EventBuilder {
         return null;
     }
 
-    private static Event buildChainedEvent(Rectangle triggerArea, List<String> parameters) {
+    private static Event buildChainedEvent(List<String> parameters) {
         List<String> params;
         boolean newEventRepeatable;
         if (parameters.indexOf("-->") == -1 || (parameters.indexOf("->") < parameters.indexOf("-->") && parameters.indexOf("->") != -1)) {
@@ -127,7 +127,7 @@ public class EventBuilder {
         } else {
             throw new IllegalArgumentException("You have to set an event that should be executed.");
         }
-        return buildThinEvent(triggerArea, newEventRepeatable, params);
+        return buildThinEvent(null, newEventRepeatable, params);
     }
 
     private static List<String> split(String line) {

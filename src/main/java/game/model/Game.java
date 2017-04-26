@@ -1,9 +1,9 @@
 package game.model;
 
 import game.CoordinateMap;
-import game.model.event.CheckpointEvent;
-import game.model.event.Event;
-import game.model.event.StyleEvent;
+import game.event.CheckpointEvent;
+import game.event.Event;
+import game.event.StyleEvent;
 import game.util.GameRenderer;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -31,7 +31,6 @@ public class Game implements Cloneable {
     private final GameRenderer lastGameRenderer;
 
     private final JSONObject data;
-    private final Set<Event> eventQueue = new HashSet<>();
 
     private final int mapWidth;
     private final int mapHeight;
@@ -128,10 +127,9 @@ public class Game implements Cloneable {
         return conditions.get(conditionName);
     }
 
-    public boolean setCondition(String name, String value) {
+    public void setCondition(String name, String value) {
         changedConditions.put(name, conditions.get(name));
         conditions.put(name, value);
-        return true;
     }
 
     public void respawn(Session session) {
@@ -202,12 +200,9 @@ public class Game implements Cloneable {
         return new Statistics(tickCounter.intValue(), failCounter.intValue());
     }
 
-    public Set<Event> getEventQueue() {
-        return eventQueue;
-    }
-
+    @SuppressWarnings("SpellCheckingInspection")
     public static class Builder {
-        private String title;
+        private final String title;
         private final String token;
         private final Player.Builder playerBuilder;
         private final CoordinateMap.Builder<Block> blocks;
@@ -240,8 +235,8 @@ public class Game implements Cloneable {
             this.textures = true;
         }
 
-        public Set<String> getResources(String mode) {
-            Set<String> resources = new HashSet<>(this.resources);
+        public List<String> getResources(String mode) {
+            List<String> resources = new ArrayList<>(this.resources);
             resources.addAll(gameRenderer.getResources());
             if (mode != null && mode.equals("textures")) {
                 if (textures) {
@@ -249,7 +244,7 @@ public class Game implements Cloneable {
                     resources.add("/textures?map=" + title + "&name=stick");
                     resources.add("/textures?map=" + title + "&name=minus");
                 }
-                resources.add("/error.png");
+                resources.add(0, "/error.png");
             }
             return resources;
         }

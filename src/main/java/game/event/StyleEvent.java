@@ -1,4 +1,4 @@
-package game.model.event;
+package game.event;
 
 import game.model.Game;
 import game.util.GameRenderer;
@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created StyleEvent.java in game.model.event
+ * Created StyleEvent.java in event.event
  * by Arne on 13.01.2017.
  */
 public class StyleEvent extends Event {

@@ -1,50 +1,57 @@
-String.prototype.replaceAll = function(regex, replacements) {
+String.prototype.replaceAll = function (regex, replacements) {
     return this.split(regex).join(replacements);
-}
+};
 
 var images = {};
 
 function preLoad(arrayOfImages, mapID) {
     var ready = arrayOfImages.length;
-    $(arrayOfImages).each(function() {
+    console.log(arrayOfImages);
+    $(arrayOfImages).each(function () {
+        var key = this;
         var img = new Image();
         img.src = this;
-        img.onload = function() {
+        img.onload = function () {
             ready += -1;
 
             if (ready === 0) {
                 startGame(mapID);
             }
-        }
-        images[this] = img;
+        };
+        img.onerror = function () {
+            ready += -1;
+            images[key] = null;
+        };
+        images[key] = img;
     });
 }
 
 $.ajax({
     url: "/maps",
-    success: function(response) {
+    success: function (response) {
         for (var i = 0; i < response.length; i++) {
             var item = "<li onclick='initGame(\"" + response[i].id + "\")' style='cursor: pointer;'>" + response[i].name + "</li>";
-            $("#map-list").html($("#map-list").html() + item);
+            var mapList = $("#map-list");
+            mapList.html(mapList.html() + item);
 
-            $("#map-input-btn").click(function(event) {
+            $("#map-input-btn").click(function () {
                 initGame($("#map-input").val());
             });
         }
     }
-})
+});
 
 function initGame(mapID) {
     $.ajax({
         url: "/resources?map=" + mapID + "&mode=textures",
-        success: function(resources) {
+        success: function (resources) {
             preLoad(resources, mapID);
         }
     })
 }
 
 function startGame(mapID) {
-    $("#map-list").css("display", "none");
+    $("#map-selection").css("display", "none");
     $("#game-content").css("display", "block");
 
     var webSocket = new WebSocket('ws://' + window.location["hostname"] + '/game?map=' + mapID);
@@ -53,11 +60,11 @@ function startGame(mapID) {
     var canvas = document.getElementById("myCanvas");
     var canvasContext = canvas.getContext("2d");
 
-    var actualBackground = null;
-    webSocket.onmessage = function(message) {
+
+    webSocket.onmessage = function (message) {
         message = JSON.parse(message.data);
-        if (message.cmd == "OUTPUT") {
-            document.getElementById("right-cornor").innerHTML = "x: " + message.position.x + ", y:" + message.position.y;
+        if (message["cmd"] === "OUTPUT") {
+            document.getElementById("right-corner").innerHTML = "x: " + message.position.x + ", y:" + message.position.y;
 
             canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -66,37 +73,41 @@ function startGame(mapID) {
                 canvasContext.fillStyle = background;
                 canvasContext.fillRect(0, 0, canvas.width, canvas.height);
             } else {
-                canvasContext.drawImage(images[background], 0, 0);
+                var img = images[background];
+                if (img !== null) {
+                    canvasContext.drawImage(img, 0, 0);
+                }
             }
 
-            show(message.msg, message.player_char);
+            show(message["msg"], message["player_char"]);
             updateMessages();
-        } else if (message.cmd == "PING-OUTPUT") {
+        } else if (message["cmd"] === "PING-OUTPUT") {
             updateMessages();
-        } else if (message.cmd == "CLEAR-MESSAGES") {
+        } else if (message["cmd"] === "CLEAR-MESSAGES") {
             messages = [];
             updateMessages();
-        } else if (message.cmd == "MESSAGE") {
-            messages[messages.length] = message.msg;
+        } else if (message["cmd"] === "MESSAGE") {
+            messages[messages.length] = message["msg"];
+
         }
-    }
+    };
 
     function updateMessages() {
         //countdown ticks
-        (function() {
+        (function () {
             for (var i = 0; i < messages.length; i++) {
                 messages[i].ticks = messages[i].ticks - 1;
-                if (messages[i].ticks == 0) {
+                if (messages[i].ticks === 0) {
                     messages[i] = null;
                 }
             }
         })();
 
         //remove expired messages
-        (function() {
-            newMessages = [];
+        (function () {
+            var newMessages = [];
             for (var i = 0; i < messages.length; i++) {
-                if (messages[i] != null) {
+                if (messages[i] !== null) {
                     newMessages[newMessages.length] = messages[i];
                 }
             }
@@ -104,7 +115,7 @@ function startGame(mapID) {
         })();
 
         //build output from messages
-        var output = (function() {
+        var output = (function () {
             var out = "<li>";
             for (var i = 0; i < messages.length; i++) {
                 out += messages[i].text.replaceAll("\n", "<br>") + "</li><li>";
@@ -114,6 +125,13 @@ function startGame(mapID) {
         var messageOutputElement = document.getElementById("message");
         if (messageOutputElement.innerHTML !== output) {
             messageOutputElement.innerHTML = output;
+
+            var messageContainer = document.getElementById("message-container");
+            if (messages.length === 0) {
+                messageContainer.style.display = "none";
+            } else {
+                messageContainer.style.display = "block";
+            }
         }
     }
 
@@ -125,7 +143,7 @@ function startGame(mapID) {
         "respawn": false
     });
     var up = false;
-    window.onkeydown = function(e) {
+    window.onkeydown = function (e) {
         keyManager.changeKeyDown("w", "up", e);
         keyManager.changeKeyDown("ArrowUp", "up", e);
         keyManager.changeKeyDown(" ", "up", e);
@@ -140,8 +158,9 @@ function startGame(mapID) {
         keyManager.changeKeyDown("ArrowDown", "down", e);
 
         keyManager.changeKeyDown("r", "respawn", e);
-    }
-    window.onkeyup = function(e) {
+    };
+
+    window.onkeyup = function (e) {
         keyManager.changeKeyUp("w", "up", e);
         keyManager.changeKeyUp("ArrowUp", "up", e);
         keyManager.changeKeyUp(" ", "up", e);
@@ -156,19 +175,19 @@ function startGame(mapID) {
         keyManager.changeKeyUp("ArrowDown", "down", e);
 
         keyManager.changeKeyUp("r", "respawn", e);
-    }
+    };
 
     function KeyManager(keyCodes) {
         return {
             keys: keyCodes,
-            changeKeyDown: function(key, name, event) {
-                if (key == event.key && !this.keys[name]) {
+            changeKeyDown: function (key, name, event) {
+                if (key === event.key && !this.keys[name]) {
                     this.keys[name] = true;
                     webSocket.send(name);
                 }
             },
-            changeKeyUp: function(key, name, event) {
-                if (key == event.key && this.keys[name]) {
+            changeKeyUp: function (key, name, event) {
+                if (key === event.key && this.keys[name]) {
                     this.keys[name] = false;
                     webSocket.send(name);
                 }
@@ -208,9 +227,9 @@ function startGame(mapID) {
         replacements["+"] = "plus";
         replacements["-"] = "minus";
 
-        if(replacements[char] !== undefined) {
+        if (replacements[char] !== undefined) {
             show_image(replacements[char], x, y);
-        } else if (char == char.toLowerCase()) {
+        } else if (char === char.toLowerCase()) {
             show_image("k" + char, x, y);
         } else {
             show_image(char.toLowerCase(), x, y);
@@ -226,7 +245,6 @@ function startGame(mapID) {
         }
     }
 }
-
 
 
 function resize(factor) {

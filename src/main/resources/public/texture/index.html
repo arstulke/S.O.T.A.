@@ -1,48 +1,53 @@
 <html>
 <head>
     <title>S.O.T.A.</title>
-    <style>
-    ul {
-        list-style-type: none;
-    }
-    html {
-      //background: url(images/bg.jpg) no-repeat center center fixed;
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
-    }
-
-
-
-    </style>
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
 <div id="map-selection">
-    <ul id="map-list"></ul>
-    <input id="map-input" type="text">
-    <button id="map-input-btn">Start</button>
+    <div class="container">
+        <div class="row" style="margin-top: 50px">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Maps</div>
+                    <div class="card-block">
+                        <ul id="map-list"></ul>
+                        <input id="map-input" type="text">
+                        <button id="map-input-btn">Start</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
 </div>
-<table id="game-content" style="width: 100%; display: none;">
-    <tbody>
-    <tr>
-        <td rowspan="2" style="width: 70%">
-            <canvas id="myCanvas" width="496" height="288"></canvas>
-        </td>
-        <td style=" vertical-align: top;">
-            <pre id="right-cornor" style="margin-top: 0px; float: right; vertical-align: top;"></pre>
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>
-            <center>
-                <ul id="message"></ul>
-            </center>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div id="game-content" style="display: none; margin-top:30px; margin-left:20px;">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <div id="right-corner" class="float-right"></div>
+                </div>
+                <div class="card-block">
+                    <canvas id="myCanvas" width="496" height="288"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="message-container" class="col-md-4" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    Messages
+                </div>
+                <div class="card-block">
+                    <ul id="message"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script src="../jquery.js"></script>
 <script src="game.js"></script>
