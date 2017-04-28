@@ -241,8 +241,8 @@ public class Game implements Cloneable {
             if (mode != null && mode.equals("textures")) {
                 if (textures) {
                     resources.addAll(getTextures());
-                    resources.add("/textures?map=" + title + "&name=stick");
-                    resources.add("/textures?map=" + title + "&name=minus");
+                    resources.add("/textures?map=" + token + "&name=stick");
+                    resources.add("/textures?map=" + token + "&name=minus");
                 }
                 resources.add(0, "/error.png");
             }
@@ -277,7 +277,7 @@ public class Game implements Cloneable {
                         .replace("+", "plus")
                         .replace("-", "minus");
 
-                return "/textures?map=" + title + "&name=" + ch;
+                return "/textures?map=" + token + "&name=" + ch;
             };
 
             Set<String> textures = blocks.stream()

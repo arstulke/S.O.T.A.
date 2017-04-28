@@ -24,7 +24,7 @@ public class CheckpointEvent extends Event {
         if (!game.getPlayer().getSpawnPoint().equals(target)) {
             game.checkpoint(target);
             if (display) {
-                DisplayEvent event = new DisplayEvent(this.triggerPoints, false, "⚑ Checkpoint (" + ((int) target.getX()) + ", " + ((int) target.getX()) + ")", 200);
+                DisplayEvent event = new DisplayEvent(this.triggerPoints, false, "⚑ Checkpoint (" + ((int) target.getX()) + ", " + ((int) target.getX()) + ")", 1500);
                 event.execute(session, game);
             }
         }

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Datei-Upload</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<div class="container">
+    <div class="row" style="margin-top: 50px">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Map Upload</div>
+                <div class="card-block">
+                    <form method="post" action="/file-upload" enctype="multipart/form-data">
+                        <label>
+                            Wählen Sie eine ZIP-Datei aus<br>
+                            <input name="file" type="file" size="50" accept=".zip">
+                        </label><br><br>
+                        <button>Hochladen</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+</body>
+</html>

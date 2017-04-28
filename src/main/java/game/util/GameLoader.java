@@ -132,7 +132,7 @@ public class GameLoader {
 
         if (log) {
             Log.getLogger(getClass()).info("Reloading Maps.");
-            gameBuilders.forEach((s, game) -> Log.getLogger(getClass()).info(String.format("Loaded Map \"%s\" with id \"%s\"", s.replaceAll("_", " "), s)));
+            gameBuilders.forEach((s, game) -> Log.getLogger(getClass()).info(String.format("Loaded Map \"%s\" with id \"%s\"", game.getTitle(), game.getKey())));
         }
     }
 

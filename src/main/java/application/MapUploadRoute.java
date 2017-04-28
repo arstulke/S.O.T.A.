@@ -87,7 +87,7 @@ class MapUploadRoute implements Route {
         ZipEntry entry;
         while ((entry = input.getNextEntry()) != null) {
             if (!entry.getName().contains(".")) {
-                new File(path + entry.getName()).mkdir();
+                new File(path + "/" + entry.getName()).mkdir();
             } else {
                 File outputFile = path.resolve(entry.getName()).toFile();
                 outputFile.createNewFile();

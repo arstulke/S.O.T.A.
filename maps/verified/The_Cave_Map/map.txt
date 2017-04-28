@@ -115,7 +115,7 @@ foreground:#ffffff
 ~0.3;7.6 style http://www.techcredo.com/wp-content/uploads/2010/06/Ibex_Wallpaper_by_willwill100.png #ffffff
 ~82.8;93.5 style http://www.techcredo.com/wp-content/uploads/2010/06/Ibex_Wallpaper_by_willwill100.png #ffffff
 
-~7.6 display "Welcome to\n <b>THE CAVE MAP</b>\n by Maik Müller" 1000
+~7.6 display "Welcome to\n <b>THE CAVE MAP</b>\n by Maik Müller" 5000
 ~56.14;48.14 checkpoint 55.14 true
 ~23.21;23.18 checkpoint 23.21 true
 ~82.8 checkpoint 82.8 true

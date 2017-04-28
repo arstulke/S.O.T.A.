@@ -38,8 +38,7 @@ public class Application {
             return gameloader.loadInstances().toString();
         });
 
-        get("/upload", (request, response) -> "<form method=\"post\" action=\"/upload\" enctype=\"multipart/form-data\">\n<label>Wählen Sie eine ZIP-Datei aus\n<input name=\"file\" type=\"file\" size=\"50\" accept=\".zip\">\n</label>\n<button>... und ab geht die Post!</button>\n</form>");
-        post("/upload", new MapUploadRoute());
+        post("/file-upload", new MapUploadRoute());
 
         get("/resources", new ResourceRoute());
         get("/textures", (request, response) -> {
