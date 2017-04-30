@@ -31,7 +31,7 @@ public class Application {
 
         setPort();
         staticFileLocation("/public");
-        webSocket("/de/aska/game", WebSocketHandler.class);
+        webSocket("/game", WebSocketHandler.class);
 
         get("/maps", (request, response) -> {
             response.header("Content-type", "de/aska/application/json");
