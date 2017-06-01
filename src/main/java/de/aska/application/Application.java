@@ -22,8 +22,8 @@ import static spark.Spark.*;
  * by Arne on 11.01.2017.
  */
 public class Application {
-    private final static ApplicationProperties properties = new ApplicationProperties();
     public final static GameLoader gameloader = new GameLoader();
+    private final static ApplicationProperties properties = new ApplicationProperties();
     private final static TextureLoader textureLoader = new TextureLoader();
 
     public static void main(String[] args) throws IOException {
@@ -31,10 +31,10 @@ public class Application {
 
         setPort();
         staticFileLocation("/public");
-        webSocket("/de/aska/game", WebSocketHandler.class);
+        webSocket("/game", WebSocketHandler.class);
 
         get("/maps", (request, response) -> {
-            response.header("Content-type", "de/aska/application/json");
+            response.header("Content-type", "application/json");
             return gameloader.loadInstances().toString();
         });
 
