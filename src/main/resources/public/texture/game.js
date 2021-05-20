@@ -56,7 +56,7 @@ function startGame(mapID) {
 
     resize(2);
 
-    var webSocket = new WebSocket('ws://' + window.location["hostname"] + '/game?map=' + mapID);
+    var webSocket = new WebSocket('ws://' + window.location["host"] + '/game?map=' + mapID);
     var messages = [];
 
     var canvas = document.getElementById("myCanvas");
