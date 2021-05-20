@@ -22,7 +22,7 @@ class ResourceRoute implements Route {
         JSONArray arr = new JSONArray();
         resources.forEach(s -> arr.put(arr.length(), s));
 
-        response.header("Content-type", "de/aska/application/json");
+        response.header("Content-type", "application/json");
         return arr.toString();
     }
 }
