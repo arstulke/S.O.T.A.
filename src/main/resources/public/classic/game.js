@@ -40,7 +40,8 @@ function startGame(mapID) {
     $("#map-selection").css("display", "none");
     $("#game-content").css("display", "block");
 
-    var webSocket = new WebSocket('ws://' + window.location["host"] + '/game?map=' + mapID);
+    var protocol = window.location.protocol == "https:" ? "wss" : "ws";
+    var webSocket = new WebSocket(protocol + '://' + window.location["host"] + '/game?map=' + mapID);
     var messages = [];
 
     webSocket.onmessage = function (message) {
