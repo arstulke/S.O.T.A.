@@ -5,8 +5,6 @@ import de.aska.game.event.CheckpointEvent;
 import de.aska.game.event.StyleEvent;
 import de.aska.game.util.GameRenderer;
 import de.aska.network.Session;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -54,8 +52,8 @@ public class Game implements Cloneable {
         this.data = new JSONObject();
 
         //region setWidthAndHeight
-        IntegerProperty highestX = new SimpleIntegerProperty(0);
-        IntegerProperty highestY = new SimpleIntegerProperty(0);
+        AtomicInteger highestX = new AtomicInteger(0);
+        AtomicInteger highestY = new AtomicInteger(0);
 
         blocks.forEach((p, block) -> {
             if (p.getX() > highestX.get()) {
